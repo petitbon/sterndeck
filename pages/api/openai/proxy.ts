@@ -45,7 +45,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     /* Send request to another server */
-    /*
     const response = await fetch('https://api.openai.com/v1/files', {
       headers: {
         Authorization: `Bearer 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`,
@@ -53,7 +52,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       method: 'POST',
       body: formData,
     });
-     */
   }
 
   res.status(status).json(resultBody);
