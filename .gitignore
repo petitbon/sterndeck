@@ -2,6 +2,7 @@
 
 /.firebase/
 /.vscode/
+.firebaserc
 
 # dependencies
 /node_modules
