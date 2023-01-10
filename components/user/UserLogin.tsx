@@ -1,6 +1,7 @@
 'use client';
 
 import { useSession, signIn, signOut } from 'next-auth/react';
+import { UserCard } from '@components/user/UserCard';
 
 export default function Login() {
   const { data: session } = useSession();
@@ -9,10 +10,9 @@ export default function Login() {
     return (
       <>
         <div className="h-16 grid grid-cols-1 gap-4 content-center">
-          <button className="btn-primary" onClick={() => signOut()}>
-            Sign Out
-          </button>
-          {session?.user?.email}
+          {/* Pass session info to server component */}
+          <UserCard user={session?.user} />
+          <button onClick={() => signOut()}>Sign Out</button>
         </div>
       </>
     );
@@ -20,9 +20,7 @@ export default function Login() {
     return (
       <>
         <div className="h-16 grid grid-cols-1 gap-4 content-center">
-          <button className="btn-primary" onClick={() => signIn()}>
-            Sign In
-          </button>
+          <button onClick={() => signIn()}>Sign In</button>
         </div>
       </>
     );
