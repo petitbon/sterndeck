@@ -13,8 +13,6 @@ export const config = {
 type ProcessedFiles = Array<[string, File]>;
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log('handler');
-
   let status = 200,
     resultBody = { status: 'ok', message: 'Files were uploaded successfully' };
 
@@ -31,7 +29,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       //
     });
   }).catch((e) => {
-    console.log(e);
     status = 500;
     resultBody = {
       status: 'fail',
@@ -55,8 +52,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       method: 'POST',
       body: formData,
     });
-
-    console.log(response);
   }
 
   res.status(status).json(resultBody);
