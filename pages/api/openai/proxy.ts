@@ -41,10 +41,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const formData = new FormData();
     for (const file of files) {
       formData.append('purpose', 'fine-tune');
-      formData.append(file[0], fs.createReadStream(file[1].filepath) as Blob);
+      formData.append(file[0], fs.createReadStream(file[1].filepath));
     }
 
     /* Send request to another server */
+    /*
     const response = await fetch('https://api.openai.com/v1/files', {
       headers: {
         Authorization: `Bearer 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`,
@@ -52,6 +53,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       method: 'POST',
       body: formData,
     });
+     */
   }
 
   res.status(status).json(resultBody);

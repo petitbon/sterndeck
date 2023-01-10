@@ -16,8 +16,8 @@ export default function SternDrop() {
       reader.onerror = () => console.log('file reading has failed');
       reader.onload = async () => {
         // Do whatever you want with the file contents
-        const binaryStr = reader.result;
-        console.log(binaryStr);
+        // const binaryStr = reader.result;
+        // console.log(binaryStr);
 
         formData.append('file', file);
 
