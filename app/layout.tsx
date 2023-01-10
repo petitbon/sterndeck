@@ -1,9 +1,8 @@
 import '../styles/globals.css';
 
 import SessionProvider from './SessionProvider';
-
-import { IconPhoto } from '@tabler/icons';
 import UserLogin from '@components/user/UserLogin';
+import ModelsSection from '@components/navigation/ModelsSection';
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -11,33 +10,40 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <SessionProvider>
           <div className="sidenavbar">
-            <div className="pt-4 pb-2 px-6">
-              <a href="#!">
-                <div className="flex items-center">
-                  <div className="shrink-0"></div>
-                  <div className="grow ml-3">
-                    <UserLogin />
-                  </div>
+            <div className="pt-4 pb-2 ">
+              <div className="flex items-center">
+                <div className="shrink-0"></div>
+                <div className="grow ml-3">
+                  <UserLogin />
                 </div>
-              </a>
+              </div>
             </div>
-            <ul className="relative px-1">
-              <li className="relative">
-                <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-black">
-                  <IconPhoto size={15} stroke={1.5} />
-                  <span className="text-[15px] ml-4 text-gray-600 font-bold">Home</span>
-                </div>
-              </li>
-            </ul>
+
             <hr className="my-2" />
             <ul className="relative px-1">
               <li className="relative">
-                <div className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-blue-600 text-black">
-                  <IconPhoto size={15} stroke={1.5} />
-                  <span className="text-[15px] ml-4 text-gray-600 font-bold">Home</span>
+                <div className="p-2.5 mt-3 flex items-center  px-4 duration-300 text-black">
+                  <ModelsSection />
+                </div>
+              </li>
+
+              <li className="relative pl-8 pr-4">
+                <div className="t-3 flex items-center rounded-full duration-300 cursor-pointer hover:bg-blue-300 text-black">
+                  <span className="text-[13px] ml-4 text-gray-600">Sandokan</span>
+                </div>
+              </li>
+              <li className="relative pl-8 pr-4">
+                <div className="mt-3 flex items-center rounded-full duration-300 cursor-pointer hover:bg-blue-300 text-black">
+                  <span className="text-[13px] ml-4 text-gray-600">The masked rider</span>
+                </div>
+              </li>
+              <li className="relative pl-8 pr-4">
+                <div className="mt-3 flex items-center rounded-full duration-300 cursor-pointer hover:bg-blue-300 text-black">
+                  <span className="text-[13px] ml-4 text-gray-600">Flash Gordon</span>
                 </div>
               </li>
             </ul>
+
             <div className="text-center bottom-0 absolute w-full">
               <hr className="m-0" />
               <p className="py-2 text-sm text-gray-700">STERNDECK</p>
