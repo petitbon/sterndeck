@@ -1,6 +1,7 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import AuthCheck from '@components/auth/AuthCheck';
+
 import Name from './formfields/Name';
 import Description from './formfields/Description';
 import SternDrop from './formfields/SternDrop';
@@ -8,11 +9,9 @@ import TakeAction from './formfields/TakeAction';
 import Inline from './formfields/Inline';
 
 export default function Models() {
-  const { data: session } = useSession();
-
-  if (session) {
-    return (
-      <>
+  return (
+    <>
+      <AuthCheck>
         <div className="flex w-full justify-center p-20 ">
           <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <div className="mb-4">
@@ -32,9 +31,9 @@ export default function Models() {
             </div>
           </form>
         </div>
-      </>
-    );
-  }
+      </AuthCheck>
+    </>
+  );
 }
 
 /*

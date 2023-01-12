@@ -1,20 +1,20 @@
 import '../styles/globals.css';
 
-import SessionProvider from './SessionProvider';
-import UserLogin from '@components/user/UserLogin';
+import FirebaseLogin from '@components/auth/FirebaseLogin';
 import ModelsSection from '@components/navigation/ModelsSection';
+import { AuthContextProvider } from '@context/AuthContextProvider';
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <SessionProvider>
+        <AuthContextProvider>
           <div className="sidenavbar">
             <div className="pt-4 pb-2 ">
               <div className="flex items-center">
                 <div className="shrink-0"></div>
                 <div className="grow ml-3">
-                  <UserLogin />
+                  <FirebaseLogin />
                 </div>
               </div>
             </div>
@@ -51,7 +51,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </div>
           </div>
           <div className="content">{children}</div>
-        </SessionProvider>
+        </AuthContextProvider>
       </body>
     </html>
   );

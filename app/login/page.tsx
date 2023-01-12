@@ -1,8 +1,13 @@
 'use client';
 
-import { useSession, signIn, signOut } from 'next-auth/react';
+//import { useSession, signIn, signOut } from 'next-auth/react';
+import FirebaseLogin from '@components/auth/FirebaseLogin';
 
 export default function Login() {
+  return <FirebaseLogin />;
+
+  /*
+
   const { data: session } = useSession();
 
   if (session) {
@@ -27,4 +32,5 @@ export default function Login() {
       </>
     );
   }
+   */
 }
