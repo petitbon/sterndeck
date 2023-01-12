@@ -2,15 +2,17 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { getTask, UpdateTask } from '@lib/firebase/task.firestore';
+import { useAuthContext } from '@context/AuthContext';
 
 function SingleTodo() {
+  const { user } = useAuthContext();
   const router = useRouter();
   const { todoId } = router.query;
   const [todo, setTodo] = useState<any>(null);
 
   useEffect(() => {
     if (todoId && typeof todoId === 'string') {
-      getTask(todoId)
+      getTask(user.id, todoId)
         .then((task) => setTodo(task))
         .catch((error) => console.log(error.message));
     }
