@@ -1,21 +1,25 @@
+'use client';
+
 import '../styles/globals.css';
 
-import FirebaseLogin from '@components/auth/FirebaseLogin';
+//import FirebaseLogin from '@components/auth/FirebaseLogin';
+//import Auth from '@components/Auth';
 import ModelsSection from '@components/navigation/ModelsSection';
-import { AuthContextProvider } from '@context/AuthContextProvider';
+//mport { AuthContextProvider } from '@context/AuthContextProvider';
+import { SystemProvider } from '@context/SystemProvider';
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
+//<Auth />
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <AuthContextProvider>
+        <SystemProvider fontSize="large">
+          {' '}
           <div className="sidenavbar">
             <div className="pt-4 pb-2 ">
               <div className="flex items-center">
                 <div className="shrink-0"></div>
-                <div className="grow ml-3">
-                  <FirebaseLogin />
-                </div>
+                <div className="grow ml-3"></div>
               </div>
             </div>
 
@@ -51,7 +55,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </div>
           </div>
           <div className="content">{children}</div>
-        </AuthContextProvider>
+        </SystemProvider>
       </body>
     </html>
   );
