@@ -9,8 +9,8 @@ export function Text({
   children,
   ...restProps
 }: {
-  href?: string;
-  children: React.ReactNode;
+  href?: string,
+  children: React.ReactNode,
 } & React.HTMLAttributes<HTMLElement>) {
   const Element = href ? 'a' : 'span';
   const { fontSize } = useSystem();

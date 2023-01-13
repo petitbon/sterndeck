@@ -2,9 +2,7 @@
 
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { useAuthContext } from '@context/AuthContext';
-
-import FirebaseLogin from '@components/auth/FirebaseLogin';
+import { useAuthContext } from '@context/AuthProvider';
 
 function AuthCheck({ children }: any) {
   const { user, loading } = useAuthContext();
@@ -20,7 +18,7 @@ function AuthCheck({ children }: any) {
   if (user && !loading && pathname !== '/') {
     return children;
   } else if (!user && !loading) {
-    return <FirebaseLogin />;
+    return 'please login';
   } else {
     return 'loading ...';
   }

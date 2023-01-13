@@ -1,19 +1,36 @@
 'use client';
 
-import AuthCheck from '@components/auth/AuthCheck';
-
+import UserCheck from '@components/user/UserCheck';
 import Name from './formfields/Name';
 import Description from './formfields/Description';
 import SternDrop from './formfields/SternDrop';
 import TakeAction from './formfields/TakeAction';
 import Inline from './formfields/Inline';
+import firebaseApp from '@context/firebase/firebaseApp';
+import { getAuth } from 'firebase/auth';
+import { getFirestore, collection, setDoc, doc } from 'firebase/firestore';
+import { useAuthContext } from '@context/AuthProvider';
+import { useCollection } from 'react-firebase-hooks/firestore';
+
+type CustommodelDocument = {
+  custommodel: string;
+};
 
 export default function Models() {
+  const auth = getAuth(firebaseApp);
+  const db = getFirestore(firebaseApp);
+  const { user } = useAuthContext();
+  const [custommodels, custommodelsLoading, custommodelsError] = useCollection(collection(db, 'custommodels'), {});
+
+  const addCustommodelDocument = async (custommodel: CustommodelDocument) => {
+    await setDoc(doc(db, 'custommodels', user.uid), custommodel);
+  };
+
   return (
     <>
-      <AuthCheck>
+      <UserCheck>
         <div className="flex w-full justify-center p-20 ">
-          <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+          <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={() => addCustommodelDocument()}>
             <div className="mb-4">
               <Name />
             </div>{' '}
@@ -31,7 +48,7 @@ export default function Models() {
             </div>
           </form>
         </div>
-      </AuthCheck>
+      </UserCheck>
     </>
   );
 }

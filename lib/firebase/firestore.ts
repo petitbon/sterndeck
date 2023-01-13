@@ -5,9 +5,7 @@ const firestore = getFirestore(firebase);
 
 export const getCollectionWithLimit = async <T>(collectionName: string, orderByElement: any, state: boolean, uidUser: string) => {
   let datas: any[] = [];
-  const docs = await getDocs(
-    query(collection(firestore, collectionName), where('complete', '==', state), where('uidUser', '==', uidUser), orderBy(orderByElement), limit(10))
-  );
+  const docs = await getDocs(query(collection(firestore, collectionName), where('complete', '==', state), where('uidUser', '==', uidUser), orderBy(orderByElement), limit(10)));
   docs.forEach((doc) => {
     const id = doc.id;
     const data = doc.data();
@@ -27,14 +25,7 @@ export const getCollectionAt = async <T>(collectionName: string, orderByElement:
   let datas: any[] = [];
   const lastDocSnap = await getDoc(doc(firestore, lastElement));
   const docs = await getDocs(
-    query(
-      collection(firestore, collectionName),
-      where('complete', '==', state),
-      where('uidUser', '==', uidUser),
-      orderBy(orderByElement),
-      limit(10),
-      startAfter(lastDocSnap)
-    )
+    query(collection(firestore, collectionName), where('complete', '==', state), where('uidUser', '==', uidUser), orderBy(orderByElement), limit(10), startAfter(lastDocSnap))
   );
 
   docs.forEach((doc) => {
