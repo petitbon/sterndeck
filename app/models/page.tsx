@@ -1,50 +1,78 @@
 'use client';
 
 import UserCheck from '@components/user/UserCheck';
-import Name from './formfields/Name';
-import Description from './formfields/Description';
-import SternDrop from './formfields/SternDrop';
-import TakeAction from './formfields/TakeAction';
-import Inline from './formfields/Inline';
 import firebaseApp from '@context/firebase/firebaseApp';
-import { getAuth } from 'firebase/auth';
-import { getFirestore, collection, setDoc, doc } from 'firebase/firestore';
+import { getFirestore, addDoc, doc, collection } from 'firebase/firestore';
 import { useAuthContext } from '@context/AuthProvider';
-import { useCollection } from 'react-firebase-hooks/firestore';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
 type CustommodelDocument = {
-  custommodel: string;
+  title: string;
+  basemodel: string;
+  epochs: number;
 };
 
+type Inputs = CustommodelDocument;
+
 export default function Models() {
-  const auth = getAuth(firebaseApp);
   const db = getFirestore(firebaseApp);
   const { user } = useAuthContext();
-  const [custommodels, custommodelsLoading, custommodelsError] = useCollection(collection(db, 'custommodels'), {});
 
-  const addCustommodelDocument = async (custommodel: CustommodelDocument) => {
-    await setDoc(doc(db, 'custommodels', user.uid), custommodel);
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting, errors },
+  } = useForm<Inputs>();
+
+  const onSubmit: SubmitHandler<Inputs> = async (data: CustommodelDocument) => {
+    const docRef = doc(db, 'custommodels', user.uid);
+    const colRef = collection(docRef, 'list');
+    await addDoc(colRef, data);
   };
+
+  const basemodelsOptions = ['ada', 'babbage', 'curie', 'davinci'];
+  const epochsOptions = [1, 2, 3, 4, 5, 6, 7, 8];
 
   return (
     <>
       <UserCheck>
-        <div className="flex w-full justify-center p-20 ">
-          <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={() => addCustommodelDocument()}>
+        <div className="flex justify-center p-4">
+          <form className="custommodel-form" onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
-              <Name />
-            </div>{' '}
-            <div className="mb-6">
-              <Description />
+              <label className="custommodel-label">Custom Model</label>
+              <input placeholder="Name of the custom model" className="custommodel-input" {...register('title', { required: true })} />
+              {errors.title && <span>This field is required</span>}
             </div>
-            <div className="flex items-center justify-between mb-6">
-              <SternDrop />{' '}
+            <div className="mb-4">
+              <label className="custommodel-label">Base Model</label>
+              <select className="custommodel-input" defaultValue="curie" {...register('basemodel', { required: true })}>
+                {basemodelsOptions.map((value, i) => (
+                  <option value={value} key={i}>
+                    {value}
+                  </option>
+                ))}
+              </select>
+              {errors.title && <span>This field is required</span>}
             </div>
-            <div className="flex items-center justify-between mb-6">
-              <TakeAction />
+            <div className="mb-4">
+              <label className="custommodel-label">Number of Epochs</label>
+              <select className="custommodel-input" defaultValue="4" {...register('epochs', { required: true })}>
+                {epochsOptions.map((value, i) => (
+                  <option value={value} key={i}>
+                    {value}
+                  </option>
+                ))}
+              </select>
+              {errors.title && <span>This field is required</span>}
             </div>
+            <div className="mb-6"></div>
+            <div className="flex items-center justify-between mb-6"></div>
+            <div className="flex items-center justify-between mb-6"></div>
+            <div className="flex flex-wrap -mx-3 mb-2"></div>
             <div className="flex flex-wrap -mx-3 mb-2">
-              <Inline />
+              <button className="btn-primary" disabled={isSubmitting}>
+                {isSubmitting ? '...loading' : 'Submit'}
+              </button>
             </div>
           </form>
         </div>

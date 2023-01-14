@@ -2,58 +2,60 @@
 
 import '../styles/globals.css';
 
-//import FirebaseLogin from '@components/auth/FirebaseLogin';
 import UserAuth from '@components/user/UserAuth';
-import ModelsSection from '@components/navigation/ModelsSection';
+import CustommodelPane from '@components/navbar/CustommodelPane';
 import { AuthProvider } from '@context/AuthProvider';
 import { SystemProvider } from '@context/SystemProvider';
+import UserCheck from '@components/user/UserCheck';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>
+      <body className="">
         <AuthProvider>
           <SystemProvider fontSize="large">
-            <div className="sidenavbar">
-              <div className="pt-4 pb-2 h-[200px]">
-                <div className="flex items-center">
-                  <div className="shrink-0"></div>
-                  <div className="grow ml-3">
-                    <UserAuth />
+            <div className="sidenavbar divide-y divide-blue-700 border-r border-blue-700 ">
+              {/* ----------------------------------------------------------------------------------- */}
+              <div className="pt-4 h-[60px]">
+                <div className="flex items-center justify-center -space-x-[148px]">
+                  <div className="">
+                    <div className="flex justify-center -space-x-[8px]">
+                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
+                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
+                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
+                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
+                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
+                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
+                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
+                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
+                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
+                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
+                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
+                    </div>
                   </div>
+                  <p className="ml-1 font-semibold text-xl tracking-widest text-stern-blue">STERNDECK</p>
                 </div>
               </div>
-
-              <hr className="my-2" />
-              <ul className="relative px-1">
-                <li className="relative">
-                  <div className="p-2.5 mt-3 flex items-center  px-4 duration-300 text-black">
-                    <ModelsSection />
-                  </div>
-                </li>
-
-                <li className="relative pl-8 pr-4">
-                  <div className="t-3 flex items-center rounded-full duration-300 cursor-pointer hover:bg-blue-300 text-black">
-                    <span className="text-[13px] ml-4 text-gray-600">Sandokan</span>
-                  </div>
-                </li>
-                <li className="relative pl-8 pr-4">
-                  <div className="mt-3 flex items-center rounded-full duration-300 cursor-pointer hover:bg-blue-300 text-black">
-                    <span className="text-[13px] ml-4 text-gray-600">The masked rider</span>
-                  </div>
-                </li>
-                <li className="relative pl-8 pr-4">
-                  <div className="mt-3 flex items-center rounded-full duration-300 cursor-pointer hover:bg-blue-300 text-black">
-                    <span className="text-[13px] ml-4 text-gray-600">Flash Gordon</span>
-                  </div>
-                </li>
-              </ul>
-
-              <div className="text-center bottom-0 absolute w-full">
-                <hr className="m-0" />
-                <p className="py-2 text-sm text-gray-700">STERNDECK</p>
-                <p className="py-2 text-sm text-gray-700">AI Tools and Marketplace</p>
+              {/* ----------------------------------------------------------------------------------- */}
+              <div className="flex-1">
+                <UserCheck>
+                  <CustommodelPane />
+                </UserCheck>
               </div>
+              {/* ----------------------------------------------------------------------------------- */}
+              <div className="flex-1 bottom-0 absolute w-full h-[200px]">
+                <div className="my-1">
+                  <UserAuth />
+                </div>
+              </div>
+              {/* ----------------------------------------------------------------------------------- */}
+              <div className="flex-1 bottom-0 absolute w-full h-[26px]">
+                <div className="w-full h-[26px] bottom-0 absolute">
+                  {' '}
+                  <p className="m-1 text-xs text-center"> &#169; STERNDECK 2023</p>
+                </div>
+              </div>
+              {/* ----------------------------------------------------------------------------------- */}
             </div>
             <div className="content">{children}</div>
           </SystemProvider>

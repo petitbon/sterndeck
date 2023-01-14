@@ -10,11 +10,11 @@ export function UserCard({ user }: { user: User }) {
   }
   return (
     <>
-      <div className="flex items-center">
-        <Image src={imageSource} alt="fynext" width="35" height="35" />
+      <div className="flex">
+        <Image className="rounded-full" src={imageSource} alt="fynext" width="35" height="35" />
         <div className="text-sm pl-4">
-          <p className="text-gray-900 leading-none">{user?.displayName}</p>
-          <p className="text-gray-600">{user?.email}</p>
+          <p className="leading-none">{user?.displayName}</p>
+          <p className="">{user?.email}</p>
         </div>
       </div>
     </>

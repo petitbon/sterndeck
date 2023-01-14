@@ -2,30 +2,94 @@
 @tailwind components;
 @tailwind utilities;
 
+.firebaseui-idp-button {
+  border-radius: 18px;
+}
+
 @layer components {
   .sidenavbar {
-    @apply m-0 p-0 w-[320px] h-full shadow-md bg-white top-0 absolute;
+    @apply w-[380px] h-full top-0 absolute;
   }
   .content {
-    @apply ml-[320px];
+    @apply ml-[380px];
+  }
+  .btn-small {
+    @apply px-1 px-2 bg-gray-300 text-xs font-semibold rounded-full shadow-md hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
   }
   .btn-primary {
-    @apply py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
+    @apply py-2 px-4 bg-gray-300 text-base font-semibold rounded-full shadow-md hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
+  }
+  .custommodel-form {
+    @apply shadow-md rounded px-8 pt-6 pb-8 mb-4 w-[800px];
+  }
+  .custommodel-input {
+    @apply shadow appearance-none border rounded w-full py-2 px-3 leading-tight;
+  }
+  .custommodel-label {
+    @apply block text-sm font-bold mb-2;
   }
 }
 
-body {
-  height: 100vh;
-  background-image: linear-gradient(
-    25deg,
-    hsl(240deg 15% 13%) 0%,
-    hsl(233deg 22% 15%) 11%,
-    hsl(226deg 30% 17%) 23%,
-    hsl(221deg 40% 18%) 36%,
-    hsl(215deg 52% 19%) 48%,
-    hsl(221deg 62% 26%) 61%,
-    hsl(238deg 46% 36%) 74%,
-    hsl(264deg 54% 40%) 87%,
-    hsl(287deg 84% 36%) 100%
-  );
+/**
+ * Copyright 2017 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+
+ *mdl-button mdl-js-button mdl-button--raised firebaseui-idp-google firebaseui-id-idp-button
+ */
+
+.firebaseui-container {
+  background: rgba(0, 0, 0, 0.05);
+  margin-bottom: 15px;
+  min-height: 150px;
+  padding-top: 10px;
+  border-radius: 20px;
+  box-shadow: none;
+}
+.firebaseui-container.firebaseui-page-provider-sign-in {
+  background: transparent;
+  box-shadow: none;
+  min-height: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+}
+.firebaseui-container.firebaseui-id-page-callback {
+  background: transparent;
+  box-shadow: none;
+  margin-top: 40px;
+  height: 84px;
+  min-height: 0;
+  margin-bottom: 0;
+  padding-top: 0;
+}
+.firebaseui-card-header {
+  display: none;
+}
+.firebaseui-subtitle,
+.firebaseui-text {
+  color: rgba(255, 255, 255, 0.87);
+}
+.firebaseui-form-actions .mdl-button--raised.mdl-button--colored.firebaseui-button {
+  background: rgba(0, 0, 0, 0.1);
+}
+.firebaseui-id-dismiss-info-bar {
+  display: block;
+}
+.firebaseui-info-bar {
+  border: 0;
+  border-radius: 10px;
+  left: 5%;
+  right: 5%;
+  top: 10%;
+  bottom: 10%;
 }
