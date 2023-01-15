@@ -4,7 +4,7 @@ import '../styles/globals.css';
 
 import UserAuth from '@components/user/UserAuth';
 import CustommodelPane from '@components/navbar/CustommodelPane';
-import { AuthProvider } from '@context/AuthProvider';
+import { AuthUserProvider } from '@context/AuthUserProvider';
 import { SystemProvider } from '@context/SystemProvider';
 import UserCheck from '@components/user/UserCheck';
 
@@ -12,7 +12,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className="">
-        <AuthProvider>
+        <AuthUserProvider>
           <SystemProvider fontSize="large">
             <div className="sidenavbar divide-y divide-blue-700 border-r border-blue-700 ">
               {/* ----------------------------------------------------------------------------------- */}
@@ -60,7 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </div>
             <div className="content">{children}</div>
           </SystemProvider>
-        </AuthProvider>
+        </AuthUserProvider>
       </body>
     </html>
   );

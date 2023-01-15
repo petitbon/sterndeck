@@ -2,15 +2,15 @@
 
 import { IconPhoto } from '@tabler/icons';
 import { useRouter } from 'next/navigation';
-import firebaseApp from '@context/firebase/firebaseApp';
-import { useAuthContext } from '@context/AuthProvider';
+import { firebaseApp } from '@context/firebase/firebase';
+import { useAuth } from '@context/AuthUserProvider';
 import { getFirestore, collection } from 'firebase/firestore';
 import { useCollection } from 'react-firebase-hooks/firestore';
 
 export default function CustommodelPane() {
-  const { user } = useAuthContext();
+  const { authUser, isLoading } = useAuth();
   const db = getFirestore(firebaseApp);
-  const path = `custommodels/${user.uid}/list`;
+  const path = `custommodels/${authUser?.uid}/list`;
   const [value, loading, error] = useCollection(collection(db, path), {
     snapshotListenOptions: { includeMetadataChanges: false },
   });

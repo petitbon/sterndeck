@@ -1,13 +1,13 @@
 'use client';
 
-import { useAuthContext } from '@context/AuthProvider';
+import { useAuth } from '@context/AuthUserProvider';
 
 function AuthCheck({ children }: any) {
-  const { user, loading } = useAuthContext();
+  const { authUser, isLoading } = useAuth();
 
-  if (user && !loading) {
+  if (authUser && !isLoading) {
     return children;
-  } else if (!user && !loading) {
+  } else if (!authUser && !isLoading) {
     return '';
   } else {
     return (
