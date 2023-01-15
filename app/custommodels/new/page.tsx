@@ -14,7 +14,7 @@ type CustommodelDocument = {
 
 type Inputs = CustommodelDocument;
 
-export default function Models() {
+export default function CustommodelNew() {
   const db = getFirestore(firebaseApp);
   const { user } = useAuthContext();
 

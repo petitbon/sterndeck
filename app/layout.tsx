@@ -37,7 +37,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </div>
               </div>
               {/* ----------------------------------------------------------------------------------- */}
-              <div className="flex-1">
+
+              <div className="items-center justify-center h-auto">
                 <UserCheck>
                   <CustommodelPane />
                 </UserCheck>
