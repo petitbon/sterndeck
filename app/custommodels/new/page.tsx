@@ -1,22 +1,22 @@
 'use client';
 
 import UserCheck from '@components/user/UserCheck';
-import firebaseApp from '@context/firebase/firebaseApp';
-import { getFirestore, addDoc, doc, collection } from 'firebase/firestore';
-import { useAuthContext } from '@context/AuthProvider';
+import { useAuth } from '@context/AuthUserProvider';
+import { firebaseDB } from '@context/firebase/firebase';
+import { addDoc, collection } from 'firebase/firestore';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 type CustommodelDocument = {
   title: string;
   basemodel: string;
   epochs: number;
+  useruid: string;
 };
 
 type Inputs = CustommodelDocument;
 
 export default function CustommodelNew() {
-  const db = getFirestore(firebaseApp);
-  const { user } = useAuthContext();
+  const { authUser } = useAuth();
 
   const {
     register,
@@ -25,8 +25,7 @@ export default function CustommodelNew() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data: CustommodelDocument) => {
-    const docRef = doc(db, 'custommodels', user.uid);
-    const colRef = collection(docRef, 'list');
+    const colRef = collection(firebaseDB, 'custommodels', data.useruid, 'list');
     await addDoc(colRef, data);
   };
 
@@ -41,6 +40,7 @@ export default function CustommodelNew() {
             <div className="mb-4">
               <label className="custommodel-label">Custom Model</label>
               <input placeholder="Name of the custom model" className="custommodel-input" {...register('title', { required: true })} />
+              <input type="hidden" className="custommodel-input" {...register('useruid', { required: true })} value={authUser?.uid} />
               {errors.title && <span>This field is required</span>}
             </div>
             <div className="mb-4">

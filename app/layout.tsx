@@ -16,24 +16,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <SystemProvider fontSize="large">
             <div className="sidenavbar divide-y divide-blue-700 border-r border-blue-700 ">
               {/* ----------------------------------------------------------------------------------- */}
-              <div className="pt-4 h-[60px]">
-                <div className="flex items-center justify-center -space-x-[148px]">
-                  <div className="">
-                    <div className="flex justify-center -space-x-[8px]">
-                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
-                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
-                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
-                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
-                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
-                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
-                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
-                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
-                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
-                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
-                      <div className="mix-blend-overlay bg-gray-300 rounded-lg w-[22px] h-[32px]"> </div>
-                    </div>
+              <div className="h-[60px]">
+                <div className="flex items-center justify-left -space-x-[240px]">
+                  <div className="flex justify-center -space-x-[18px]">
+                    <div className="mix-blend-overlay bg-red-600  w-[42px] h-[60px]"> </div>
+                    <div className="mix-blend-overlay bg-pink-400 w-[42px] h-[60px]"> </div>
+                    <div className="mix-blend-overlay bg-violet-400  w-[42px] h-[60px]"> </div>
+                    <div className="mix-blend-overlay bg-blue-500 w-[42px] h-[60px]"> </div>
+                    <div className="mix-blend-overlay bg-green-500  w-[42px] h-[60px]"> </div>
+                    <div className="mix-blend-overlay bg-blue-300 w-[42px] h-[60px]"> </div>
+                    <div className="mix-blend-overlay bg-red-500  w-[42px] h-[60px]"> </div>
+                    <div className="mix-blend-overlay bg-pink-400 w-[42px] h-[60px]"> </div>
+                    <div className="mix-blend-overlay bg-violet-400  w-[42px] h-[60px]"> </div>
+                    <div className="mix-blend-overlay bg-blue-500 w-[42px] h-[60px]"> </div>
+                    <div className="mix-blend-overlay bg-green-500  w-[42px] h-[60px]"> </div>
+                    <div className="mix-blend-overlay bg-pink-500  w-[42px] h-[60px]"> </div>
+                    <div className="mix-blend-overlay bg-violet-300  w-[42px] h-[60px]"> </div>
+                    <div className="mix-blend-overlay bg-blue-300 w-[42px] h-[60px]"> </div>
+                    <div className="mix-blend-overlay bg-red-600  w-[44px] h-[60px]"> </div>
                   </div>
-                  <p className="ml-1 font-semibold text-xl tracking-widest text-stern-blue">STERNDECK</p>
+                  <div className="font-bold text-3xl tracking-widest text-stern-blue">STERNDECK</div>
                 </div>
               </div>
               {/* ----------------------------------------------------------------------------------- */}

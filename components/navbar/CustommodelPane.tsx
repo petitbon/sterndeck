@@ -2,22 +2,29 @@
 
 import { IconPhoto } from '@tabler/icons';
 import { useRouter } from 'next/navigation';
-import { firebaseApp } from '@context/firebase/firebase';
+import { getCustommodels } from '@context/firebase/firestore';
 import { useAuth } from '@context/AuthUserProvider';
-import { getFirestore, collection } from 'firebase/firestore';
-import { useCollection } from 'react-firebase-hooks/firestore';
+import { useEffect, useState } from 'react';
 
 export default function CustommodelPane() {
-  const { authUser, isLoading } = useAuth();
-  const db = getFirestore(firebaseApp);
-  const path = `custommodels/${authUser?.uid}/list`;
-  const [value, loading, error] = useCollection(collection(db, path), {
-    snapshotListenOptions: { includeMetadataChanges: false },
-  });
-
-  //  console.log(loading);
-  //  console.log(error);
   const router = useRouter();
+
+  const { authUser, isLoading } = useAuth();
+  const [custommodels, setCustommodels] = useState([]);
+  const [isLodingCustommodels, setIsLodingCustommodels] = useState([]);
+
+  useEffect(() => {
+    const doit = async () => {
+      if (authUser) {
+        const unsubscribe = await getCustommodels(authUser.uid, setCustommodels, setIsLodingCustommodels);
+        return () => unsubscribe();
+      }
+    };
+    doit();
+  }, [authUser]);
+
+  console.log(custommodels);
+
   return (
     <>
       <ul className="relative px-1">
@@ -31,11 +38,11 @@ export default function CustommodelPane() {
           </div>
         </li>
 
-        {value?.docs.map((doc, i) => (
+        {custommodels?.map((doc, i) => (
           <li className="relative pl-8 pr-4" key={i}>
-            <div className="mt-3 flex items-center rounded-full duration-300 cursor-pointer hover:bg-blue-300 " key={i} onClick={() => router.push(`/custommodels/${doc?.id}`)}>
+            <div className="mt-3 flex items-center rounded-full duration-300 cursor-pointer hover:bg-blue-300 " key={i} onClick={() => router.push(`/custommodels/${doc.id}`)}>
               <span className="text-[13px] ml-4" key={i}>
-                {doc?.get('title')}
+                {doc.title}
               </span>
             </div>
           </li>
