@@ -5,6 +5,7 @@ import UserCheck from '@components/user/UserCheck';
 import { getCustommodel } from '@context/firebase/firestore';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState, useEffect } from 'react';
+import SternDrop from '@components/formfields/SternDrop';
 
 interface Props {
   params: {
@@ -17,13 +18,15 @@ type CustommodelDocument = {
   basemodel: string;
   epochs: number;
   useruid: string;
+  trainingFile: string;
+  trainingFileUrl: string;
 };
 
 type Inputs = CustommodelDocument;
 
 export default function CustommodelEdit({ params }: Props) {
-  const { authUser, isLoading } = useAuth();
-  const [custommodel, setCustommodel] = useState([]);
+  const { authUser } = useAuth();
+  const [custommodel, setCustommodel] = useState({} as CustommodelDocument);
   const [isLodingCustommodel, setIsLodingCustommodel] = useState([]);
 
   useEffect(() => {
@@ -36,8 +39,6 @@ export default function CustommodelEdit({ params }: Props) {
     doit();
   }, [authUser]);
 
-  console.log(custommodel);
-
   const {
     register,
     handleSubmit,
@@ -45,14 +46,17 @@ export default function CustommodelEdit({ params }: Props) {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data: CustommodelDocument) => {};
+
   return (
     <>
       <UserCheck>
         <div className="flex justify-center p-4">
           <form className="custommodel-form" onSubmit={handleSubmit(onSubmit)}>
-            <div> Custom Model {custommodel.title} </div>
-            <div> Base Model {custommodel.basemodel} </div>
-            <div> Number of Epochs {custommodel.epochs} </div>
+            <div> Custom Model {custommodel?.title} </div>
+            <div> Base Model {custommodel?.basemodel} </div>
+            <div> Number of Epochs {custommodel?.epochs} </div>
+            <SternDrop id={params.id as string} fileJob="training" />
+            <div>Download FIle {custommodel?.trainingFileUrl}</div>
           </form>
         </div>
       </UserCheck>

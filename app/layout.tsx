@@ -24,18 +24,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <div className="mix-blend-overlay bg-violet-400  w-[42px] h-[60px]"> </div>
                     <div className="mix-blend-overlay bg-blue-500 w-[42px] h-[60px]"> </div>
                     <div className="mix-blend-overlay bg-green-500  w-[42px] h-[60px]"> </div>
-                    <div className="mix-blend-overlay bg-blue-300 w-[42px] h-[60px]"> </div>
+                    <div className="mix-blend-overlay bg-blue-400 w-[42px] h-[60px]"> </div>
                     <div className="mix-blend-overlay bg-red-500  w-[42px] h-[60px]"> </div>
                     <div className="mix-blend-overlay bg-pink-400 w-[42px] h-[60px]"> </div>
                     <div className="mix-blend-overlay bg-violet-400  w-[42px] h-[60px]"> </div>
                     <div className="mix-blend-overlay bg-blue-500 w-[42px] h-[60px]"> </div>
                     <div className="mix-blend-overlay bg-green-500  w-[42px] h-[60px]"> </div>
                     <div className="mix-blend-overlay bg-pink-500  w-[42px] h-[60px]"> </div>
-                    <div className="mix-blend-overlay bg-violet-300  w-[42px] h-[60px]"> </div>
-                    <div className="mix-blend-overlay bg-blue-300 w-[42px] h-[60px]"> </div>
-                    <div className="mix-blend-overlay bg-red-600  w-[44px] h-[60px]"> </div>
+                    <div className="mix-blend-overlay bg-violet-400  w-[42px] h-[60px]"> </div>
+                    <div className="mix-blend-overlay bg-blue-400 w-[42px] h-[60px]"> </div>
+                    <div className="mix-blend-overlay bg-orange-600  w-[44px] h-[60px]"> </div>
                   </div>
-                  <div className="font-bold text-3xl tracking-widest text-stern-blue">STERNDECK</div>
+                  <div className="font-bold text-3xl tracking-widest text-white">STERNDECK</div>
                 </div>
               </div>
               {/* ----------------------------------------------------------------------------------- */}

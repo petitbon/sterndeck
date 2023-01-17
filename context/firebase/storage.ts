@@ -1,16 +1,19 @@
-import { format } from 'date-fns';
 import { deleteObject, getDownloadURL as getStorageDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { firebaseStorage } from './firebase';
 
 // Bucket URL from Storage in Firebase Console
-const BUCKET_URL = '';
+const BUCKET_URL = 'fine-tuned-files';
 
-// Uploads image and returns the storage bucket
-export async function uploadImage(image: any, uid: string) {
-  const formattedDate = format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'");
-  const bucket = `${BUCKET_URL}/${uid}/${formattedDate}.jpg`;
-  await uploadBytes(ref(firebaseStorage, bucket), image);
-  return bucket;
+// Uploads file and returns the uploaded file
+export async function uploadFile(file: any, uid: string, id: string, setUploadedFile: any, setIsUploading: any) {
+  setIsUploading(true);
+  const filePath = `${BUCKET_URL}/${uid}/${id}.jsonl`;
+  await uploadBytes(ref(firebaseStorage, filePath), file).then((out) => {
+    getDownloadURL(out.metadata.fullPath).then((url) => {
+      setUploadedFile({ path: out.metadata.fullPath, URL: url });
+    });
+    setIsUploading(false);
+  });
 }
 
 // Replaces existing image in storage and returns the storage bucket

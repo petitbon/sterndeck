@@ -6,10 +6,18 @@ import { getCustommodels } from '@context/firebase/firestore';
 import { useAuth } from '@context/AuthUserProvider';
 import { useEffect, useState } from 'react';
 
+type CustommodelDocument = {
+  id: string;
+  title: string;
+  basemodel: string;
+  epochs: number;
+  useruid: string;
+  trainingFile: string;
+};
+
 export default function CustommodelPane() {
   const router = useRouter();
-
-  const { authUser, isLoading } = useAuth();
+  const { authUser } = useAuth();
   const [custommodels, setCustommodels] = useState([]);
   const [isLodingCustommodels, setIsLodingCustommodels] = useState([]);
 
@@ -23,30 +31,38 @@ export default function CustommodelPane() {
     doit();
   }, [authUser]);
 
-  console.log(custommodels);
+  //console.log(custommodels);
 
   return (
     <>
       <ul className="relative px-1">
         <li className="relative">
-          <div className="p-2.5 mt-3 flex items-center  px-4 duration-300 ">
-            <IconPhoto size={15} stroke={1.5} />
-            <span className="text-[15px] mx-4 font-semibold">Custom Models</span>
-            <button onClick={() => router.push('/custommodels/new')} className="btn-small">
-              Add New
-            </button>
+          <div className="flex items-center m-4">
+            <IconPhoto size={25} stroke={1.5} className="mr-4" />
+            <span className="text-lg font-semibold">Custom Models</span>
           </div>
         </li>
 
-        {custommodels?.map((doc, i) => (
-          <li className="relative pl-8 pr-4" key={i}>
+        {custommodels?.map((doc: CustommodelDocument, i) => (
+          <li className="relative pl-8" key={i}>
             <div className="mt-3 flex items-center rounded-full duration-300 cursor-pointer hover:bg-blue-300 " key={i} onClick={() => router.push(`/custommodels/${doc.id}`)}>
-              <span className="text-[13px] ml-4" key={i}>
+              <span className="text-[13px] ml-6" key={i}>
                 {doc.title}
               </span>
             </div>
           </li>
         ))}
+
+        <li className="relative pl-8 pr-4">
+          <div
+            className="mt-3 flex items-center rounded-full duration-300 bg-orange-300 text-white cursor-pointer hover:bg-blue-600 "
+            onClick={() => router.push('/custommodels/new')}
+          >
+            <span className="text-[13px] ml-4" key="new">
+              Create New
+            </span>
+          </div>
+        </li>
       </ul>
     </>
   );

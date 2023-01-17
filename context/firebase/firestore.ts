@@ -1,12 +1,10 @@
-import { addDoc, collection, deleteDoc, getDoc, doc, onSnapshot, orderBy, query, setDoc, where } from 'firebase/firestore';
+import { addDoc, updateDoc, collection, deleteDoc, getDoc, doc, onSnapshot, orderBy, query, setDoc, where } from 'firebase/firestore';
 import { firebaseDB } from './firebase';
 import { getDownloadURL } from './storage';
 
-// Name of receipt collection in Firestore
-const RECEIPT_COLLECTION = 'receipts';
-
-export function addReceipt(uid: string, date: any, locationName: any, address: any, items: any, amount: any, imageBucket: any) {
-  addDoc(collection(firebaseDB, RECEIPT_COLLECTION), { uid, date, locationName, address, items, amount, imageBucket });
+export function addCustommodels(uid: string, date: any, locationName: any, address: any, items: any, amount: any, imageBucket: any) {
+  const path = `custommodels/${uid}/list/`;
+  addDoc(collection(firebaseDB, path), { uid, date, locationName, address, items, amount, imageBucket });
 }
 
 export async function getCustommodels(uid: string, setCustommodels: any, setIsLoadingCustommodels: any) {
@@ -31,17 +29,24 @@ export async function getCustommodel(uid: string, id: string, setCustommodel: an
   const path = `custommodels/${uid}/list/${id}`;
   const unsubscribe = onSnapshot(doc(firebaseDB, path), async (doc) => {
     setCustommodel(doc.data());
-    setIsLoadingCustommodel(false);
   });
   return unsubscribe;
 }
 
-// Updates receipt with @docId with given information.
-export function updateReceipt(docId: string, uid: string, date: any, locationName: string, address: string, items: any, amount: any, imageBucket: any) {
-  setDoc(doc(firebaseDB, RECEIPT_COLLECTION, docId), { uid, date, locationName, address, items, amount, imageBucket });
+export async function updateCustommodel(id: string, uid: string, fileJob: string, trainingFilePath: string, trainingFileURL: string, setSavedFile: any, setIsSaving: any) {
+  setIsSaving(true);
+  const path = `custommodels/${uid}/list/`;
+
+  await updateDoc(doc(firebaseDB, path, id), { trainingFileURL, fileJob, trainingFilePath })
+    .then(() => {
+      setIsSaving(false);
+    })
+    .catch((error) => {
+      console.log(`Unsuccessful returned error ${error}`);
+    });
 }
 
-// Deletes receipt with given @id.
-export function deleteReceipt(id: string) {
-  deleteDoc(doc(firebaseDB, RECEIPT_COLLECTION, id));
+export function deleteCustommodel(uid: string, id: string) {
+  const path = `custommodels/${uid}/list/`;
+  deleteDoc(doc(firebaseDB, path, id));
 }

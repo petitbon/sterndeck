@@ -45,15 +45,18 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     /* Send request to another server */
-    const response = await fetch('https://api.openai.com/v1/files', {
+    fetch('https://api.openai.com/v1/files', {
       headers: {
         Authorization: `Bearer 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`,
       },
       method: 'POST',
       body: formData,
+    }).then((response) => {
+      console.log(response.body);
     });
   }
 
+  //  console.log(res.status(status).json(resultBody));
   res.status(status).json(resultBody);
 };
 
