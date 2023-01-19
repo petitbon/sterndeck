@@ -24,7 +24,7 @@
       "@api*": ["./pages/api*"],
       "@lib*": ["./lib*"],
       "@context*": ["./context*"],
-      "@models*": ["./models*"]
+      "@interfaces*": ["./interfaces*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

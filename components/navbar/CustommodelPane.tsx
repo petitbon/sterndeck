@@ -3,8 +3,8 @@
 import { IconPhoto } from '@tabler/icons';
 import { useRouter } from 'next/navigation';
 import { getCustommodels } from '@context/firebase/firestore';
-import { useAuth } from '@context/AuthUserProvider';
 import { useEffect, useState } from 'react';
+import { useSystemContext } from '@context/SystemProvider';
 
 type CustommodelDocument = {
   id: string;
@@ -16,8 +16,8 @@ type CustommodelDocument = {
 };
 
 export default function CustommodelPane() {
+  const { authUser } = useSystemContext();
   const router = useRouter();
-  const { authUser } = useAuth();
   const [custommodels, setCustommodels] = useState([]);
   const [isLodingCustommodels, setIsLodingCustommodels] = useState([]);
 
@@ -31,21 +31,27 @@ export default function CustommodelPane() {
     doit();
   }, [authUser]);
 
-  //console.log(custommodels);
-
   return (
     <>
       <ul className="relative px-1">
         <li className="relative">
-          <div className="flex items-center m-4">
-            <IconPhoto size={25} stroke={1.5} className="mr-4" />
-            <span className="text-lg font-semibold">Custom Models</span>
+          <div className="flex flex-row">
+            {' '}
+            <div className="flex items-center m-4">
+              <IconPhoto size={35} stroke={1.5} className="mr-4" />
+              <span className="text-lg font-semibold">Custom Models</span>
+            </div>
+            <div className="flex items-center m-4">
+              <button className="btn-small" onClick={() => router.push('/custommodels/new')}>
+                <span className="text-[11px] mx-4">+ Create New </span>
+              </button>
+            </div>
           </div>
         </li>
 
         {custommodels?.map((doc: CustommodelDocument, i) => (
           <li className="relative pl-8" key={i}>
-            <div className="mt-3 flex items-center rounded-full duration-300 cursor-pointer hover:bg-blue-300 " key={i} onClick={() => router.push(`/custommodels/${doc.id}`)}>
+            <div className="m-3 p-1 flex items-center duration-300 cursor-pointer hover:bg-blue-300 " key={i} onClick={() => router.push(`/custommodels/${doc.id}`)}>
               <span className="text-[13px] ml-6" key={i}>
                 {doc.title}
               </span>
@@ -53,16 +59,7 @@ export default function CustommodelPane() {
           </li>
         ))}
 
-        <li className="relative pl-8 pr-4">
-          <div
-            className="mt-3 flex items-center rounded-full duration-300 bg-orange-300 text-white cursor-pointer hover:bg-blue-600 "
-            onClick={() => router.push('/custommodels/new')}
-          >
-            <span className="text-[13px] ml-4" key="new">
-              Create New
-            </span>
-          </div>
-        </li>
+        <li className="relative pl-8 pr-4"></li>
       </ul>
     </>
   );

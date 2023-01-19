@@ -1,11 +1,12 @@
 'use client';
 
-import { GoogleAuthProvider, GithubAuthProvider } from 'firebase/auth';
+import { useState, useEffect } from 'react';
+import { GoogleAuthProvider, GithubAuthProvider, onAuthStateChanged } from 'firebase/auth';
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import { getAuth } from 'firebase/auth';
-import { useAuth } from '@context/AuthUserProvider';
-import { firebaseApp, firebaseAuth } from '@context/firebase/firebase';
+import { firebaseAuth } from '@context/firebase/firebase';
 import { UserCard } from '@components/user/UserCard';
+import { useSystemContext } from '@context/SystemProvider';
+import { User } from 'firebase/auth';
 
 const uiConfig = {
   signInFlow: 'popup',
@@ -18,9 +19,18 @@ const uiConfig = {
 };
 
 function SignInScreen() {
-  const { authUser, isLoading } = useAuth();
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const { authUser, setAuthUser } = useSystemContext();
+  // Listen to the Firebase Auth state and set the local state.
+  useEffect(() => {
+    const unregisterAuthObserver = onAuthStateChanged(firebaseAuth, (user) => {
+      setIsSignedIn(!!user);
+      setAuthUser(user as User);
+    });
+    return () => unregisterAuthObserver(); // Make sure we un-register Firebase observers when the component unmounts.
+  }, []);
 
-  if (!authUser) {
+  if (!isSignedIn) {
     return (
       <div className="">
         <p className="text-sm text-center">Sign Up | Login</p>
@@ -34,7 +44,7 @@ function SignInScreen() {
           <UserCard user={authUser} />
         </div>
         <div className="flex justify-end items-center m-2">
-          <button className="btn-small" onClick={() => getAuth(firebaseApp).signOut()}>
+          <button className="btn-small" onClick={() => firebaseAuth.signOut()}>
             Sign-out
           </button>
         </div>

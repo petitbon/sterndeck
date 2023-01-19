@@ -1,7 +1,7 @@
 'use client';
 
 import UserCheck from '@components/user/UserCheck';
-import { useAuth } from '@context/AuthUserProvider';
+import { useSystemContext } from '@context/SystemProvider';
 import { firebaseDB } from '@context/firebase/firebase';
 import { addDoc, collection } from 'firebase/firestore';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -16,7 +16,7 @@ type CustommodelDocument = {
 type Inputs = CustommodelDocument;
 
 export default function CustommodelNew() {
-  const { authUser } = useAuth();
+  const { authUser } = useSystemContext();
 
   const {
     register,

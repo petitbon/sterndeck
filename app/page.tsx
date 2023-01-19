@@ -1,10 +1,14 @@
 'use client';
 
+import { useContext } from 'react';
+import { SystemContext } from '@context/SystemProvider';
+
 export default function HomePage() {
+  const { authUser, setAuthUser } = useContext(SystemContext);
   return (
     <div className="flex items-center flex-col mx-auto w-full justify-center mt-16 px-8">
-      <h1 className="font-bold mt-4 mb-8 text-xl">Coming Soon</h1>
-      <div className="flex items-center gap-4 mt-8 "></div>
+      <h1 className="font-bold mt-4 mb-8 text-xl">Coming Soon </h1>
+      <div className="flex items-center gap-4 mt-8 ">{authUser?.uid}</div>
     </div>
   );
 }

@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { User } from 'firebase/auth';
 
-export function UserCard({ user }: { user: User }) {
+export function UserCard({ user }: { user: User | null }) {
   let imageSource: string;
   if (user && user.photoURL) {
     imageSource = user.photoURL;

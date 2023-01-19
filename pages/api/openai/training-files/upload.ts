@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { promises as fs } from 'fs';
-import path from 'path';
+import fs from 'fs';
+import fetch from 'node-fetch';
+import FormData from 'form-data';
 import formidable, { File } from 'formidable';
 
 export const config = {
@@ -25,10 +26,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     form.on('end', () => resolve(files));
     form.on('error', (err) => reject(err));
     form.parse(req, () => {
-      //
+      //      console.log(req);
     });
   }).catch((e) => {
-    console.log(e);
     status = 500;
     resultBody = {
       status: 'fail',
@@ -37,22 +37,24 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   });
 
   if (files?.length) {
-    /* Create directory for uploads */
-    const targetPath = path.join(process.cwd(), `/uploads/`);
-    try {
-      await fs.access(targetPath);
-    } catch (e) {
-      await fs.mkdir(targetPath);
-    }
-
-    /* Move uploaded files to directory */
+    /* Add files to FormData */
+    const formData = new FormData();
     for (const file of files) {
-      const tempPath = file[1].filepath;
-      await fs.rename(tempPath, targetPath + file[1].originalFilename);
+      formData.append('purpose', 'fine-tune');
+      formData.append(file[0], fs.createReadStream(file[1].filepath));
     }
-  }
 
-  res.status(status).json(resultBody);
+    const response = await fetch('https://api.openai.com/v1/files', {
+      headers: {
+        Authorization: `Bearer ${process.env.OPENAI_API_BEARER}`,
+      },
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await response.json();
+    res.status(status).json(data);
+  }
 };
 
 export default handler;
