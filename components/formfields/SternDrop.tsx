@@ -6,7 +6,7 @@ import { IconPhoto } from '@tabler/icons';
 import { TrainingFile, UploadedTrainingFile } from '@interfaces/Custommodel';
 import { uploadFile, getDownloadURL } from '@context/firebase/storage';
 import { updateCustommodelFirst } from '@context/firebase/firestore';
-import { useAuth } from '@context/AuthUserProvider';
+import { useSystemContext } from '@context/SystemProvider';
 
 export interface Props {
   id: string;
@@ -22,11 +22,9 @@ const proxyUploadFile = async (file: string): Promise<TrainingFile> => {
 };
 
 export default function SternDrop({ id, fileJob }: Props) {
-  const { authUser } = useAuth();
+  const { authUser } = useSystemContext();
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
-  ///const [pokemon, setPokemon] = useState<Pokemon>(Object);
 
   const onDrop = useCallback(async (receivedFiles: any) => {
     setErrorMessage('');
