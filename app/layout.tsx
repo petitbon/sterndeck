@@ -10,7 +10,7 @@ import UserCheck from '@components/user/UserCheck';
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="">
+      <body>
         <SystemProvider>
           <aside className="sidenavbar border-r border-gray-400">
             {/* ----------------------------------------------------------------------------------- */}

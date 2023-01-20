@@ -2,6 +2,7 @@
 
 import { useEffect, ReactNode, createContext, useContext, useState, useMemo } from 'react';
 import { User, onAuthStateChanged, getAuth } from 'firebase/auth';
+import { firebaseAuth } from './firebase/firebase';
 
 export const SystemContext = createContext({
   authUser: {} as User,
@@ -24,7 +25,7 @@ export function SystemProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(getAuth(), authStateChanged);
+    const unsubscribe = onAuthStateChanged(firebaseAuth, authStateChanged);
     return () => unsubscribe();
   }, [authUser]);
 

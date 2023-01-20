@@ -5,7 +5,7 @@ import UserCheck from '@components/user/UserCheck';
 import { getCustommodel, getUploadedTrainingFiles, deleteTrainingFile } from '@context/firebase/firestore';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useState, useEffect } from 'react';
-import SternDrop from '@components/formfields/SternDrop';
+import SternDrop from '@components/custommodels/SternDrop';
 import { Custommodel, DeletedFileConfirmation, UploadedTrainingFile } from '@interfaces/Custommodel';
 import { deleteFile } from '@context/firebase/storage';
 
@@ -58,6 +58,13 @@ export default function CustommodelEdit({ params }: Props) {
 
   const onSubmit: SubmitHandler<Custommodel> = async (data: Custommodel) => {};
 
+  const train = async (): Promise<null> => {
+    const response = await fetch(`/api/openai/fine-tunes/create`, { method: 'POST' });
+    console.log("let's do this");
+    console.log(response);
+    return null;
+  };
+
   return (
     <>
       <UserCheck>
@@ -85,6 +92,12 @@ export default function CustommodelEdit({ params }: Props) {
                   </li>
                 ))}{' '}
               </ul>
+              <div className="flex justify-center pt-4">
+                {' '}
+                <button className="btn-primary bg-orange-600" onClick={() => train()}>
+                  Train
+                </button>
+              </div>
             </div>
           </form>
         </div>
