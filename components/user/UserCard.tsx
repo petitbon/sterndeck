@@ -3,9 +3,9 @@
 import Image from 'next/image';
 import { User } from 'firebase/auth';
 
-export function UserCard({ user }: { user: User | null }) {
+export function UserCard({ user }: { user: User }) {
   let imageSource: string;
-  if (user && user.photoURL) {
+  if (user.photoURL) {
     imageSource = user.photoURL;
   } else {
     imageSource = 'https://lh3.googleusercontent.com/a/AEdFTp66pfwryV9pHKD1_odl4xpQ60fjbTt9SlrjHi4X=s96-c';

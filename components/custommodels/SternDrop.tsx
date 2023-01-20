@@ -3,7 +3,7 @@
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { IconPhoto } from '@tabler/icons';
-import { TrainingFile, UploadedTrainingFile } from '@interfaces/Custommodel';
+import { TrainingFile } from '@interfaces/Custommodel';
 import { uploadFile, getDownloadURL } from '@context/firebase/storage';
 import { updateCustommodelFirst } from '@context/firebase/firestore';
 import { useSystemContext } from '@context/SystemProvider';
@@ -21,7 +21,7 @@ const proxyUploadFile = async (file: string): Promise<TrainingFile> => {
   return trainingFile;
 };
 
-export default function SternDrop({ id, fileJob }: Props) {
+export default function SternDrop({ id }: Props) {
   const { authUser } = useSystemContext();
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -58,7 +58,6 @@ export default function SternDrop({ id, fileJob }: Props) {
       const trainingFilePath: string = await uploadFile(receivedFiles[0], authUser.uid, id, trainingFile.id);
       const trainingFileURL: string = await getDownloadURL(trainingFilePath);
       const updatedCustommodel = await updateCustommodelFirst(id, authUser.uid, trainingFile.id, trainingFile, trainingFilePath, trainingFileURL);
-      console.log(updatedCustommodel);
     } catch (e) {
       console.error(e);
     }

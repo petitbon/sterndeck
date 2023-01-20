@@ -16,14 +16,14 @@ type CustommodelDocument = {
 };
 
 export default function CustommodelPane() {
-  const { authUser } = useSystemContext();
+  const { authUser, isSignedIn } = useSystemContext();
   const router = useRouter();
   const [custommodels, setCustommodels] = useState([]);
   const [isLodingCustommodels, setIsLodingCustommodels] = useState([]);
 
   useEffect(() => {
     const doit = async () => {
-      if (authUser) {
+      if (isSignedIn) {
         const unsubscribe = await getCustommodels(authUser.uid, setCustommodels, setIsLodingCustommodels);
         return () => unsubscribe();
       }

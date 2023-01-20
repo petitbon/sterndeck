@@ -3,12 +3,12 @@
 import { useSystemContext } from '@context/SystemProvider';
 
 function AuthCheck({ children }: any) {
-  const { authUser } = useSystemContext();
+  const { isSignedIn } = useSystemContext();
 
-  if (!authUser?.uid) {
-    return '';
-  } else {
+  if (isSignedIn) {
     return children;
+  } else {
+    return '';
   }
 }
 

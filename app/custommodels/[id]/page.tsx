@@ -16,14 +16,13 @@ interface Props {
 }
 
 export default function CustommodelEdit({ params }: Props) {
-  const { authUser } = useSystemContext();
+  const { authUser, isSignedIn } = useSystemContext();
   const [custommodel, setCustommodel] = useState({} as Custommodel);
-  ///const [pokemon, setPokemon] = useState<Pokemon>(Object);
   const [uploadedTrainingFiles, setUploadedTrainingFiles] = useState<UploadedTrainingFile[]>([]);
 
   useEffect(() => {
     const doit = async () => {
-      if (authUser) {
+      if (isSignedIn) {
         const unsubscribe = await getCustommodel(authUser.uid, params.id, setCustommodel);
         return () => unsubscribe();
       }
