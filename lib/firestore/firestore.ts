@@ -1,25 +1,39 @@
 import { firebaseApp } from '@context/firebase/firebase';
-import { addDoc, collection, doc, getDoc, getDocs, getFirestore, limit, orderBy, query, startAfter, startAt, updateDoc, where } from 'firebase/firestore';
+
+import {
+  addDoc,
+  deleteDoc,
+  onSnapshot,
+  DocumentData,
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  getFirestore,
+  limit,
+  orderBy,
+  query,
+  startAfter,
+  updateDoc,
+  where,
+} from 'firebase/firestore';
 
 const firestore = getFirestore(firebaseApp);
 
-export const getCollectionWithLimit = async <T>(collectionName: string, orderByElement: any, state: boolean, userUid: string) => {
+export const getCollectionWithLimit = async <T>(collectionName: string, orderByElement: any, userUid: string) => {
   let datas: any[] = [];
-  const docs = await getDocs(query(collection(firestore, collectionName), where('useruid', '==', userUid), orderBy(orderByElement), limit(10)));
-  docs.forEach((doc) => {
-    const id = doc.id;
-    const data = doc.data();
-    datas.push({
-      id,
-      ...data,
-      createdAt: new Date(data?.createdAt?.seconds * 1000) || null,
+  //const docs = await getDocs(query(collection(firestore, collectionName), where('useruid', '==', userUid), orderBy(orderByElement), limit(10)));
+  const docs = query(collection(firestore, collectionName));
+  onSnapshot(docs, async (snapshot) => {
+    snapshot.docs.forEach((doc: DocumentData) => {
+      datas.push({ ...doc.data(), id: doc.id });
     });
   });
 
   return datas as T[];
 };
 
-export const getCollectionAt = async <T>(collectionName: string, orderByElement: any, lastElement: any, state: boolean, userUid: string) => {
+export const getCollectionAt = async <T>(collectionName: string, orderByElement: any, lastElement: any, userUid: string) => {
   let datas: any[] = [];
   const lastDocSnap = await getDoc(doc(firestore, lastElement));
   const docs = await getDocs(query(collection(firestore, collectionName), where('useruid', '==', userUid), orderBy(orderByElement), limit(10), startAfter(lastDocSnap)));
@@ -58,4 +72,8 @@ export const addDocument = async <T>(collectionName: string, data: T) => {
 
 export const updateDocument = async <T>(collectionName: string, data: T) => {
   return await updateDoc(doc(firestore, collectionName), { ...(data as T[]) });
+};
+
+export const deleteDocument = async <T>(collectionName: string) => {
+  return await deleteDoc(doc(firestore, collectionName));
 };

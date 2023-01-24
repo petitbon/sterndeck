@@ -16,19 +16,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
     return;
   }
-  const trainingFile = req.body.trainingFile || '';
-  if (trainingFile.trim().length === 0) {
+  const training_file = req.body.training_file || '';
+  if (training_file.trim().length === 0) {
     res.status(400).json({ error: { message: 'Please enter a valid training file id' } });
     return;
   }
 
   switch (method) {
-    case 'POST':
+    case 'GET':
       try {
-        //        const response = await openai.createFineTune({
-        //         training_file: trainingFile,
-        //      });
-        //     res.status(200).json({ result: response.data });
+        const response = await openai.listFineTuneEvents('ft-AF1WoRqd3aJAHsqc9NY7iL8F');
+        res.status(200).json({ result: response.data });
       } catch (error) {
         if (error.response) {
           res.status(error.response.status).json(error.response.data);
@@ -38,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
       break;
     default:
-      res.setHeader('Allow', ['POST']);
+      res.setHeader('Allow', ['GET']);
       res.status(405).end(`Method ${method} Not Allowed`);
   }
 }

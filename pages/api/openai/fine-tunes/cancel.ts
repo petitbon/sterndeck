@@ -16,8 +16,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
     return;
   }
-  const trainingFile = req.body.trainingFile || '';
-  if (trainingFile.trim().length === 0) {
+  const fine_tune_id = req.body.training_file || '';
+
+  console.log(fine_tune_id);
+
+  if (fine_tune_id.trim().length === 0) {
     res.status(400).json({ error: { message: 'Please enter a valid training file id' } });
     return;
   }
@@ -25,16 +28,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   switch (method) {
     case 'POST':
       try {
-        //        const response = await openai.createFineTune({
-        //         training_file: trainingFile,
-        //      });
-        //     res.status(200).json({ result: response.data });
+        console.log(fine_tune_id);
+
+        //        const response = await openai.cancelFineTune(fine_tune_id);
+        //       res.status(200).json({ result: response.data });
       } catch (error) {
-        if (error.response) {
-          res.status(error.response.status).json(error.response.data);
-        } else {
-          res.status(500).json({ error: { message: 'An error occurred during your request.' } });
-        }
+        //      if (error.response) {
+        //       res.status(error.response.status).json(error.response.data);
+        //    } else {
+        //     res.status(500).json({ error: { message: 'An error occurred during your request.' } });
+        //  }
       }
       break;
     default:

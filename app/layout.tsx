@@ -1,9 +1,7 @@
-'use client';
-
 import '../styles/globals.css';
 
 import UserAuth from '@components/user/UserAuth';
-import CustommodelPane from '@components/navbar/CustommodelPane';
+import ModelPane from '@components/navbar/ModelPane';
 import { SystemProvider } from '@context/SystemProvider';
 import UserCheck from '@components/user/UserCheck';
 
@@ -15,7 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <aside className="sidenavbar border-r border-gray-400">
             {/* ----------------------------------------------------------------------------------- */}
             <div className="h-[80px] m-3">
-              <div className="flex items-center justify-left -space-x-[250px]">
+              <div className="flex items-center justofy-left -space-x-[250px]">
                 <div className="flex justify-center -space-x-[18px]">
                   <div className="og-blend bg-red-600"> </div>
                   <div className="og-blend bg-pink-400"> </div>
@@ -39,7 +37,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
             <div className="items-center justify-center h-auto">
               <UserCheck>
-                <CustommodelPane />
+                <ModelPane />
               </UserCheck>
             </div>
             {/* ----------------------------------------------------------------------------------- */}

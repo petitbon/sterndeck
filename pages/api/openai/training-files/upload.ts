@@ -26,7 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     form.on('end', () => resolve(files));
     form.on('error', (err) => reject(err));
     form.parse(req, () => {
-      //      console.log(req);
+      // console.log(req);
     });
   }).catch((e) => {
     status = 500;

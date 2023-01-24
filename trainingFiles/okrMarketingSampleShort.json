@@ -1,0 +1,14 @@
+[
+  {
+    "prompt": "{Objective: Become the top American High School In Pakistan.}",
+    "completion": "{[{KR1: Enrollment increased 100% by end of quarter}, {KR2: 10 percent of students accepted to Ivy League every year.}, {KR3: 60% students placed in college with scholarships.},{KR4: Internal testing improves by 10%.}]}"
+  },
+  {
+    "prompt": "{ Objective: Instagram account is a major contributor to sales and brand awareness.}",
+    "completion": "{[{KR1: Hit 100k followers by end of quarter.},{KR2: 2.5% average engagement rate on all posts.},{KR3: 15% of sales comes from Instagram.},{KR4: Make a - 10 top accounts you need to follow - list.}]}"
+  },
+  {
+    "prompt": "{Objective: Reach meaningful scale by filing 1,500 cases/month.}",
+    "completion": "{[{KR1: NPS above 85.}, {KR2: Scale product and processes to support 1000 cases/month.},{ KR3: Improve funnel to file 400 cases/month based on all site traffic.}, {KR4: 10000 website visitors/month via technical and non-technical SEO}]}"
+  }
+]

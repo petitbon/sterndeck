@@ -1,6 +1,7 @@
+/*
 import { addDoc, collection, deleteDoc, doc, onSnapshot, query, setDoc } from 'firebase/firestore';
 import { firebaseDB } from './firebase';
-import { TrainingFile } from '@interfaces/Custommodel';
+import { ITrainingFile } from '@interfaces/Custommodel';
 
 export function addCustommodels(uid: string, date: any, locationName: any, address: any, items: any, amount: any, imageBucket: any) {
   const path = `custommodels/${uid}/list/`;
@@ -54,12 +55,18 @@ export async function updateCustommodelFirst(
   custommodelid: string,
   uid: string,
   trainingFileId: string,
-  trainingFile: TrainingFile,
+  trainingFile: ITrainingFile,
   trainingFilePath: string,
   trainingFileURL: string
 ) {
   const path = `custommodels/${uid}/list/${custommodelid}/uploadedTrainingFiles`;
   const unsub = await setDoc(doc(firebaseDB, path, trainingFileId), { id: trainingFileId, trainingFile, trainingFilePath, trainingFileURL });
+  return unsub;
+}
+
+export async function updateFineTunes(custommodelid: string, uid: string, trainingFileId: string, fine_tune_id: string) {
+  const path = `custommodels/${uid}/list/${custommodelid}/fine-tunes`;
+  const unsub = await setDoc(doc(firebaseDB, path, fine_tune_id), { id: trainingFileId, fine_tune_id: fine_tune_id });
   return unsub;
 }
 
@@ -72,3 +79,6 @@ export function deleteTrainingFile(uid: string, custommodelid: string, fileid: s
   const path = `custommodels/${uid}/list/${custommodelid}/uploadedTrainingFiles`;
   deleteDoc(doc(firebaseDB, path, fileid));
 }
+
+
+*/

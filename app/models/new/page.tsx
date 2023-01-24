@@ -1,32 +1,25 @@
 'use client';
 
-import UserCheck from '@components/user/UserCheck';
-import { useSystemContext } from '@context/SystemProvider';
-import { firebaseDB } from '@context/firebase/firebase';
-import { addDoc, collection } from 'firebase/firestore';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useSystemContext } from '@context/SystemProvider';
 
-type CustommodelDocument = {
-  title: string;
-  basemodel: string;
-  epochs: number;
-  useruid: string;
-};
+import { IModel } from '@interfaces/IModel';
 
-type Inputs = CustommodelDocument;
+import { addModel } from '@lib/firestore/models.firestore';
 
-export default function CustommodelNew() {
+import UserCheck from '@components/user/UserCheck';
+
+export default function ModelNew() {
   const { authUser } = useSystemContext();
 
   const {
     register,
     handleSubmit,
     formState: { isSubmitting, errors },
-  } = useForm<Inputs>();
+  } = useForm<IModel>();
 
-  const onSubmit: SubmitHandler<Inputs> = async (data: CustommodelDocument) => {
-    const colRef = collection(firebaseDB, 'custommodels', data.useruid, 'list');
-    await addDoc(colRef, data);
+  const onSubmit: SubmitHandler<IModel> = async (data: IModel) => {
+    await addModel(authUser.uid, data);
   };
 
   const basemodelsOptions = ['ada', 'babbage', 'curie', 'davinci'];
@@ -40,12 +33,12 @@ export default function CustommodelNew() {
             <div className="mb-4">
               <label className="custommodel-label">Custom Model</label>
               <input placeholder="Name of the custom model" className="custommodel-input" {...register('title', { required: true })} />
-              <input type="hidden" className="custommodel-input" {...register('useruid', { required: true })} value={authUser?.uid} />
+              <input type="hidden" className="custommodel-input" {...register('user_uid', { required: true })} value={authUser?.uid} />
               {errors.title && <span>This field is required</span>}
             </div>
             <div className="mb-4">
               <label className="custommodel-label">Base Model</label>
-              <select className="custommodel-input" defaultValue="curie" {...register('basemodel', { required: true })}>
+              <select className="custommodel-input" defaultValue="curie" {...register('model', { required: true })}>
                 {basemodelsOptions.map((value, i) => (
                   <option value={value} key={i}>
                     {value}
@@ -56,7 +49,7 @@ export default function CustommodelNew() {
             </div>
             <div className="mb-4">
               <label className="custommodel-label">Number of Epochs</label>
-              <select className="custommodel-input" defaultValue="4" {...register('epochs', { required: true })}>
+              <select className="custommodel-input" defaultValue="4" {...register('n_epochs', { required: true })}>
                 {epochsOptions.map((value, i) => (
                   <option value={value} key={i}>
                     {value}

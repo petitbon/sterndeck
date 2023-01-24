@@ -3,28 +3,30 @@
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { IconPhoto } from '@tabler/icons';
-import { TrainingFile } from '@interfaces/Custommodel';
-import { uploadFile, getDownloadURL } from '@context/firebase/storage';
-import { updateCustommodelFirst } from '@context/firebase/firestore';
 import { useSystemContext } from '@context/SystemProvider';
 
+import { ITrainingFile } from '@interfaces/ITrainingFile';
+
+import { uploadFile, getDownloadURL } from '@cloudstorage/storage';
+import { addTrainingFile } from '@firestore/trainingFiles.firestore';
+
 export interface Props {
-  id: string;
-  fileJob: 'training' | 'validation';
+  model_id: string;
 }
 
-const proxyUploadFile = async (file: string): Promise<TrainingFile> => {
+const sendFileToOpenai = async (file: string): Promise<ITrainingFile> => {
   const formData = new FormData();
   formData.append('file', file);
   const response = await fetch('/api/openai/training-files/upload', { method: 'POST', body: formData });
-  const trainingFile: TrainingFile = await response.json();
+  const trainingFile: ITrainingFile = await response.json();
   return trainingFile;
 };
 
-export default function SternDrop({ id }: Props) {
+export default function SternDrop({ model_id }: Props) {
   const { authUser } = useSystemContext();
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [trainingFile, setTrainingFile] = useState<ITrainingFile>(Object);
 
   const onDrop = useCallback(async (receivedFiles: any) => {
     setErrorMessage('');
@@ -54,10 +56,12 @@ export default function SternDrop({ id }: Props) {
     reader.readAsArrayBuffer(receivedFiles[0]);
 
     try {
-      const trainingFile: TrainingFile = await proxyUploadFile(receivedFiles[0]);
-      const trainingFilePath: string = await uploadFile(receivedFiles[0], authUser.uid, id, trainingFile.id);
+      const openaifile: ITrainingFile = await sendFileToOpenai(receivedFiles[0]);
+      const trainingFilePath: string = await uploadFile(receivedFiles[0], authUser.uid, model_id, openaifile.id);
       const trainingFileURL: string = await getDownloadURL(trainingFilePath);
-      const updatedCustommodel = await updateCustommodelFirst(id, authUser.uid, trainingFile.id, trainingFile, trainingFilePath, trainingFileURL);
+      const tf = { ...openaifile, path: trainingFilePath, url: trainingFileURL };
+      await addTrainingFile(authUser.uid, model_id, tf);
+      setTrainingFile(tf);
     } catch (e) {
       console.error(e);
     }
@@ -66,7 +70,7 @@ export default function SternDrop({ id }: Props) {
   const { getRootProps, getInputProps } = useDropzone({ onDrop, multiple: false });
 
   return (
-    <div {...getRootProps()} className="flex flex-col h-[300px] bg-gray-100 border p-10 m-4 justify-center items-center">
+    <div {...getRootProps()} className="flex flex-col h-[100px] bg-gray-100 border p-10 m-4 justify-center items-center">
       <input {...getInputProps()} />
       <div className="flex items-center text-gray-400 text-bold">
         <IconPhoto size={55} stroke={1.5} className={`${isUploading ? 'text-red-500' : 'text-gray-500 '}`} />

@@ -28,7 +28,7 @@ function SignInScreen() {
       setIsSignedIn(!!user);
     });
     return () => unsubscribe();
-  }, [authUser]);
+  }, []);
 
   if (isSignedIn) {
     return (

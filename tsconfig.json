@@ -10,6 +10,7 @@
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
+    "useUnknownInCatchVariables": false,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -24,7 +25,9 @@
       "@api*": ["./pages/api*"],
       "@lib*": ["./lib*"],
       "@context*": ["./context*"],
-      "@interfaces*": ["./interfaces*"]
+      "@interfaces*": ["./lib/interfaces*"],
+      "@firestore*": ["./lib/firestore*"],
+      "@cloudstorage*": ["./lib/cloudstorage*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

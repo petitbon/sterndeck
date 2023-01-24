@@ -1,11 +1,11 @@
-/*
+import { firebaseStorage } from '@context/firebase/firebase';
+
 import { deleteObject, getDownloadURL as getStorageDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { firebaseStorage } from './firebase';
 
 const BUCKET_URL = 'fine-tuned-files';
 
-export async function uploadFile(file: any, uid: string, custommodelid: string, fileid: string) {
-  const filePath = `${BUCKET_URL}/${uid}/${custommodelid}/${fileid}.jsonl`;
+export async function uploadFile(file: any, user_uid: string, model_id: string, file_id: string) {
+  const filePath = `${BUCKET_URL}/${user_uid}/${model_id}/${file_id}.jsonl`;
   const uploadedFile = await uploadBytes(ref(firebaseStorage, filePath), file);
   return uploadedFile.metadata.fullPath;
 }
@@ -31,4 +31,3 @@ export function deleteFile(path: any) {
 export async function getDownloadURL(path: any) {
   return await getStorageDownloadURL(ref(firebaseStorage, path));
 }
- */

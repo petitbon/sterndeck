@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import type { DeletedFileConfirmation } from '@interfaces/Custommodel';
+import type { DeletedFileConfirmation } from '@interfaces/DeletedFileConfirmation';
 
 export default async function userHandler(req: NextApiRequest, res: NextApiResponse<DeletedFileConfirmation>) {
   const { query, method } = req;
