@@ -5,7 +5,7 @@ import { useSystemContext } from '@context/SystemProvider';
 
 import { IModel } from '@interfaces/IModel';
 
-import { addModel } from '@lib/firestore/models.firestore';
+import { addModel } from '@lib/firestore/models';
 
 import UserCheck from '@components/user/UserCheck';
 

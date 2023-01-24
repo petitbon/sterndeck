@@ -4,19 +4,14 @@ import { deleteObject, getDownloadURL as getStorageDownloadURL, ref, uploadBytes
 
 const BUCKET_URL = 'fine-tuned-files';
 
-export async function uploadFile(file: any, user_uid: string, model_id: string, file_id: string) {
+export async function uploadStorageFile(file: any, user_uid: string, model_id: string, file_id: string) {
   const filePath = `${BUCKET_URL}/${user_uid}/${model_id}/${file_id}.jsonl`;
   const uploadedFile = await uploadBytes(ref(firebaseStorage, filePath), file);
   return uploadedFile.metadata.fullPath;
 }
 
-// Replaces existing image in storage and returns the storage bucket
-export function replaceImage(image: any, bucket: any) {
-  uploadBytes(ref(firebaseStorage, bucket), image);
-}
-
 // Deletes existing image in storage
-export function deleteFile(path: any) {
+export function deleteStorageFile(path: any) {
   const desertRef = ref(firebaseStorage, path);
   deleteObject(desertRef)
     .then(() => {

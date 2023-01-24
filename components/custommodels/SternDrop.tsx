@@ -7,8 +7,8 @@ import { useSystemContext } from '@context/SystemProvider';
 
 import { ITrainingFile } from '@interfaces/ITrainingFile';
 
-import { uploadFile, getDownloadURL } from '@cloudstorage/storage';
-import { addTrainingFile } from '@firestore/trainingFiles.firestore';
+import { uploadStorageFile, getDownloadURL } from '@cloudstorage/storage';
+import { addTrainingFile } from '@firestore/trainingFiles';
 
 export interface Props {
   model_id: string;
@@ -57,7 +57,7 @@ export default function SternDrop({ model_id }: Props) {
 
     try {
       const openaifile: ITrainingFile = await sendFileToOpenai(receivedFiles[0]);
-      const trainingFilePath: string = await uploadFile(receivedFiles[0], authUser.uid, model_id, openaifile.id);
+      const trainingFilePath: string = await uploadStorageFile(receivedFiles[0], authUser.uid, model_id, openaifile.id);
       const trainingFileURL: string = await getDownloadURL(trainingFilePath);
       const tf = { ...openaifile, path: trainingFilePath, url: trainingFileURL };
       await addTrainingFile(authUser.uid, model_id, tf);

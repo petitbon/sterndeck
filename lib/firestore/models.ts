@@ -1,7 +1,8 @@
 import { firebaseDB } from '@context/firebase/firebase';
 import { IModel } from '@interfaces/IModel';
 
-import { onSnapshot, collection, query, where, documentId } from 'firebase/firestore';
+import { onSnapshot, collection, query, where, documentId, addDoc } from 'firebase/firestore';
+
 export async function getModels(user_uid: string, setModels: any) {
   const path = `models/${user_uid}/list`;
   const collectionQuery = query(collection(firebaseDB, path));
@@ -35,6 +36,18 @@ export async function getModel(user_uid: string, model_id: string, setModel: any
   });
   return unsubscribe;
 }
+
+//export const addModel = async <T>(user_uid: string, data: T) => {
+//  addDoc(collection(firebaseDB, `models/${user_uid}/list/`), data as T[]);
+//};
+
+export async function addModel(user_uid: string, data: IModel) {
+  addDoc(collection(firebaseDB, `models/${user_uid}/list/`), data);
+}
+
+//  export function addModel(user_uid, date, locationName, address, items, amount, imageBucket) {
+//   addDoc(collection(db, RECEIPT_COLLECTION), { uid, date, locationName, address, items, amount, imageBucket });
+//}
 
 /*
 export const addModel = (user_uid: string, model: IModel) => addDocument(`models/${user_uid}/list`, model);

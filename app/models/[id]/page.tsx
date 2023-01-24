@@ -43,11 +43,10 @@ export default function ModelEdit({ params }: Props) {
   }, [authUser]);
 
   const methods = useForm();
-  const onSubmit = (data: any) => console.log(data);
+  const onSubmit = (data: any) => console.log('DAT FROM EDIT PAGE: ', data);
 
   const onCreateFineTune: SubmitHandler<FieldValues> = async (subdata) => {
-    console.log(JSON.stringify(subdata));
-
+    //   console.log(JSON.stringify(subdata));
     /*
     try {
       const response = await fetch('/api/openai/fine-tunes/create', {
@@ -81,9 +80,9 @@ export default function ModelEdit({ params }: Props) {
                 <div> Number of Epochs {model?.n_epochs} </div>
                 <SternDrop model_id={params.id as string} />
                 <ul>
-                  {trainingFiles.map((sdfile: ITrainingFile, i: number) => (
-                    <li className="relative m-2" key={i + 'li'}>
-                      <TrainingFile sdCustommodelId={params.id} sdTrainingFile={sdfile} />
+                  {trainingFiles.map((file: ITrainingFile, i: number) => (
+                    <li className="relative m-2" key={i}>
+                      <TrainingFile modelId={params.id} trainingFile={file} />
                     </li>
                   ))}
                 </ul>
@@ -94,7 +93,7 @@ export default function ModelEdit({ params }: Props) {
                 </div>
                 <ul>
                   {fineTunes.map((fineTune: IFineTune, i: number) => (
-                    <li className="relative m-2" key={i + 'li'}>
+                    <li className="relative m-2" key={i}>
                       <FineTune modelId={params.id} trainingFiles={fineTune.training_files} />
                     </li>
                   ))}
