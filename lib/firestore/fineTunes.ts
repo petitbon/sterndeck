@@ -1,0 +1,29 @@
+import { firebaseDB } from '@context/firebase/firebase';
+
+import { doc, setDoc, deleteDoc, onSnapshot, collection, query } from 'firebase/firestore';
+
+export async function getFineTunes(user_uid: string, model_id: string, setFineTunes: any) {
+  const path = `models/${user_uid}/list/${model_id}/fine_tunes`;
+  const collectionQuery = query(collection(firebaseDB, path));
+  const unsubscribe = onSnapshot(collectionQuery, async (snapshot) => {
+    let allDatas = [];
+    for (const documentSnapshot of snapshot.docs) {
+      const model = documentSnapshot.data();
+      allDatas.push({
+        ...model,
+        id: documentSnapshot.id,
+      });
+    }
+    setFineTunes(allDatas);
+  });
+  return unsubscribe;
+}
+
+export async function addFineTune(user_uid: string, model_id: string, data: any) {
+  const path = `models/${user_uid}/list/${model_id}/fine_tunes`;
+  await setDoc(doc(firebaseDB, path, data.id), data);
+}
+
+export async function deleteFineTune(user_uid: string, model_id: string, data_id: string) {
+  deleteDoc(doc(firebaseDB, `models/${user_uid}/list/${model_id}/fine_tunes/${data_id}`));
+}

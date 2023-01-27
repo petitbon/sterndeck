@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import type { DeletedFileConfirmation } from '@interfaces/DeletedFileConfirmation';
+import type { IDeletedFileConfirmation } from '@interfaces/IDeletedFileConfirmation';
 
-export default async function userHandler(req: NextApiRequest, res: NextApiResponse<DeletedFileConfirmation>) {
+export default async function userHandler(req: NextApiRequest, res: NextApiResponse<IDeletedFileConfirmation>) {
   const { query, method } = req;
   const id = query.id as string;
   let status = 200;

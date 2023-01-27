@@ -26,12 +26,10 @@ export default function SternDrop({ model_id }: Props) {
   const { authUser } = useSystemContext();
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [trainingFile, setTrainingFile] = useState<ITrainingFile>(Object);
 
   const onDrop = useCallback(async (receivedFiles: any) => {
     setErrorMessage('');
-    if (receivedFiles.length == 1) {
-    } else {
+    if (receivedFiles.length !== 1) {
       setErrorMessage('please upload one file at a time');
       return null;
     }
@@ -61,7 +59,6 @@ export default function SternDrop({ model_id }: Props) {
       const trainingFileURL: string = await getDownloadURL(trainingFilePath);
       const tf = { ...openaifile, path: trainingFilePath, url: trainingFileURL };
       await addTrainingFile(authUser.uid, model_id, tf);
-      setTrainingFile(tf);
     } catch (e) {
       console.error(e);
     }

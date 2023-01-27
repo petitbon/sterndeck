@@ -10,6 +10,7 @@ import { IFineTune } from '@interfaces/IFineTune';
 
 import { getModel } from '@firestore/models';
 import { getTrainingFiles } from '@firestore/trainingFiles';
+import { getFineTunes } from '@firestore/fineTunes';
 
 import UserCheck from '@components/user/UserCheck';
 import SternDrop from '@components/custommodels/SternDrop';
@@ -33,9 +34,11 @@ export default function ModelEdit({ params }: Props) {
       if (isSignedIn) {
         const disregard = await getModel(authUser.uid, params.id, setModel);
         const unsubscribe = await getTrainingFiles(authUser.uid, params.id, setTrainingFiles);
+        const forgetit = await getFineTunes(authUser.uid, params.id, setFineTunes);
         return () => {
           unsubscribe();
           disregard();
+          forgetit();
         };
       }
     };
@@ -43,29 +46,7 @@ export default function ModelEdit({ params }: Props) {
   }, [authUser]);
 
   const methods = useForm();
-  const onSubmit = (data: any) => console.log('DAT FROM EDIT PAGE: ', data);
-
-  const onCreateFineTune: SubmitHandler<FieldValues> = async (subdata) => {
-    //   console.log(JSON.stringify(subdata));
-    /*
-    try {
-      const response = await fetch('/api/openai/fine-tunes/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(subdata),
-      });
-      const data = await response.json();
-      if (response.status !== 200) {
-        throw data.error || new Error(`Request failed with status ${response.status}`);
-      }
-      console.log(data.result);
-    } catch (error) {
-      console.error(error);
-    }
-     */
-  };
+  const onSubmit = (data: any) => console.log('DATA FROM EDIT PAGE: ', data);
 
   return (
     <>
@@ -82,19 +63,14 @@ export default function ModelEdit({ params }: Props) {
                 <ul>
                   {trainingFiles.map((file: ITrainingFile, i: number) => (
                     <li className="relative m-2" key={i}>
-                      <TrainingFile modelId={params.id} trainingFile={file} />
+                      <TrainingFile model={model} trainingFile={file} />
                     </li>
                   ))}
                 </ul>
-                <div className="flex-1 justify-center align-center m-4">
-                  <button className="btn-primary bg-red-600 w-full text-white text-xl" onClick={methods.handleSubmit((d) => onCreateFineTune(d))}>
-                    TRAIN FINE TUNE MODEL
-                  </button>
-                </div>
                 <ul>
                   {fineTunes.map((fineTune: IFineTune, i: number) => (
                     <li className="relative m-2" key={i}>
-                      <FineTune modelId={params.id} trainingFiles={fineTune.training_files} />
+                      <FineTune modelId={params.id} fineTune={fineTune} />
                     </li>
                   ))}
                 </ul>

@@ -11,24 +11,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { method } = req;
 
   if (!configuration.apiKey) {
-    res.status(500).json({
-      error: { message: 'OpenAI API key not configured' },
-    });
-    return;
-  }
-  const trainingFile = req.body.trainingFile || '';
-  if (trainingFile.trim().length === 0) {
-    res.status(400).json({ error: { message: 'Please enter a valid training file id' } });
+    res.status(500).json({ error: { message: 'OpenAI API key not configured' } });
     return;
   }
 
   switch (method) {
     case 'POST':
       try {
-        //        const response = await openai.createFineTune({
-        //         training_file: trainingFile,
-        //      });
-        //     res.status(200).json({ result: response.data });
+        const response = await openai.createFineTune(req.body);
+        res.status(200).json({ result: response.data });
       } catch (error) {
         if (error.response) {
           res.status(error.response.status).json(error.response.data);
