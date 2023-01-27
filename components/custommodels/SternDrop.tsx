@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { IconPhoto } from '@tabler/icons';
+import { IconPhoto } from '@tabler/icons-react';
 import { useSystemContext } from '@context/SystemProvider';
 
 import { ITrainingFile } from '@interfaces/ITrainingFile';

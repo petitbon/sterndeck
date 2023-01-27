@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { IconPhoto } from '@tabler/icons';
+import { IconPhoto } from '@tabler/icons-react';
 import { useSystemContext } from '@context/SystemProvider';
 
 import { IModel } from '@interfaces/IModel';

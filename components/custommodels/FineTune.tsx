@@ -1,7 +1,12 @@
+import { useSystemContext } from '@context/SystemProvider';
+
 import { ITrainingFile } from '@interfaces/ITrainingFile';
 import { IFineTune } from '@interfaces/IFineTune';
+import { ICancelFineTuneConfirmation } from '@interfaces/ICancelFineTuneConfirmation';
 
 import TrainedFile from '@components/custommodels/TrainedFile';
+
+import { cancelFineTune } from '@firestore/fineTunes';
 
 export interface Props {
   fineTune: IFineTune;
@@ -9,6 +14,19 @@ export interface Props {
 }
 
 export default function FineTune({ fineTune, modelId }: Props) {
+  const { authUser } = useSystemContext();
+
+  //
+
+  const cancelTraining = async (fineTuneId: string): Promise<ICancelFineTuneConfirmation | null> => {
+    console.log(fineTuneId);
+    const response = await fetch(`/api/openai/fine-tunes/${fineTuneId}/cancel`, { method: 'POST', body: fineTuneId });
+    const confirmation: ICancelFineTuneConfirmation = await response.json();
+    cancelFineTune(authUser.uid, modelId, fineTuneId);
+    fineTune = {} as IFineTune;
+    return confirmation;
+  };
+
   return (
     <div className="flex-1 p-2 mx-2 border items-center border ">
       <div className="text-[12px] m-1 font-semibold items-center">
@@ -18,7 +36,7 @@ export default function FineTune({ fineTune, modelId }: Props) {
 
       <ul>
         <li className="relative m-2" key="">
-          Fine Tune: {fineTune.id}
+          Fine Tune: {fineTune.id} Status: {fineTune.status}
         </li>
       </ul>
 
@@ -29,6 +47,12 @@ export default function FineTune({ fineTune, modelId }: Props) {
           </li>
         ))}
       </ul>
+
+      <div className="flex m-2 w-1/3 font-semibold justify-end">
+        <button className="btn-primary" onClick={() => cancelTraining(fineTune.id)}>
+          Cancel Training
+        </button>
+      </div>
     </div>
   );
 }
