@@ -1,8 +1,5 @@
 {
   "projects": {
-    "default": "sterndeck-2",
-    "dev": "sterndeck-2"
-  },
-  "targets": {},
-  "etags": {}
+    "default": "sterndeck-4"
+  }
 }

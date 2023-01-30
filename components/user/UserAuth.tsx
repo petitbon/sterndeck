@@ -1,26 +1,21 @@
 'use client';
 
 import { useEffect } from 'react';
-import { GoogleAuthProvider, GithubAuthProvider, onAuthStateChanged } from 'firebase/auth';
-import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'firebase/auth';
 import { firebaseAuth } from '@context/firebase/firebase';
 import { UserCard } from '@components/user/UserCard';
 import { useSystemContext } from '@context/SystemProvider';
 import { User } from 'firebase/auth';
 
-const uiConfig = {
-  signInFlow: 'popup',
-  signInSuccessUrl: '/',
-  signInOptions: [GoogleAuthProvider.PROVIDER_ID, GithubAuthProvider.PROVIDER_ID],
-  callbacks: {
-    // Avoid redirects after sign-in.
-    signInSuccessWithAuthResult: () => false,
-  },
-};
-
 function SignInScreen() {
   const { isSignedIn, setIsSignedIn } = useSystemContext();
   const { authUser, setAuthUser } = useSystemContext();
+  const provider = new GoogleAuthProvider();
+  //  const auth = getAuth();
+
+  const signIn = async () => {
+    await signInWithPopup(firebaseAuth, provider);
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseAuth, (user: any) => {
@@ -46,9 +41,10 @@ function SignInScreen() {
   } else {
     return (
       <>
-        <div className="">
-          <p className="text-sm text-center">Sign Up | Login</p>
-          <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebaseAuth} />
+        <div className="flex justify-center items-center m-2">
+          <button className="btn-primary" onClick={signIn}>
+            Sign In
+          </button>
         </div>
       </>
     );
