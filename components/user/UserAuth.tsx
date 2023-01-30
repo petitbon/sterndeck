@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'firebase/auth';
+import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'firebase/auth';
 import { firebaseAuth } from '@context/firebase/firebase';
 import { UserCard } from '@components/user/UserCard';
 import { useSystemContext } from '@context/SystemProvider';
@@ -11,7 +11,6 @@ function SignInScreen() {
   const { isSignedIn, setIsSignedIn } = useSystemContext();
   const { authUser, setAuthUser } = useSystemContext();
   const provider = new GoogleAuthProvider();
-  //  const auth = getAuth();
 
   const signIn = async () => {
     await signInWithPopup(firebaseAuth, provider);
@@ -32,7 +31,7 @@ function SignInScreen() {
           <UserCard user={authUser} />
         </div>
         <div className="flex justify-end items-center m-2">
-          <button className="btn-small" onClick={() => firebaseAuth.signOut()}>
+          <button className="btn-small" onClick={() => signOut(firebaseAuth)}>
             Sign-out
           </button>
         </div>
