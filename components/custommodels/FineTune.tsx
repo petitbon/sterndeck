@@ -1,9 +1,11 @@
 import { useSystemContext } from '@context/SystemProvider';
 
+import { useState, useEffect } from 'react';
 import { ITrainingFile } from '@interfaces/ITrainingFile';
 import { IFineTune } from '@interfaces/IFineTune';
 import { ICancelFineTuneConfirmation } from '@interfaces/ICancelFineTuneConfirmation';
 
+import { getEvent } from '@firestore/fineTunes';
 import TrainedFile from '@components/custommodels/TrainedFile';
 
 import { cancelFineTune } from '@firestore/fineTunes';
@@ -15,6 +17,17 @@ export interface Props {
 
 export default function FineTune({ fineTune, modelId }: Props) {
   const { authUser } = useSystemContext();
+  const [event, setEvent] = useState({ latestMessage: '' });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const unsub = await getEvent(authUser.uid, modelId, fineTune.id, setEvent);
+      return () => {
+        unsub();
+      };
+    };
+    fetchData();
+  }, [authUser]);
 
   //
 
@@ -40,6 +53,11 @@ export default function FineTune({ fineTune, modelId }: Props) {
         </li>
       </ul>
 
+      <ul>
+        <li className="relative m-2" key="">
+          Update: {event?.latestMessage}
+        </li>
+      </ul>
       <ul>
         {fineTune.training_files.map((file: ITrainingFile, i: number) => (
           <li className="relative m-2" key={i}>
