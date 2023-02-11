@@ -5,10 +5,14 @@ import { ITrainingFile } from '@interfaces/ITrainingFile';
 import { IFineTune } from '@interfaces/IFineTune';
 import { ICancelFineTuneConfirmation } from '@interfaces/ICancelFineTuneConfirmation';
 
+import { IFineTuneDeleteConfirmation } from '@interfaces/IFineTune';
+
 import { getEvent } from '@firestore/fineTunes';
 import TrainedFile from '@components/custommodels/TrainedFile';
+import FineTunedPrompt from '@components/custommodels/FineTunedPrompt';
 
 import { cancelFineTune } from '@firestore/fineTunes';
+import { deleteFineTune } from '@firestore/fineTunes';
 
 export interface Props {
   fineTune: IFineTune;
@@ -29,15 +33,20 @@ export default function FineTune({ fineTune, modelId }: Props) {
     fetchData();
   }, [authUser]);
 
-  //
-
   const cancelTraining = async (fineTuneId: string): Promise<ICancelFineTuneConfirmation | null> => {
-    console.log(fineTuneId);
-    const response = await fetch(`/api/openai/fine-tunes/${fineTuneId}/cancel`, { method: 'POST', body: fineTuneId });
+    const response = await fetch(`/api/openai/fine-tunes/cancel`, { method: 'POST', body: fineTuneId });
     const confirmation: ICancelFineTuneConfirmation = await response.json();
-    cancelFineTune(authUser.uid, modelId, fineTuneId);
+    await cancelFineTune(authUser.uid, modelId, fineTuneId);
     fineTune = {} as IFineTune;
     return confirmation;
+  };
+
+  const deleteFineTuned = async (fineTune: IFineTune): Promise<IFineTuneDeleteConfirmation | null> => {
+    await fetch(`/api/openai/fine-tunes/delete`, { method: 'DELETE', body: fineTune.fine_tuned_model });
+    await cancelFineTune(authUser.uid, modelId, fineTune.id);
+    await deleteFineTune(authUser.uid, modelId, fineTune.id);
+    fineTune = {} as IFineTune;
+    return null;
   };
 
   return (
@@ -59,6 +68,12 @@ export default function FineTune({ fineTune, modelId }: Props) {
         </li>
       </ul>
       <ul>
+        <li className="relative m-2" key="">
+          Fine Tune Model: {fineTune.fine_tuned_model}
+        </li>
+      </ul>
+
+      <ul>
         {fineTune.training_files.map((file: ITrainingFile, i: number) => (
           <li className="relative m-2" key={i}>
             <TrainedFile trainingFile={file} />
@@ -66,42 +81,26 @@ export default function FineTune({ fineTune, modelId }: Props) {
         ))}
       </ul>
 
-      <div className="flex m-2 w-1/3 font-semibold justify-end">
-        <button className="btn-primary" onClick={() => cancelTraining(fineTune.id)}>
-          Cancel Training
-        </button>
-      </div>
+      <ul>
+        <li className="relative m-2">
+          {!fineTune.fine_tuned_model && (
+            <button className="btn-primary" onClick={() => cancelTraining(fineTune.id)}>
+              Cancel Training
+            </button>
+          )}
+          {!!fineTune.fine_tuned_model && <FineTunedPrompt fine_tuned_model={fineTune.fine_tuned_model} />}
+        </li>
+      </ul>
+      <ul>
+        <li className="relative m-2">
+          {!!fineTune.fine_tuned_model && (
+            <button className="btn-primary" onClick={() => deleteFineTuned(fineTune)}>
+              Delete Model
+            </button>
+          )}
+        </li>
+      </ul>
+      <div className="flex m-2 font-semibold justify-end"></div>
     </div>
   );
 }
-
-/*
- *
-export interface IFineTune {
-  id: string;
-  object: string;
-  model: string;
-  created_at: Date;
-  events: [
-    {
-      object: string;
-      created_at: Date;
-      level: string;
-      message: string;
-    }
-  ];
-  fine_tuned_model: null;
-  hyperparams: {
-    batch_size: number;
-    learning_rate_multiplier: number;
-    n_epochs: number;
-    prompt_loss_weight: number;
-  };
-  organization_id: string;
-  result_files: Array<string>;
-  status: string;
-  validation_files: Array<string>;
-  training_files: Array<ITrainingFile>;
-  updated_at: Date;
-}
- */

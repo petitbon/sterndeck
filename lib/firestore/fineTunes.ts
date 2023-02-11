@@ -25,7 +25,7 @@ export async function addFineTune(user_uid: string, model_id: string, data: any)
 }
 
 export async function deleteFineTune(user_uid: string, model_id: string, data_id: string) {
-  deleteDoc(doc(firebaseDB, `models/${user_uid}/list/${model_id}/fine_tunes/${data_id}`));
+  await deleteDoc(doc(firebaseDB, `models/${user_uid}/list/${model_id}/fine_tunes/${data_id}`));
 }
 
 export async function cancelFineTune(user_uid: string, model_id: string, fine_tune_id: string) {

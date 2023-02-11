@@ -9,6 +9,7 @@ import { ITrainingFile } from '@interfaces/ITrainingFile';
 import { IFineTune } from '@interfaces/IFineTune';
 
 import { getModel } from '@firestore/models';
+import { deleteModel } from '@firestore/models';
 import { getTrainingFiles } from '@firestore/trainingFiles';
 import { getFineTunes } from '@firestore/fineTunes';
 
@@ -48,6 +49,12 @@ export default function ModelEdit({ params }: Props) {
   const methods = useForm();
   const onSubmit = (data: any) => console.log('DATA FROM EDIT PAGE: ', data);
 
+  const deleteThis = async (model_id: string): Promise<null> => {
+    await deleteModel(authUser.uid, model_id);
+    setModel({} as IModel);
+    return null;
+  };
+
   return (
     <>
       <UserCheck>
@@ -59,13 +66,17 @@ export default function ModelEdit({ params }: Props) {
                 <div> Custom Model {model?.title} </div>
                 <div> Base Model {model?.model} </div>
                 <div> Number of Epochs {model?.n_epochs} </div>
+                <button className="btn-primary" onClick={() => deleteThis(model?.id)}>
+                  Delete Model
+                </button>
                 <SternDrop model_id={params.id as string} />
                 <ul>
-                  {trainingFiles.map((file: ITrainingFile, i: number) => (
-                    <li className="relative m-2" key={i}>
-                      <TrainingFile model={model} trainingFile={file} />
-                    </li>
-                  ))}
+                  {fineTunes.length == 0 &&
+                    trainingFiles.map((file: ITrainingFile, i: number) => (
+                      <li className="relative m-2" key={i}>
+                        <TrainingFile model={model} trainingFile={file} />
+                      </li>
+                    ))}
                 </ul>
                 <ul>
                   {fineTunes.map((fineTune: IFineTune, i: number) => (

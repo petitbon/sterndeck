@@ -1,5 +1,11 @@
 import { ITrainingFile } from '@interfaces/ITrainingFile';
 
+export interface IFineTuneDeleteConfirmation {
+  id: string;
+  object: string;
+  deleted: boolean;
+}
+
 export interface IFineTune {
   id: string;
   object: string;

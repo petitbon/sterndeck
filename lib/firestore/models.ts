@@ -1,7 +1,7 @@
 import { firebaseDB } from '@context/firebase/firebase';
 import { IModel } from '@interfaces/IModel';
 
-import { onSnapshot, collection, query, where, documentId, addDoc } from 'firebase/firestore';
+import { doc, deleteDoc, onSnapshot, collection, query, where, documentId, addDoc } from 'firebase/firestore';
 
 export async function getModels(user_uid: string, setModels: any) {
   const path = `models/${user_uid}/list`;
@@ -41,6 +41,10 @@ export async function getModel(user_uid: string, model_id: string, setModel: any
 //  addDoc(collection(firebaseDB, `models/${user_uid}/list/`), data as T[]);
 //};
 
+export async function deleteModel(user_uid: string, model_id: string) {
+  return await deleteDoc(doc(firebaseDB, `models/${user_uid}/list/${model_id}`));
+}
+
 export async function addModel(user_uid: string, data: IModel) {
   addDoc(collection(firebaseDB, `models/${user_uid}/list/`), data);
 }
@@ -62,7 +66,4 @@ export const updateDocument = async <T>(collectionName: string, data: T) => {
   return await updateDoc(doc(firestore, collectionName), { ...(data as T[]) });
 };
 
-export const deleteDocument = async <T>(collectionName: string) => {
-  return await deleteDoc(doc(firestore, collectionName));
-};
  */

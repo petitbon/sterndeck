@@ -44,9 +44,9 @@ export default function TrainingFile({ trainingFile, model }: Props) {
     try {
       const response = await fetch(`/api/openai/fine-tunes/create`, { method: 'POST', body: JSON.stringify(trainData) });
       const data: any = await response.json();
-      console.log(data);
       fineTune = data.result;
       await addFineTune(authUser.uid, model.id, fineTune);
+
       return fineTune;
     } catch (error) {
       console.error(error);
