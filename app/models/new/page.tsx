@@ -29,16 +29,16 @@ export default function ModelNew() {
     <>
       <UserCheck>
         <div className="flex justify-center p-4">
-          <form className="custommodel-form" onSubmit={handleSubmit(onSubmit)}>
+          <form className="custom-form" onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-4">
-              <label className="custommodel-label">Custom Model</label>
-              <input placeholder="Name of the custom model" className="custommodel-input" {...register('title', { required: true })} />
-              <input type="hidden" className="custommodel-input" {...register('user_uid', { required: true })} value={authUser?.uid} />
+              <label className="custom-label">Custom Model</label>
+              <input placeholder="Name of the custom model" className="custom-input" {...register('title', { required: true })} />
+              <input type="hidden" className="custom-input" {...register('user_uid', { required: true })} value={authUser?.uid} />
               {errors.title && <span>This field is required</span>}
             </div>
             <div className="mb-4">
-              <label className="custommodel-label">Base Model</label>
-              <select className="custommodel-input" defaultValue="curie" {...register('model', { required: true })}>
+              <label className="custom-label">Base Model</label>
+              <select className="custom-input" defaultValue="curie" {...register('model', { required: true })}>
                 {basemodelsOptions.map((value, i) => (
                   <option value={value} key={i}>
                     {value}
@@ -48,8 +48,8 @@ export default function ModelNew() {
               {errors.title && <span>This field is required</span>}
             </div>
             <div className="mb-4">
-              <label className="custommodel-label">Number of Epochs</label>
-              <select className="custommodel-input" defaultValue="4" {...register('n_epochs', { required: true })}>
+              <label className="custom-label">Number of Epochs</label>
+              <select className="custom-input" defaultValue="4" {...register('n_epochs', { required: true })}>
                 {epochsOptions.map((value, i) => (
                   <option value={value} key={i}>
                     {value}

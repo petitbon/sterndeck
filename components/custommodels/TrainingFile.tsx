@@ -1,3 +1,4 @@
+import { IconFileCode } from '@tabler/icons-react';
 import { useSystemContext } from '@context/SystemProvider';
 import { deleteStorageFile } from '@cloudstorage/storage';
 
@@ -22,7 +23,7 @@ export interface ITrainData {
 export default function TrainingFile({ trainingFile, model }: Props) {
   const { authUser } = useSystemContext();
 
-  const truncate = (input: string) => (input?.length > 20 ? `${input.substring(0, 14)}...` : input);
+  const truncate = (input: string) => (input?.length > 18 ? `${input.substring(0, 16)}...` : input);
 
   const deleteFile = async (file: ITrainingFile): Promise<IDeletedFileConfirmation | null> => {
     const response = await fetch(`/api/openai/training-files/${file.id}`, { method: 'DELETE' });
@@ -46,7 +47,6 @@ export default function TrainingFile({ trainingFile, model }: Props) {
       const data: any = await response.json();
       fineTune = data.result;
       await addFineTune(authUser.uid, model.id, fineTune);
-
       return fineTune;
     } catch (error) {
       console.error(error);
@@ -56,8 +56,9 @@ export default function TrainingFile({ trainingFile, model }: Props) {
 
   return (
     <div className="flex p-2 mx-2 border items-center">
-      <div className="text-[12px] m-1 w-1/3 font-semibold items-center">
-        <div className="flex py-1 tems-center inline-block align-middle">
+      <div className="text-[14px] m-1 w-1/3 font-semibold items-center">
+        <div className="flex py-1 items-center inline-block align-middle">
+          <IconFileCode size={55} stroke={1.5} className="text-gray-500" />
           <label className="">{truncate(trainingFile?.id)}</label>
         </div>
       </div>
@@ -67,10 +68,9 @@ export default function TrainingFile({ trainingFile, model }: Props) {
           Train
         </button>
       </div>
-
       <div className="flex m-2 w-1/3 font-semibold justify-end">
         <button className="btn-primary" onClick={() => deleteFile(trainingFile)}>
-          Delete File
+          Delete
         </button>
       </div>
     </div>

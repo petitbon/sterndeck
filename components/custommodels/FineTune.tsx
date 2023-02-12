@@ -1,5 +1,6 @@
 import { useSystemContext } from '@context/SystemProvider';
 
+import { IconFocus } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { ITrainingFile } from '@interfaces/ITrainingFile';
 import { IFineTune } from '@interfaces/IFineTune';
@@ -57,22 +58,18 @@ export default function FineTune({ fineTune, modelId }: Props) {
       </div>
 
       <ul>
-        <li className="relative m-2" key="">
-          Fine Tune: {fineTune.id} Status: {fineTune.status}
+        <li className="relative m-2">
+          <div className="flex flex-row">
+            <div className="flex block">
+              <IconFocus size={55} stroke={1.5} className="text-gray-500" />
+            </div>
+            <div className="flex block">
+              {fineTune.id} <br />
+              Status: {event?.latestMessage} <br />
+            </div>
+          </div>
         </li>
       </ul>
-
-      <ul>
-        <li className="relative m-2" key="">
-          Update: {event?.latestMessage}
-        </li>
-      </ul>
-      <ul>
-        <li className="relative m-2" key="">
-          Fine Tune Model: {fineTune.fine_tuned_model}
-        </li>
-      </ul>
-
       <ul>
         {fineTune.training_files.map((file: ITrainingFile, i: number) => (
           <li className="relative m-2" key={i}>
@@ -81,6 +78,11 @@ export default function FineTune({ fineTune, modelId }: Props) {
         ))}
       </ul>
 
+      <ul>
+        <li className="relative m-2">
+          {!!fineTune.fine_tuned_model && <div className="flex-1 p-2 mx-2 border bg-gray-300 items-center border ">{fineTune.fine_tuned_model}</div>}
+        </li>
+      </ul>
       <ul>
         <li className="relative m-2">
           {!fineTune.fine_tuned_model && (
@@ -92,10 +94,10 @@ export default function FineTune({ fineTune, modelId }: Props) {
         </li>
       </ul>
       <ul>
-        <li className="relative m-2">
+        <li className="relative flex justify-center  m-2 pt-4">
           {!!fineTune.fine_tuned_model && (
             <button className="btn-primary" onClick={() => deleteFineTuned(fineTune)}>
-              Delete Model
+              Remove Training
             </button>
           )}
         </li>

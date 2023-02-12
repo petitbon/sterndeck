@@ -10,6 +10,8 @@ export default function FineTunedPrompt({ fine_tuned_model }: Props) {
   const [response, setResponse] = useState(null as any);
   const [promptstr, setPromptstr] = useState<string>('');
 
+  const clean = (input: string) => input?.replace(/['"]+/g, '');
+
   const handleInputChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPromptstr(evt.target.value);
   };
@@ -33,16 +35,16 @@ export default function FineTunedPrompt({ fine_tuned_model }: Props) {
   };
   return (
     <div className="flex flex-col p-2 mx-2 border ">
-      <div className="w-full">
+      <div className=" w-full ">
         <textarea
           className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          rows={5}
+          rows={4}
           onChange={(evt: React.ChangeEvent<HTMLTextAreaElement>) => handleInputChange(evt)}
         ></textarea>
       </div>
-      <div className="w-full">{JSON.stringify(response?.choices[0].text)}</div>
-      <div className="w-full items-right pt-4">
-        <button className="btn-primary" onClick={() => submittest()}>
+      <div className="w-full py-4 text-orange-500">{clean(JSON.stringify(response?.choices[0].text))}</div>
+      <div className="flex flex-row w-full justify-end pt-4">
+        <button className="btn-small p-2" onClick={() => submittest()}>
           Test
         </button>
       </div>

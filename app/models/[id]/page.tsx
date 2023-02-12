@@ -9,7 +9,6 @@ import { ITrainingFile } from '@interfaces/ITrainingFile';
 import { IFineTune } from '@interfaces/IFineTune';
 
 import { getModel } from '@firestore/models';
-import { deleteModel } from '@firestore/models';
 import { getTrainingFiles } from '@firestore/trainingFiles';
 import { getFineTunes } from '@firestore/fineTunes';
 
@@ -49,26 +48,18 @@ export default function ModelEdit({ params }: Props) {
   const methods = useForm();
   const onSubmit = (data: any) => console.log('DATA FROM EDIT PAGE: ', data);
 
-  const deleteThis = async (model_id: string): Promise<null> => {
-    await deleteModel(authUser.uid, model_id);
-    setModel({} as IModel);
-    return null;
-  };
-
   return (
     <>
       <UserCheck>
         <div className="flex justify-center p-4 h-screen">
           <FormProvider {...methods}>
-            <form className="custommodel-form" onSubmit={methods.handleSubmit(onSubmit)}>
+            <form className="custom-form" onSubmit={methods.handleSubmit(onSubmit)}>
               <div>
                 {' '}
-                <div> Custom Model {model?.title} </div>
-                <div> Base Model {model?.model} </div>
-                <div> Number of Epochs {model?.n_epochs} </div>
-                <button className="btn-primary" onClick={() => deleteThis(model?.id)}>
-                  Delete Model
-                </button>
+                <div className="text-4xl"> {model?.title} </div>
+                <div className="text-sm pb-10">
+                  Base Model: {model?.model} | Number of Epochs: {model?.n_epochs}{' '}
+                </div>
                 <SternDrop model_id={params.id as string} />
                 <ul>
                   {fineTunes.length == 0 &&

@@ -2,22 +2,22 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { IconFocus } from '@tabler/icons-react';
+import { IconAffiliate } from '@tabler/icons-react';
 import { useSystemContext } from '@context/SystemProvider';
 
-import { IModel } from '@interfaces/IModel';
+import { IComposer } from '@interfaces/IComposer';
 
-import { getModels } from '@firestore/models';
+import { getComposers } from '@firestore/composers';
 
-export default function CustommodelPane() {
+export default function CustomcomposerPane() {
   const { authUser, isSignedIn } = useSystemContext();
   const router = useRouter();
-  const [models, setModels] = useState<IModel[]>([]);
+  const [composers, setComposers] = useState<IComposer[]>([]);
 
   useEffect(() => {
     if (isSignedIn) {
       const fetchData = async () => {
-        const unsubscribe = await getModels(authUser.uid, setModels);
+        const unsubscribe = await getComposers(authUser.uid, setComposers);
         return () => unsubscribe();
       };
       fetchData();
@@ -31,22 +31,22 @@ export default function CustommodelPane() {
           <div className="flex flex-row">
             {' '}
             <div className="flex items-center m-4">
-              <IconFocus size={35} stroke={1.5} className="mr-4" />
-              <span className="text-lg font-semibold">Models </span>
+              <IconAffiliate size={35} stroke={1.5} className="mr-4" />
+              <span className="text-lg font-semibold">Composers </span>
             </div>
             <div className="flex items-center m-4">
-              <button className="btn-small" onClick={() => router.push('/models/new')}>
+              <button className="btn-small" onClick={() => router.push('/composers/new')}>
                 <span className="text-[11px] mx-4">+ Create New </span>
               </button>
             </div>
           </div>
         </li>
 
-        {models?.map((model: IModel, i) => (
+        {composers?.map((composer: IComposer, i) => (
           <li className="relative pl-8" key={i}>
-            <div className="m-3 p-1 flex items-center duration-300 cursor-pointer hover:bg-blue-300 " key={i} onClick={() => router.push(`/models/${model.id}`)}>
+            <div className="m-3 p-1 flex items-center duration-300 cursor-pointer hover:bg-blue-300 " key={i} onClick={() => router.push(`/composers/${composer.id}`)}>
               <span className="text-[13px] ml-6" key={i}>
-                {model.title}
+                {composer.title}
               </span>
             </div>
           </li>

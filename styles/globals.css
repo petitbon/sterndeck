@@ -34,14 +34,14 @@
   .btn-primary {
     @apply border hover:border-orange-600 p-2 font-semibold;
   }
-  .custommodel-form {
+  .custom-form {
     @apply p-8 w-[800px];
   }
 
-  .custommodel-input {
+  .custom-input {
     @apply shadow appearance-none border rounded w-full py-2 px-3 leading-tight;
   }
-  .custommodel-label {
+  .custom-label {
     @apply block text-sm font-bold mb-2;
   }
 }
