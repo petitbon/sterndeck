@@ -19,7 +19,7 @@ export interface IFineTune {
       message: string;
     }
   ];
-  fine_tuned_model: null;
+  fine_tuned_model: string | null;
   hyperparams: {
     batch_size: number;
     learning_rate_multiplier: number;

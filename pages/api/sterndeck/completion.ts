@@ -20,8 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   let completionRequest: ICompletionRequest = {
-    model: 'ada:ft-tunedmodels-2023-02-06-15-51-49',
-    prompt: req.body.prompt,
+    model: JSON.parse(req.body).model,
+    prompt: JSON.parse(req.body).prompt,
     max_tokens: 256,
     temperature: 0.7,
     top_p: 1,
@@ -35,14 +35,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(400).json({ error: { message: 'Please enter a valid data' } });
     return;
   }
-
   switch (method) {
     case 'POST':
       try {
-        console.log(req.body);
         const response = await openai.createCompletion(completionRequest);
-        const completion: any = response.data.choices[0].text;
-        res.status(200).json({ completion: completion });
+        //const completion: any = response.data.choices[0].text;
+        res.status(200).json(response.data);
       } catch (error) {
         if (error.response) {
           res.status(error.response.status).json(error.response.data);

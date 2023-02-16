@@ -2,22 +2,28 @@ import { useSystemContext } from '@context/SystemProvider';
 
 import { IconFocus } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
+
 import { ITrainingFile } from '@interfaces/ITrainingFile';
 import { IFineTune } from '@interfaces/IFineTune';
 import { ICancelFineTuneConfirmation } from '@interfaces/ICancelFineTuneConfirmation';
-
 import { IFineTuneDeleteConfirmation } from '@interfaces/IFineTune';
 
-import { getEvent } from '@firestore/fineTunes';
 import TrainedFile from '@components/custommodels/TrainedFile';
 import FineTunedPrompt from '@components/custommodels/FineTunedPrompt';
 
+import { getEvent } from '@firestore/fineTunes';
 import { cancelFineTune } from '@firestore/fineTunes';
 import { deleteFineTune } from '@firestore/fineTunes';
+import { updateFineTune } from '@firestore/fineTunes';
 
 export interface Props {
   fineTune: IFineTune;
   modelId: string;
+}
+
+export interface IPublishedFineTune {
+  published_finetune_id: string;
+  published_model: string | null;
 }
 
 export default function FineTune({ fineTune, modelId }: Props) {
@@ -47,6 +53,15 @@ export default function FineTune({ fineTune, modelId }: Props) {
     await cancelFineTune(authUser.uid, modelId, fineTune.id);
     await deleteFineTune(authUser.uid, modelId, fineTune.id);
     fineTune = {} as IFineTune;
+    return null;
+  };
+
+  const publishFineTuned = async (fineTune: IFineTune): Promise<any> => {
+    let pubFT: IPublishedFineTune = {
+      published_finetune_id: fineTune.id,
+      published_model: fineTune.fine_tuned_model,
+    };
+    await updateFineTune(authUser.uid, modelId, pubFT);
     return null;
   };
 
@@ -94,14 +109,25 @@ export default function FineTune({ fineTune, modelId }: Props) {
         </li>
       </ul>
       <ul>
-        <li className="relative flex justify-center  m-2 pt-4">
+        <li className="relative flex m-2 pt-4">
           {!!fineTune.fine_tuned_model && (
-            <button className="btn-primary" onClick={() => deleteFineTuned(fineTune)}>
-              Remove Training
-            </button>
+            <div className="flex w-full">
+              {' '}
+              <div className="flex w-1/2 justify-center ">
+                <button className="btn-primary" onClick={() => deleteFineTuned(fineTune)}>
+                  Remove Training
+                </button>
+              </div>
+              <div className="flex w-1/2 justify-center ">
+                <button className="btn-primary" onClick={() => publishFineTuned(fineTune)}>
+                  Publish
+                </button>
+              </div>
+            </div>
           )}
         </li>
       </ul>
+
       <div className="flex m-2 font-semibold justify-end"></div>
     </div>
   );

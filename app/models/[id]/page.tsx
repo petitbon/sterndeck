@@ -13,6 +13,7 @@ import { getTrainingFiles } from '@firestore/trainingFiles';
 import { getFineTunes } from '@firestore/fineTunes';
 
 import UserCheck from '@components/user/UserCheck';
+import PublishedModelCard from '@components/custommodels/PublishedModelCard';
 import SternDrop from '@components/custommodels/SternDrop';
 import TrainingFile from '@components/custommodels/TrainingFile';
 import FineTune from '@components/custommodels/FineTune';
@@ -46,7 +47,8 @@ export default function ModelEdit({ params }: Props) {
   }, [authUser]);
 
   const methods = useForm();
-  const onSubmit = (data: any) => console.log('DATA FROM EDIT PAGE: ', data);
+  //const onSubmit = (data: any) => console.log('DATA FROM EDIT PAGE: ', data);
+  const onSubmit = (data: any) => null;
 
   return (
     <>
@@ -75,6 +77,9 @@ export default function ModelEdit({ params }: Props) {
                       <FineTune modelId={params.id} fineTune={fineTune} />
                     </li>
                   ))}
+                </ul>
+                <ul>
+                  <li className="relative m-2">{!!model.published_model && <PublishedModelCard published_model={model.published_model} />}</li>
                 </ul>
               </div>
             </form>

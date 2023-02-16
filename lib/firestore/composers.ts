@@ -1,7 +1,7 @@
 import { firebaseDB } from '@context/firebase/firebase';
 import { IComposer } from '@interfaces/IComposer';
 
-import { doc, deleteDoc, onSnapshot, collection, query, where, documentId, addDoc } from 'firebase/firestore';
+import { doc, updateDoc, deleteDoc, onSnapshot, collection, query, where, documentId, addDoc } from 'firebase/firestore';
 
 export async function getComposers(user_uid: string, setComposers: any) {
   const path = `composers/${user_uid}/list`;
@@ -37,10 +37,6 @@ export async function getComposer(user_uid: string, composer_id: string, setComp
   return unsubscribe;
 }
 
-//export const addComposer = async <T>(user_uid: string, data: T) => {
-//  addDoc(collection(firebaseDB, `composers/${user_uid}/list/`), data as T[]);
-//};
-
 export async function deleteComposer(user_uid: string, composer_id: string) {
   return await deleteDoc(doc(firebaseDB, `composers/${user_uid}/list/${composer_id}`));
 }
@@ -49,14 +45,13 @@ export async function addComposer(user_uid: string, data: IComposer) {
   addDoc(collection(firebaseDB, `composers/${user_uid}/list/`), data);
 }
 
-//  export function addComposer(user_uid, date, locationName, address, items, amount, imageBucket) {
-//   addDoc(collection(db, RECEIPT_COLLECTION), { uid, date, locationName, address, items, amount, imageBucket });
-//}
+export async function updateComposer<T>(user_uid: string, composer_id: string, data: T) {
+  return await updateDoc(doc(firebaseDB, `composers/${user_uid}/list/${composer_id}`), { ...(data as T[]) });
+}
 
 /*
 export const addComposer = (user_uid: string, composer: IComposer) => addDocument(`composers/${user_uid}/list`, composer);
 
-export const updateComposer = (user_uid: string, composer_id: string, composer: IComposer) => updateDocument(`composers/${user_uid}/list/${composer_id}`, composer);
 
 export const addDocument = async <T>(collectionName: string, data: T) => {
   return await addDoc(collection(firestore, collectionName), data as T[]);

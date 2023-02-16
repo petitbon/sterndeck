@@ -1,6 +1,6 @@
 import { firebaseDB } from '@context/firebase/firebase';
 
-import { doc, setDoc, deleteDoc, onSnapshot, collection, query, where } from 'firebase/firestore';
+import { updateDoc, doc, setDoc, deleteDoc, onSnapshot, collection, query, where } from 'firebase/firestore';
 
 export async function getFineTunes(user_uid: string, model_id: string, setFineTunes: any) {
   const path = `models/${user_uid}/list/${model_id}/fine_tunes`;
@@ -39,6 +39,9 @@ export async function getEvent(user_uid: string, model_id: string, finetune_id: 
     console.log(`Received doc snapshot: ${JSON.stringify(doc.data())}`);
     setEvent(doc.data());
   });
-
   return unsub;
+}
+
+export async function updateFineTune<T>(user_uid: string, model_id: string, data: T) {
+  return await updateDoc(doc(firebaseDB, `models/${user_uid}/list/${model_id}`), { ...(data as T[]) });
 }

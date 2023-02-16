@@ -1,11 +1,14 @@
 import '../styles/globals.css';
 
+import Image from 'next/image';
+
+import { SystemProvider } from '@context/SystemProvider';
+
 import UserAuth from '@components/user/UserAuth';
 import ModelPane from '@components/navbar/ModelPane';
 import ComposerPane from '@components/navbar/ComposerPane';
-import { SystemProvider } from '@context/SystemProvider';
 import UserCheck from '@components/user/UserCheck';
-import Image from 'next/image';
+
 import stog from '../public/stog.png';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -17,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {/* ----------------------------------------------------------------------------------- */}
             <div className="h-[80px] m-3">
               <div className="flex">
-                <Image src={stog} alt="sterndeck" width={380} />
+                <Image src={stog} alt="sterndeck" width={380} priority={true} />
               </div>
             </div>
             {/* ----------------------------------------------------------------------------------- */}
