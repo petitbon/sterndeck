@@ -1,15 +1,10 @@
 import '../styles/globals.css';
 
-import Image from 'next/image';
-
 import { SystemProvider } from '@context/SystemProvider';
 
 import UserAuth from '@components/user/UserAuth';
 import ModelPane from '@components/navbar/ModelPane';
-import ComposerPane from '@components/navbar/ComposerPane';
 import UserCheck from '@components/user/UserCheck';
-
-import stog from '../public/stog.png';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -18,17 +13,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SystemProvider>
           <aside className="sidenavbar border-r border-gray-400">
             {/* ----------------------------------------------------------------------------------- */}
-            <div className="h-[80px] m-3">
-              <div className="flex">
-                <Image src={stog} alt="sterndeck" width={380} priority={true} />
-              </div>
+            <div className="h-[80px] m-3 text-6xl">
+              <div className="flex">STERNDECK</div>
             </div>
             {/* ----------------------------------------------------------------------------------- */}
-
             <div className="items-center justify-center h-auto">
               <UserCheck>
                 <ModelPane />
-                <ComposerPane />
               </UserCheck>
             </div>
             {/* ----------------------------------------------------------------------------------- */}
