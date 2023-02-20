@@ -66,7 +66,7 @@ export default function FineTune({ fineTune, modelId }: Props) {
   };
 
   return (
-    <div className="flex-1 p-2 mx-2 border items-center border ">
+    <div className="flex-1 p-2 mx-2 border items-center">
       <div className="text-[12px] m-1 font-semibold items-center">
         <div className="flex py-1 tems-center inline-block align-middle"></div>
         <div className="flex py-1 tems-center inline-block align-middle"></div>

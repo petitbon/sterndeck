@@ -3,7 +3,6 @@
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { IconPhoto } from '@tabler/icons-react';
-import { useSystemContext } from '@context/SystemProvider';
 
 import { ITrainingFile } from '@interfaces/ITrainingFile';
 
@@ -11,6 +10,7 @@ import { uploadStorageFile, getDownloadURL } from '@cloudstorage/storage';
 import { addTrainingFile } from '@firestore/trainingFiles';
 
 export interface Props {
+  user_uid: string;
   model_id: string;
 }
 
@@ -22,8 +22,7 @@ const sendFileToOpenai = async (file: string): Promise<ITrainingFile> => {
   return trainingFile;
 };
 
-export default function SternDrop({ model_id }: Props) {
-  const { authUser } = useSystemContext();
+export default function FileDrop({ user_uid, model_id }: Props) {
   const [isUploading, setIsUploading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -55,10 +54,10 @@ export default function SternDrop({ model_id }: Props) {
 
     try {
       const openaifile: ITrainingFile = await sendFileToOpenai(receivedFiles[0]);
-      const trainingFilePath: string = await uploadStorageFile(receivedFiles[0], authUser.uid, model_id, openaifile.id);
+      const trainingFilePath: string = await uploadStorageFile(receivedFiles[0], user_uid, model_id, openaifile.id);
       const trainingFileURL: string = await getDownloadURL(trainingFilePath);
       const tf = { ...openaifile, path: trainingFilePath, url: trainingFileURL };
-      await addTrainingFile(authUser.uid, model_id, tf);
+      await addTrainingFile(user_uid, model_id, tf);
     } catch (e) {
       console.error(e);
     }
