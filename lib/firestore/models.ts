@@ -1,7 +1,7 @@
 import { firebaseDB } from '@context/firebase/firebase';
 import { IModel } from '@interfaces/IModel';
 
-import { doc, deleteDoc, onSnapshot, collection, query, where, documentId, addDoc } from 'firebase/firestore';
+import { doc, updateDoc, deleteDoc, onSnapshot, collection, query, where, documentId, addDoc } from 'firebase/firestore';
 
 export async function getModels(user_uid: string, setModels: any) {
   const path = `models/${user_uid}/list`;
@@ -37,10 +37,6 @@ export async function getModel(user_uid: string, model_id: string, setModel: any
   return unsubscribe;
 }
 
-//export const addModel = async <T>(user_uid: string, data: T) => {
-//  addDoc(collection(firebaseDB, `models/${user_uid}/list/`), data as T[]);
-//};
-
 export async function deleteModel(user_uid: string, model_id: string) {
   return await deleteDoc(doc(firebaseDB, `models/${user_uid}/list/${model_id}`));
 }
@@ -49,21 +45,6 @@ export async function addModel(user_uid: string, data: IModel) {
   addDoc(collection(firebaseDB, `models/${user_uid}/list/`), data);
 }
 
-//  export function addModel(user_uid, date, locationName, address, items, amount, imageBucket) {
-//   addDoc(collection(db, RECEIPT_COLLECTION), { uid, date, locationName, address, items, amount, imageBucket });
-//}
-
-/*
-export const addModel = (user_uid: string, model: IModel) => addDocument(`models/${user_uid}/list`, model);
-
-export const updateModel = (user_uid: string, model_id: string, model: IModel) => updateDocument(`models/${user_uid}/list/${model_id}`, model);
-
-export const addDocument = async <T>(collectionName: string, data: T) => {
-  return await addDoc(collection(firestore, collectionName), data as T[]);
-};
-
-export const updateDocument = async <T>(collectionName: string, data: T) => {
-  return await updateDoc(doc(firestore, collectionName), { ...(data as T[]) });
-};
-
- */
+export async function updateModel<T>(user_uid: string, model_id: string, data: T) {
+  return await updateDoc(doc(firebaseDB, `models/${user_uid}/list/${model_id}`), { ...(data as T[]) });
+}

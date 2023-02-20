@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSystemContext } from '@context/SystemProvider';
-import { useForm, SubmitHandler, FormProvider, FieldValues } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 
 import { IModel } from '@interfaces/IModel';
 import { ITrainingFile } from '@interfaces/ITrainingFile';
@@ -11,6 +11,14 @@ import { IFineTune } from '@interfaces/IFineTune';
 import { getModel } from '@firestore/models';
 import { getTrainingFiles } from '@firestore/trainingFiles';
 import { getFineTunes } from '@firestore/fineTunes';
+
+import Title from '@components/modelcomps/Title';
+import BaseModel from '@components/modelcomps/BaseModel';
+import Epochs from '@components/modelcomps/Epochs';
+import Batch from '@components/modelcomps/Batch';
+import LearningRate from '@components/modelcomps/LearningRate';
+import PromptLoss from '@components/modelcomps/PromptLoss';
+import ComputeClassification from '@components/modelcomps/ComputeClassification';
 
 import UserCheck from '@components/user/UserCheck';
 import PublishedModelCard from '@components/custommodels/PublishedModelCard';
@@ -58,9 +66,30 @@ export default function ModelEdit({ params }: Props) {
             <form className="custom-form" onSubmit={methods.handleSubmit(onSubmit)}>
               <div>
                 {' '}
-                <div className="text-4xl"> {model?.title} </div>
-                <div className="text-sm pb-10">
-                  Base Model: {model?.model} | Number of Epochs: {model?.n_epochs}{' '}
+                <div className="pb-4">
+                  <Title user_uid={authUser.uid} model_id={model?.id} title={model?.title} />
+                </div>
+                <div className="pb-4 flex w-full">
+                  <div className="w-1/3 p-4">
+                    <BaseModel user_uid={authUser.uid} model_id={model?.id} baseModel={model?.model} />
+                  </div>
+                  <div className="w-1/3 p-4">
+                    <Epochs user_uid={authUser.uid} model_id={model?.id} n_epochs={model?.n_epochs} />
+                  </div>
+                  <div className="w-1/3 p-4">
+                    <Batch user_uid={authUser.uid} model_id={model?.id} batch={model?.batch_size} />
+                  </div>
+                </div>
+                <div className="pb-4 flex w-full">
+                  <div className="w-1/3 p-4">
+                    <LearningRate user_uid={authUser.uid} model_id={model?.id} learning_rate={model?.learning_rate_multiplier} />
+                  </div>
+                  <div className="w-1/3 p-4">
+                    <PromptLoss user_uid={authUser.uid} model_id={model?.id} prompt_loss_weight={model?.prompt_loss_weight} />
+                  </div>
+                  <div className="w-1/3 p-4">
+                    <ComputeClassification user_uid={authUser.uid} model_id={model?.id} compute_classification_metrics={model?.compute_classification_metrics} />
+                  </div>
                 </div>
                 <SternDrop model_id={params.id as string} />
                 <ul>
@@ -79,7 +108,7 @@ export default function ModelEdit({ params }: Props) {
                   ))}
                 </ul>
                 <ul>
-                  <li className="relative m-2">{!!model.published_model && <PublishedModelCard published_model={model.published_model} />}</li>
+                  <li className="relative m-2">{!!model?.published_model && <PublishedModelCard published_model={model.published_model} />}</li>
                 </ul>
               </div>
             </form>

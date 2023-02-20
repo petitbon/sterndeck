@@ -2,17 +2,20 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { IconFocus } from '@tabler/icons-react';
 import { useSystemContext } from '@context/SystemProvider';
+import { v4 as uuidv4 } from 'uuid';
 
 import { IModel } from '@interfaces/IModel';
 
 import { getModels } from '@firestore/models';
 
+type TFirestoreUUID = string & { _firestoreUUIDBrand: never };
+
 export default function CustommodelPane() {
   const { authUser, isSignedIn } = useSystemContext();
   const router = useRouter();
   const [models, setModels] = useState<IModel[]>([]);
+  const newDocId: TFirestoreUUID = uuidv4() as TFirestoreUUID;
 
   useEffect(() => {
     if (isSignedIn) {
@@ -26,25 +29,16 @@ export default function CustommodelPane() {
 
   return (
     <>
-      <ul className="relative px-1">
+      <ul className="relative">
         <li className="relative">
-          <div className="flex flex-row">
-            {' '}
-            <div className="flex items-center m-4">
-              <IconFocus size={35} stroke={1.5} className="mr-4" />
-              <span className="text-lg font-semibold">Models </span>
-            </div>
-            <div className="flex items-center m-4">
-              <button className="btn-small" onClick={() => router.push('/models/new')}>
-                <span className="text-[11px] mx-4">+ Create New </span>
-              </button>
-            </div>
+          <div className="m-3 p-1 flex">
+            <span className="text-[18px] ml-6 font-semibold">Models</span>
           </div>
         </li>
 
         {models?.map((model: IModel, i) => (
-          <li className="relative pl-8" key={i}>
-            <div className="m-3 p-1 flex items-center duration-300 cursor-pointer hover:bg-blue-300 " key={i} onClick={() => router.push(`/models/${model.id}`)}>
+          <li className="relative" key={i}>
+            <div className="m-3 p-1 flex duration-300 cursor-pointer hover:bg-blue-300 " key={i} onClick={() => router.push(`/models/${model.id}`)}>
               <span className="text-[13px] ml-6" key={i}>
                 {model.title}
               </span>
@@ -52,7 +46,11 @@ export default function CustommodelPane() {
           </li>
         ))}
 
-        <li className="relative pl-8 pr-4"></li>
+        <li className="relative">
+          <div className="m-3 p-1 flex duration-300 cursor-pointer hover:bg-blue-300 " onClick={() => router.push(`/models/${newDocId}`)}>
+            <span className="text-[13px] ml-6">+ Create New</span>
+          </div>
+        </li>
       </ul>
     </>
   );

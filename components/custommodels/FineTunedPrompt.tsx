@@ -40,7 +40,3 @@ export default function FineTunedPrompt({ fine_tuned_model }: Props) {
     </div>
   );
 }
-
-/*
-
-    */
