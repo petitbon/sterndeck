@@ -25,8 +25,8 @@ export default function Batch({ user_uid, model_id, batch }: Props) {
   return (
     <>
       {' '}
-      <div className="rounded items-center text-white hover:text-black">
-        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Batch Size {batchInput}</label>
+      <div className="">
+        <label className="custom-label">Batch Size {batchInput}</label>
         <input
           onChange={(e) => setBatchInput(+e.target.value)}
           onMouseUp={(e) => saveBatch(e)}

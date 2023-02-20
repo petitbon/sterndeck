@@ -42,7 +42,7 @@ export default function Title({ user_uid, model_id, title }: Props) {
   };
 
   const saveTitle = async () => {
-    if (title.trim() != titleInput.trim() && inputIsCool) {
+    if (inputIsCool) {
       await updateModel(user_uid, model_id, { title: titleInput });
     }
     if (!inputIsCool) {
@@ -55,7 +55,7 @@ export default function Title({ user_uid, model_id, title }: Props) {
   return (
     <>
       {' '}
-      <div className="rounded flex items-center text-white hover:text-black">
+      <div className="flex items-center text-white hover:text-black">
         <input
           className={edit ? 'edit-title-input' : 'custom-title-input'}
           value={titleInput}
@@ -67,7 +67,7 @@ export default function Title({ user_uid, model_id, title }: Props) {
         />
         {edit ? (
           <button className="btn-edit" onClick={() => saveTitle()}>
-            <IconDeviceFloppy className={'pointer-events-none w-8 h-8 transform ' + (edit ? 'text-pink-400' : 'text-gray-300')} />
+            <IconDeviceFloppy className={'pointer-events-none w-8 h-8 transform ' + (edit ? 'text-stern-blue' : 'text-gray-300')} />
           </button>
         ) : (
           <button className="btn-edit" onClick={() => editTitle()}>

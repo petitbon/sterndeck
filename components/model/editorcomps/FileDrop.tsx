@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { IconPhoto } from '@tabler/icons-react';
+import { IconFileCode } from '@tabler/icons-react';
 
 import { ITrainingFile } from '@interfaces/ITrainingFile';
 
@@ -23,13 +23,12 @@ const sendFileToOpenai = async (file: string): Promise<ITrainingFile> => {
 };
 
 export default function FileDrop({ user_uid, model_id }: Props) {
-  const [isUploading, setIsUploading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [error, setError] = useState('');
 
   const onDrop = useCallback(async (receivedFiles: any) => {
-    setErrorMessage('');
+    setError('');
     if (receivedFiles.length !== 1) {
-      setErrorMessage('please upload one file at a time');
+      setError('please upload one file at a time');
       return null;
     }
     const reader = new FileReader();
@@ -45,7 +44,7 @@ export default function FileDrop({ user_uid, model_id }: Props) {
         try {
           JSON.parse(line);
         } catch (error) {
-          setErrorMessage('file must be a valid JSONLine format');
+          setError('file must be a valid JSONLine format');
           return null;
         }
       });
@@ -66,12 +65,15 @@ export default function FileDrop({ user_uid, model_id }: Props) {
   const { getRootProps, getInputProps } = useDropzone({ onDrop, multiple: false });
 
   return (
-    <div {...getRootProps()} className="flex flex-col h-[100px] bg-gray-100 border p-10 m-4 justify-center items-center">
-      <input {...getInputProps()} />
-      <div className="flex items-center text-gray-400 text-bold">
-        <IconPhoto size={55} stroke={1.5} className={`${isUploading ? 'text-red-500' : 'text-gray-500 '}`} />
+    <div className="">
+      <label className="custom-label">Training File ( JSONLine format )</label>
+      <div {...getRootProps()} className="flex flex-col h-[100px] bg-gray-100 border items-center justify-center">
+        <input {...getInputProps()} />
+        <div className="flex flex-col items-center">
+          <div className={!!error ? 'text-error' : ''}>{!!error ? error : 'Drag and drop file.'} </div>
+          <IconFileCode size={35} stroke={1.5} />
+        </div>
       </div>
-      <div className="flex tems-center text-red-500 text-bold h-4">{errorMessage}</div>
     </div>
   );
 }

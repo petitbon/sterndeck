@@ -27,8 +27,8 @@ export default function BaseModel({ user_uid, model_id, baseModel }: Props) {
   return (
     <>
       {' '}
-      <div className="rounded items-center text-white hover:text-black">
-        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Base Model</label>
+      <div className="">
+        <label className="custom-label">Base Model</label>
         <select className="custom-base-model-select" onChange={(e) => saveBaseModel(e)} value={baseModelInput}>
           {basemodelsOptions.map((value, i) => (
             <option value={value} key={i}>

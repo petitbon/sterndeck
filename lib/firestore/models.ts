@@ -1,7 +1,7 @@
 import { firebaseDB } from '@context/firebase/firebase';
 import { IModel } from '@interfaces/IModel';
 
-import { doc, updateDoc, deleteDoc, onSnapshot, collection, query, where, documentId, addDoc } from 'firebase/firestore';
+import { doc, setDoc, deleteDoc, onSnapshot, collection, query, where, documentId, addDoc } from 'firebase/firestore';
 
 export async function getModels(user_uid: string, setModels: any) {
   const path = `models/${user_uid}/list`;
@@ -46,5 +46,5 @@ export async function addModel(user_uid: string, data: IModel) {
 }
 
 export async function updateModel<T>(user_uid: string, model_id: string, data: T) {
-  return await updateDoc(doc(firebaseDB, `models/${user_uid}/list/${model_id}`), { ...(data as T[]) });
+  return await setDoc(doc(firebaseDB, `models/${user_uid}/list/${model_id}`), { ...(data as T[]) }, { merge: true });
 }

@@ -54,7 +54,7 @@ export default function ModelEdit({ params }: Props) {
   return (
     <>
       <UserCheck>
-        <div className="flex justify-center p-4 h-screen">
+        <div className="flex h-screen">
           <FormProvider {...methods}>
             <form className="custom-form" onSubmit={methods.handleSubmit(onSubmit)}>
               <div className="pb-4">

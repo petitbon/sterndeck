@@ -25,9 +25,8 @@ export default function Epochs({ user_uid, model_id, n_epochs }: Props) {
   return (
     <>
       {' '}
-      <div className="rounded items-center text-white hover:text-black">
-        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Number of Epochs {epochInput}</label>
-
+      <div className="">
+        <label className="custom-label">Number of Epochs {epochInput}</label>
         <input
           onChange={(e) => setEpochInput(+e.target.value)}
           onMouseUp={(e) => saveEpoch(e)}

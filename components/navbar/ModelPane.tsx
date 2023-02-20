@@ -38,7 +38,7 @@ export default function CustommodelPane() {
 
         {models?.map((model: IModel, i) => (
           <li className="relative" key={i}>
-            <div className="m-3 p-1 flex duration-300 cursor-pointer hover:bg-blue-300 " key={i} onClick={() => router.push(`/models/${model.id}`)}>
+            <div className="m-3 p-1 flex duration-300 cursor-pointer hover:bg-stern-blue" key={i} onClick={() => router.push(`/models/${model.id}`)}>
               <span className="text-[13px] ml-6" key={i}>
                 {model.title}
               </span>
@@ -47,7 +47,7 @@ export default function CustommodelPane() {
         ))}
 
         <li className="relative">
-          <div className="m-3 p-1 flex duration-300 cursor-pointer hover:bg-blue-300 " onClick={() => router.push(`/models/${newDocId}`)}>
+          <div className="m-3 p-1 flex duration-300 cursor-pointer  hover:bg-stern-blue" onClick={() => router.push(`/models/${newDocId}`)}>
             <span className="text-[13px] ml-6">+ Create New</span>
           </div>
         </li>

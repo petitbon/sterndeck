@@ -25,29 +25,33 @@ export default function EditorStanza({ user_uid, model }: Props) {
   return (
     <>
       <div className="border">
-        <div className="pb-4 flex w-full">
-          <div className="w-1/3 p-4">
+        <div className="pb-2 flex w-full">
+          <div className="w-1/3 p-3 mx-4">
             <BaseModel user_uid={user_uid} model_id={modelInput.id} baseModel={modelInput.model} />
           </div>
-          <div className="w-1/3 p-4">
+          <div className="w-1/3 p-3 mx-4">
             <Epochs user_uid={user_uid} model_id={modelInput.id} n_epochs={modelInput.n_epochs} />
           </div>
-          <div className="w-1/3 p-4">
+          <div className="w-1/3 p-3 mx-4">
             <Batch user_uid={user_uid} model_id={modelInput.id} batch={modelInput.batch_size} />
           </div>
         </div>
-        <div className="pb-4 flex w-full">
-          <div className="w-1/3 p-4">
+        <div className="pb-2 flex w-full">
+          <div className="w-1/3 p-3 mx-4">
             <LearningRate user_uid={user_uid} model_id={modelInput.id} learning_rate={modelInput.learning_rate_multiplier} />
           </div>
-          <div className="w-1/3 p-4">
+          <div className="w-1/3 p-3 mx-4">
             <PromptLoss user_uid={user_uid} model_id={modelInput.id} prompt_loss_weight={modelInput.prompt_loss_weight} />
           </div>
-          <div className="w-1/3 p-4">
+          <div className="w-1/3 p-3 mx-4">
             <ComputeClassification user_uid={user_uid} model_id={modelInput.id} compute_classification_metrics={modelInput.compute_classification_metrics} />
           </div>
         </div>
-        <FileDrop user_uid={user_uid} model_id={modelInput.id} />
+        <div className="pb-2 flex w-full">
+          <div className="w-full p-3 mx-4">
+            <FileDrop user_uid={user_uid} model_id={modelInput.id} />
+          </div>
+        </div>
       </div>
     </>
   );

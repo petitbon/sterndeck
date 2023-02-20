@@ -25,8 +25,8 @@ export default function ComputeClassification({ user_uid, model_id, compute_clas
   return (
     <>
       {' '}
-      <div className="flex flex-col items-center">
-        <label className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300 mb-2">Classification Metrics</label>
+      <div className="">
+        <label className="custom-label">Classification Metrics</label>
         <label className="relative flex items-center cursor-pointer">
           <input onChange={(e) => saveComputeClassification(e.target.checked)} type="checkbox" checked={computeClassificationInput} className="sr-only peer" />
           <div className="toggle peer"></div>{' '}

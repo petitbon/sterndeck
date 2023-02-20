@@ -25,8 +25,8 @@ export default function PromptLoss({ user_uid, model_id, prompt_loss_weight }: P
   return (
     <>
       {' '}
-      <div className="rounded items-center text-white hover:text-black">
-        <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Prompt Loss Weight {promptLossInput}</label>
+      <div className="">
+        <label className="custom-label">Prompt Loss Weight {promptLossInput}</label>
         <input
           onChange={(e) => setPromptLossInput(+e.target.value)}
           onMouseUp={(e) => savePromptLoss(e)}
