@@ -9,13 +9,11 @@ import { IModel } from '@interfaces/IModel';
 
 import { getModels } from '@firestore/models';
 
-type TFirestoreUUID = string & { _firestoreUUIDBrand: never };
-
 export default function CustommodelPane() {
   const { authUser, isSignedIn } = useSystemContext();
   const router = useRouter();
   const [models, setModels] = useState<IModel[]>([]);
-  const newDocId: TFirestoreUUID = uuidv4() as TFirestoreUUID;
+  const newDocId: string = uuidv4().replace(/-/g, '').slice(0, 20);
 
   useEffect(() => {
     if (isSignedIn) {

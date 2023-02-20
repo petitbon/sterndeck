@@ -46,5 +46,6 @@ export async function addModel(user_uid: string, data: IModel) {
 }
 
 export async function updateModel<T>(user_uid: string, model_id: string, data: T) {
-  return await setDoc(doc(firebaseDB, `models/${user_uid}/list/${model_id}`), { ...(data as T[]) }, { merge: true });
+  const modelRef = doc(firebaseDB, `models/${user_uid}/list/${model_id}`);
+  return await setDoc(modelRef, { ...(data as T[]) }, { merge: true });
 }

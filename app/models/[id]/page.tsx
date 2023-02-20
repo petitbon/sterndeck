@@ -58,9 +58,9 @@ export default function ModelEdit({ params }: Props) {
           <FormProvider {...methods}>
             <form className="custom-form" onSubmit={methods.handleSubmit(onSubmit)}>
               <div className="pb-4">
-                <Title user_uid={authUser.uid} model_id={model?.id} title={model?.title} />
+                <Title user_uid={authUser.uid} model_id={params.id} title={model?.title} />
               </div>
-              <EditorStanza user_uid={authUser.uid} model={model} />
+              {model?.title && <EditorStanza user_uid={authUser.uid} model={model} />}
               <div>
                 <ul>
                   {fineTunes.length == 0 &&

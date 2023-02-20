@@ -42,12 +42,16 @@ export default function Title({ user_uid, model_id, title }: Props) {
   };
 
   const saveTitle = async () => {
-    if (inputIsCool) {
-      await updateModel(user_uid, model_id, { title: titleInput });
-    }
-    if (!inputIsCool) {
-      setTitleInput(title);
-      setErrorMessage('');
+    if (titleInput) {
+      if (inputIsCool) {
+        console.log('inputTitle. ', titleInput);
+        console.log('model_id. ', model_id);
+        await updateModel(user_uid, model_id, { title: titleInput });
+      }
+      if (!inputIsCool) {
+        setTitleInput(title);
+        setErrorMessage('');
+      }
     }
     setEdit(false);
   };
