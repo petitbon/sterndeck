@@ -2,7 +2,7 @@ import { firebaseDB } from '@context/firebase/firebase';
 
 import { updateDoc, doc, setDoc, deleteDoc, onSnapshot, collection, query, where } from 'firebase/firestore';
 
-export async function getFineTunes(user_uid: string, model_id: string, setFineTunes: any) {
+export async function getFineTunes(user_uid: string, model_id: string, setFineTunesState: any) {
   const path = `models/${user_uid}/list/${model_id}/fine_tunes`;
   const collectionQuery = query(collection(firebaseDB, path), where('status', '!=', 'cancelled'));
   const unsubscribe = onSnapshot(collectionQuery, async (snapshot) => {
@@ -14,7 +14,7 @@ export async function getFineTunes(user_uid: string, model_id: string, setFineTu
         id: documentSnapshot.id,
       });
     }
-    setFineTunes(allDatas);
+    setFineTunesState(allDatas);
   });
   return unsubscribe;
 }

@@ -34,23 +34,24 @@ export default function FileDrop({ user_uid, model_id }: Props) {
     const reader = new FileReader();
     reader.onabort = () => console.log('file reading was aborted');
     reader.onerror = () => console.log('file reading has failed');
+
     reader.onload = async () => {
-      // validate file format ...
       const binaryStr = reader.result;
       var enc = new TextDecoder('utf-8');
       const data = enc.decode(binaryStr as BufferSource);
-      const lines = data.split(/\r?\n/);
+      const clean = data.split('\n').filter(Boolean).join('\n');
+      const lines = clean.split('\n');
       lines.forEach((line: string) => {
         try {
           JSON.parse(line);
         } catch (error) {
+          console.log('bad line', JSON.stringify(line));
           setError('file must be a valid JSONLine format');
           return null;
         }
       });
     };
     reader.readAsArrayBuffer(receivedFiles[0]);
-
     try {
       const openaifile: ITrainingFile = await sendFileToOpenai(receivedFiles[0]);
       const trainingFilePath: string = await uploadStorageFile(receivedFiles[0], user_uid, model_id, openaifile.id);

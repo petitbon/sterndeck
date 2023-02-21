@@ -12,12 +12,12 @@ import { getModel } from '@firestore/models';
 import { getTrainingFiles } from '@firestore/trainingFiles';
 import { getFineTunes } from '@firestore/fineTunes';
 
+import UploadStanza from './upload';
+import TrainStanza from './train';
+
 import Title from '@components/model/comps/Title';
-import EditorStanza from './editor';
 import UserCheck from '@components/user/UserCheck';
 import PublishedModelCard from '@components/custommodels/PublishedModelCard';
-import TrainingFile from '@components/custommodels/TrainingFile';
-import FineTune from '@components/custommodels/FineTune';
 
 interface Props {
   params: {
@@ -60,20 +60,12 @@ export default function ModelEdit({ params }: Props) {
               <div className="pb-4">
                 <Title user_uid={authUser.uid} model_id={params.id} title={model?.title} />
               </div>
-              {model?.title && <EditorStanza user_uid={authUser.uid} model={model} />}
               <div>
                 <ul>
-                  {fineTunes.length == 0 &&
-                    trainingFiles.map((file: ITrainingFile, i: number) => (
-                      <li className="relative m-2" key={i}>
-                        <TrainingFile model={model} trainingFile={file} />
-                      </li>
-                    ))}
-                </ul>
-                <ul>
-                  {fineTunes.map((fineTune: IFineTune, i: number) => (
+                  <li className="relative m-2">{model?.title && <UploadStanza user_uid={authUser.uid} model={model} />}</li>
+                  {trainingFiles.map((training_file: ITrainingFile, i: number) => (
                     <li className="relative m-2" key={i}>
-                      <FineTune modelId={params.id} fineTune={fineTune} />
+                      <TrainStanza user_uid={authUser.uid} model={model} training_file={training_file} />
                     </li>
                   ))}
                 </ul>
