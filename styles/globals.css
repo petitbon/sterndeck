@@ -38,6 +38,9 @@
   .btn-primary {
     @apply border hover:border-stern-blue p-2 font-semibold;
   }
+  .btn-link {
+    @apply hover:text-stern-blue p-1 font-semibold text-xs;
+  }
 
   .btn-edit {
     @apply text-xs;

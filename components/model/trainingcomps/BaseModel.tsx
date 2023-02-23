@@ -26,7 +26,6 @@ export default function BaseModel({ user_uid, model_id, baseModel }: Props) {
 
   return (
     <>
-      {' '}
       <div className="">
         <label className="custom-label">Base Model</label>
         <select className="custom-base-model-select" onChange={(e) => saveBaseModel(e)} value={baseModelInput}>

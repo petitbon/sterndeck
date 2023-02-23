@@ -43,18 +43,17 @@ export default function FineTunedPrompt({ fine_tuned_model }: Props) {
   };
 
   return (
-    <div className="flex flex-col p-2 mx-2">
-      <div className=" w-full ">
+    <div className="flex flex-row p-2 mx-2 space-x-8">
+      <div className="w-4/5">
         <textarea className="custom-textarea" rows={4} onChange={(evt: React.ChangeEvent<HTMLTextAreaElement>) => handleInputChange(evt)}></textarea>
+        <div className="p-2 my-2 bg-gray-100">{clean(JSON.stringify(responseState?.choices[0].text))}</div>
       </div>
-
-      <div className="w-full py-4 text-orange-500">{clean(JSON.stringify(responseState?.choices[0].text))}</div>
-      <div className="flex flex-row w-full justify-end space-x-8">
+      <div className="flex flex-col w-1/5">
         <div className="">
           <Temperature temperature={1} onTemperatureChange={(e: number) => temperatureChange(e)} />
         </div>
-        <div>
-          <button className="btn-primary" onClick={() => submittest()}>
+        <div className="flex justify-end">
+          <button className="btn-small mt-4" onClick={() => submittest()}>
             Test
           </button>
         </div>
