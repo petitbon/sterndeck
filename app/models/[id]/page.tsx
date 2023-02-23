@@ -17,7 +17,6 @@ import TrainStanza from './train';
 
 import Title from '@components/model/comps/Title';
 import UserCheck from '@components/user/UserCheck';
-import PublishedModelCard from '@components/custommodels/PublishedModelCard';
 
 interface Props {
   params: {
@@ -68,9 +67,6 @@ export default function ModelEdit({ params }: Props) {
                       <TrainStanza user_uid={authUser.uid} model={model} training_file={training_file} />
                     </li>
                   ))}
-                </ul>
-                <ul>
-                  <li className="relative m-2">{!!model?.published_model && <PublishedModelCard published_model={model.published_model} />}</li>
                 </ul>
               </div>
             </form>

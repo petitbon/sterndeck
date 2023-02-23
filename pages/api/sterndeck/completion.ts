@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Configuration, OpenAIApi } from 'openai';
 
-import { ICompletionRequest } from '@interfaces/ICompletions';
+import { ICompletionOAIRequest } from '@interfaces/ICompletions';
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -19,16 +19,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  let completionRequest: ICompletionRequest = {
+  let completionRequest: ICompletionOAIRequest = {
     model: JSON.parse(req.body).model,
     prompt: JSON.parse(req.body).prompt,
+    temperature: JSON.parse(req.body).temperature || 1,
     max_tokens: 256,
-    temperature: 0.7,
     top_p: 1,
     n: 1,
     stream: false,
     logprobs: null,
-    stop: '\n',
+    stop: ' END',
   };
 
   if (!completionRequest) {
@@ -39,7 +39,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     case 'POST':
       try {
         const response = await openai.createCompletion(completionRequest);
-        //const completion: any = response.data.choices[0].text;
+        const completion: any = response.data.choices[0].text;
         res.status(200).json(response.data);
       } catch (error) {
         if (error.response) {

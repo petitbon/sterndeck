@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 import { updateModel } from '@firestore/models';
 
-type TPromptLoss = number;
+type TPromptLoss = number | undefined;
 
 export interface Props {
   user_uid: string;
@@ -11,31 +11,31 @@ export interface Props {
 }
 
 export default function PromptLoss({ user_uid, model_id, prompt_loss_weight }: Props) {
-  const [promptLossInput, setPromptLossInput] = useState<number>(0.01);
+  const [promptLossState, setPromptLossState] = useState<number>(0.01);
 
   useEffect(() => {
-    setPromptLossInput(prompt_loss_weight || 0.01);
+    setPromptLossState(prompt_loss_weight || 0.01);
   }, [prompt_loss_weight]);
 
   const savePromptLoss = async (e: any) => {
-    setPromptLossInput(e.target.value);
-    await updateModel(user_uid, model_id, { prompt_loss_weight: e.target.value });
+    setPromptLossState(e.target.value);
+    await updateModel(user_uid, model_id, { hyperparams: { prompt_loss_weight: promptLossState } });
   };
 
   return (
     <>
       {' '}
       <div className="">
-        <label className="custom-label">Prompt Loss Weight {promptLossInput}</label>
+        <label className="custom-label">Prompt Loss W. {promptLossState}</label>
         <input
-          onChange={(e) => setPromptLossInput(+e.target.value)}
+          onChange={(e) => setPromptLossState(+e.target.value)}
           onMouseUp={(e) => savePromptLoss(e)}
           id="small-range"
           max={0.1}
           min={0.01}
           step={0.01}
           type="range"
-          value={promptLossInput}
+          value={promptLossState}
           className="input-range "
         />
       </div>

@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        'stern-blue': '#34ede7',
+        'stern-blue': '#12E8F0',
+        'stern-red': '#1279F0',
         error: '#FF0000',
       },
     },

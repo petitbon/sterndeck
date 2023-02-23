@@ -44,8 +44,6 @@ export default function Title({ user_uid, model_id, title }: Props) {
   const saveTitle = async () => {
     if (titleInput) {
       if (inputIsCool) {
-        console.log('inputTitle. ', titleInput);
-        console.log('model_id. ', model_id);
         await updateModel(user_uid, model_id, { title: titleInput });
       }
       if (!inputIsCool) {

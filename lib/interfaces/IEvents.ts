@@ -1,4 +1,4 @@
-export interface Events {
+export interface IEvents {
   object: string;
   data: Array<IEvent>;
 }

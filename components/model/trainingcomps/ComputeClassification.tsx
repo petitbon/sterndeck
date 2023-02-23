@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 import { updateModel } from '@firestore/models';
 
-type TComputeClassification = boolean;
+type TComputeClassification = boolean | undefined;
 
 export interface Props {
   user_uid: string;
@@ -11,15 +11,15 @@ export interface Props {
 }
 
 export default function ComputeClassification({ user_uid, model_id, compute_classification_metrics }: Props) {
-  const [computeClassificationInput, setComputeClassificationInput] = useState<boolean>(false);
+  const [computeClassificationState, setComputeClassificationState] = useState<boolean>(false);
 
   useEffect(() => {
-    setComputeClassificationInput(compute_classification_metrics || false);
+    setComputeClassificationState(compute_classification_metrics || false);
   }, [compute_classification_metrics]);
 
   const saveComputeClassification = async (evalue: boolean) => {
-    setComputeClassificationInput(evalue);
-    await updateModel(user_uid, model_id, { compute_classification_metrics: evalue });
+    setComputeClassificationState(evalue);
+    await updateModel(user_uid, model_id, { hyperparams: { compute_classification_metrics: computeClassificationState } });
   };
 
   return (
@@ -28,7 +28,7 @@ export default function ComputeClassification({ user_uid, model_id, compute_clas
       <div className="">
         <label className="custom-label">Classification Metrics</label>
         <label className="relative flex items-center cursor-pointer">
-          <input onChange={(e) => saveComputeClassification(e.target.checked)} type="checkbox" checked={computeClassificationInput} className="sr-only peer" />
+          <input onChange={(e) => saveComputeClassification(e.target.checked)} type="checkbox" checked={computeClassificationState} className="sr-only peer" />
           <div className="toggle peer"></div>{' '}
         </label>
       </div>

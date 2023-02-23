@@ -1,4 +1,4 @@
-export interface ICompletionRequest {
+export interface ICompletionOAIRequest {
   model: string;
   prompt: string;
   max_tokens: number;
@@ -10,7 +10,7 @@ export interface ICompletionRequest {
   stop: string;
 }
 
-export interface ICompletionResponse {
+export interface ICompletionOAIResponse {
   id: string;
   object: string;
   created: Date;

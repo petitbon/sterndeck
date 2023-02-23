@@ -6,6 +6,8 @@ import { getFineTunes } from '@firestore/fineTunes';
 import { ITrainingFile } from '@interfaces/ITrainingFile';
 import { IModel } from '@interfaces/IModel';
 import { IFineTune } from '@interfaces/IFineTune';
+import { IHyperparams } from '@interfaces/IModel';
+import { IFineTuneOAIRequest } from '@interfaces/IFineTune';
 
 import TrainingFile from '@components/model/trainingcomps/TrainingFile';
 import HyperParameters from '@components/model/trainingcomps/HyperParameters';
@@ -37,23 +39,33 @@ export default function TrainStanza({ user_uid, model, training_file }: Props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const forgetit = await getFineTunes(user_uid, modelState.id, setFineTunesState);
-      return () => {
-        forgetit();
-      };
+      const forgetit = await getFineTunes(user_uid, model.id, setFineTunesState);
+      return () => forgetit();
     };
     fetchData();
-  }, [modelState]);
+  }, [model]);
 
   const train = async (file: ITrainingFile): Promise<Partial<IFineTune> | null> => {
-    let trainData: ITrainData = {
+    const trainRequest: IFineTuneOAIRequest = {
       training_file: file.id,
       model: model.model,
+      suffix: 'sterndeck',
+      n_epochs: model.hyperparams?.n_epochs,
+      batch_size: model.hyperparams?.batch_size,
+      learning_rate_multiplier: model.hyperparams?.learning_rate_multiplier,
+      prompt_loss_weight: model.hyperparams?.prompt_loss_weight,
     };
 
     let fineTune: IFineTune;
     try {
-      const response = await fetch(`/api/openai/fine-tunes/create`, { method: 'POST', body: JSON.stringify(trainData) });
+      const response = await fetch(`/api/openai/fine-tunes/create`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(trainRequest),
+      });
       const data: any = await response.json();
       fineTune = data.result;
       await addFineTune(user_uid, model.id, fineTune);
@@ -74,9 +86,9 @@ export default function TrainStanza({ user_uid, model, training_file }: Props) {
         </div>
         <HyperParameters model={modelState} user_uid={user_uid} />
         <div className="pb-2 flex w-full">
-          <div className="w-full flex flex-row p-3 mx-4 justify-end">
-            <div className="flex m-2 font-semibold">
-              <button className="btn-small" onClick={() => train(trainingFileState)}>
+          <div className="w-full flex flex-row p-3 mx-4 justify-center">
+            <div className="flex m-2 font-bold">
+              <button className="btn-small w-[200px]" onClick={() => train(trainingFileState)}>
                 Train
               </button>
             </div>

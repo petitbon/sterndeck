@@ -33,14 +33,6 @@ export async function cancelFineTune(user_uid: string, model_id: string, fine_tu
   const path = `models/${user_uid}/list/${model_id}/fine_tunes`;
   await setDoc(doc(firebaseDB, path, fine_tune_id), data, { merge: true });
 }
-export async function getEvent(user_uid: string, model_id: string, finetune_id: string, setEvent: any) {
-  const path = `models/${user_uid}/list/${model_id}/fine_tunes/${finetune_id}/events`;
-  const unsub = onSnapshot(doc(firebaseDB, path, 'update'), (doc) => {
-    console.log(`Received doc snapshot: ${JSON.stringify(doc.data())}`);
-    setEvent(doc.data());
-  });
-  return unsub;
-}
 
 export async function updateFineTune<T>(user_uid: string, model_id: string, data: T) {
   return await updateDoc(doc(firebaseDB, `models/${user_uid}/list/${model_id}`), { ...(data as T[]) });

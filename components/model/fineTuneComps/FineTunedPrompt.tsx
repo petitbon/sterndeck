@@ -1,41 +1,63 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-import { ICompletionRequest, ICompletionResponse } from '@interfaces/ICompletions';
+import { ICompletionOAIRequest, ICompletionOAIResponse } from '@interfaces/ICompletions';
+
+import Temperature from './Temperature';
 
 export interface Props {
   fine_tuned_model: string;
 }
 
 export default function FineTunedPrompt({ fine_tuned_model }: Props) {
-  const [response, setResponse] = useState(null as any);
-  const [promptstr, setPromptstr] = useState<string>('');
+  const [responseState, setResponseState] = useState(null as any);
+  const [requestState, setRequestState] = useState<ICompletionOAIRequest>({} as ICompletionOAIRequest);
 
   const clean = (input: string) => input?.replace(/['"]+/g, '');
 
+  useEffect(() => {
+    setRequestState((existingValues) => ({
+      ...existingValues,
+      model: fine_tuned_model,
+    }));
+  }, [fine_tuned_model]);
+
   const handleInputChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setPromptstr(evt.target.value);
+    setRequestState((existingValues) => ({
+      ...existingValues,
+      prompt: evt.target.value,
+    }));
+  };
+
+  const temperatureChange = (e: number) => {
+    requestState.temperature = e;
+    setRequestState((existingValues) => ({
+      ...existingValues,
+      temperature: e,
+    }));
   };
 
   const submittest = async () => {
-    let request: Partial<ICompletionRequest> = {
-      model: fine_tuned_model,
-      prompt: promptstr,
-    };
-    const r = await fetch(`/api/sterndeck/completion`, { method: 'POST', body: JSON.stringify(request) });
-    const completionResponse: ICompletionResponse = await r.json();
-    setResponse(completionResponse);
+    const r = await fetch(`/api/sterndeck/completion`, { method: 'POST', body: JSON.stringify(requestState) });
+    const completionResponse: ICompletionOAIResponse = await r.json();
+    setResponseState(completionResponse);
   };
+
   return (
-    <div className="flex flex-col p-2 mx-2 border ">
+    <div className="flex flex-col p-2 mx-2">
       <div className=" w-full ">
         <textarea className="custom-textarea" rows={4} onChange={(evt: React.ChangeEvent<HTMLTextAreaElement>) => handleInputChange(evt)}></textarea>
       </div>
 
-      <div className="w-full py-4 text-orange-500">{clean(JSON.stringify(response?.choices[0].text))}</div>
-      <div className="flex flex-row w-full justify-end pt-4">
-        <button className="btn-small p-2" onClick={() => submittest()}>
-          Test
-        </button>
+      <div className="w-full py-4 text-orange-500">{clean(JSON.stringify(responseState?.choices[0].text))}</div>
+      <div className="flex flex-row w-full justify-end space-x-8">
+        <div className="">
+          <Temperature temperature={1} onTemperatureChange={(e: number) => temperatureChange(e)} />
+        </div>
+        <div>
+          <button className="btn-primary" onClick={() => submittest()}>
+            Test
+          </button>
+        </div>
       </div>
     </div>
   );
