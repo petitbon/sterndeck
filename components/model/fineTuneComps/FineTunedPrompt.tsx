@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import { ICompletionOAIRequest, ICompletionOAIResponse } from '@interfaces/ICompletions';
 
@@ -13,13 +13,6 @@ export default function FineTunedPrompt({ fine_tuned_model }: Props) {
   const [requestState, setRequestState] = useState<ICompletionOAIRequest>({} as ICompletionOAIRequest);
 
   const clean = (input: string) => input?.replace(/['"]+/g, '');
-
-  useEffect(() => {
-    setRequestState((existingValues) => ({
-      ...existingValues,
-      model: fine_tuned_model,
-    }));
-  }, [fine_tuned_model]);
 
   const handleInputChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     setRequestState((existingValues) => ({
@@ -37,18 +30,18 @@ export default function FineTunedPrompt({ fine_tuned_model }: Props) {
   };
 
   const submittest = async () => {
-    const r = await fetch(`/api/sterndeck/completion`, { method: 'POST', body: JSON.stringify(requestState) });
+    const r = await fetch(`/api/sterndeck/completion/${fine_tuned_model}`, { method: 'POST', body: JSON.stringify(requestState), headers: { 'Content-Type': 'application/json' } });
     const completionResponse: ICompletionOAIResponse = await r.json();
     setResponseState(completionResponse);
   };
 
   return (
-    <div className="flex flex-row p-2 mx-2 space-x-8">
-      <div className="w-4/5">
+    <div className="flex flex-row">
+      <div className="w-full">
         <textarea className="custom-textarea" rows={4} onChange={(evt: React.ChangeEvent<HTMLTextAreaElement>) => handleInputChange(evt)}></textarea>
         <div className="p-2 my-2 bg-gray-100">{clean(JSON.stringify(responseState?.choices[0].text))}</div>
       </div>
-      <div className="flex flex-col w-1/5">
+      <div className="p-4 cursor-pointer w-[160px] flex flex-col items-center justify-center">
         <div className="">
           <Temperature temperature={1} onTemperatureChange={(e: number) => temperatureChange(e)} />
         </div>

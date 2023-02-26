@@ -57,11 +57,11 @@ export default function ModelEdit({ params }: Props) {
           <FormProvider {...methods}>
             <form className="custom-form" onSubmit={methods.handleSubmit(onSubmit)}>
               <div className="pb-4">
-                <Title user_uid={authUser.uid} model_id={params.id} title={model?.title} />
+                <Title user_uid={authUser?.uid} model_id={params.id} title={model?.title} />
               </div>
               <div>
                 <ul>
-                  <li className="relative m-2">{model?.title && <UploadStanza user_uid={authUser.uid} model={model} />}</li>
+                  <li className="relative m-2">{model?.title && <UploadStanza user_uid={authUser?.uid} model={model} />}</li>
                   {trainingFiles.map((training_file: ITrainingFile, i: number) => (
                     <li className="relative m-2" key={i}>
                       <TrainStanza user_uid={authUser.uid} model={model} training_file={training_file} />

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'firebase/auth';
 import { firebaseAuth } from '@context/firebase/firebase';
 import { UserCard } from '@components/user/UserCard';
@@ -26,26 +26,28 @@ function SignInScreen() {
 
   if (isSignedIn) {
     return (
-      <>
-        <div className="flex m-2">
-          <UserCard user={authUser} />
+      <div className="flex flex-col w-full h-[400px]">
+        <div className="flex flew-row">
+          <div className="flex m-2">
+            <UserCard user={authUser} />
+          </div>
+          <div className="flex w-full justify-end items-center m-2">
+            <button className="btn-small" onClick={() => signOut(firebaseAuth)}>
+              Sign-out
+            </button>
+          </div>
         </div>
-        <div className="flex justify-end items-center m-2">
-          <button className="btn-small" onClick={() => signOut(firebaseAuth)}>
-            Sign-out
-          </button>
-        </div>
-      </>
+      </div>
     );
   } else {
     return (
-      <>
-        <div className="flex justify-center items-center m-2">
+      <div className="flex flew-row w-full h-[300px]">
+        <div className="flex w-full justify-center items-start m-2">
           <button className="btn-primary" onClick={signIn}>
             Sign In
           </button>
         </div>
-      </>
+      </div>
     );
   }
 }

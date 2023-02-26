@@ -23,8 +23,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </UserCheck>
             </div>
             {/* ----------------------------------------------------------------------------------- */}
-            <div className="flex-1 bottom-0 absolute w-full h-[200px]">
-              <div className="my-1">
+            <div className="flex-1 w-full bottom-0 absolute">
+              <div className="flex my-1 h-full items-center justify-center">
                 <UserAuth />
               </div>
             </div>

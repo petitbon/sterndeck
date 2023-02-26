@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { IFineTune } from '@interfaces/IFineTune';
 import { ICancelFineTuneConfirmation } from '@interfaces/ICancelFineTuneConfirmation';
 import { IModel } from '@interfaces/IModel';
+
+import { IconCopy } from '@tabler/icons-react';
 
 import Loading from '@components/shared/Loading';
 import FineTunedPrompt from '@components/model/fineTuneComps/FineTunedPrompt';
@@ -26,9 +27,28 @@ export default function FineTune({ user_uid, model, fine_tune }: Props) {
   const [fineTuneState, setFineTuneState] = useState<IFineTune>({} as IFineTune);
   const [modelState, setModelState] = useState<IModel>({} as IModel);
   const [showTest, setShowTest] = useState<boolean>(false);
+  const [showCurl, setShowCurl] = useState<boolean>(false);
+  const [curlCodeState, setCurlCodeState] = useState<string>('');
+
+  useEffect(() => {
+    if (showCurl && showTest) setShowTest(false);
+  }, [showCurl]);
+
+  useEffect(() => {
+    if (showTest && showCurl) setShowCurl(false);
+  }, [showTest]);
 
   useEffect(() => {
     setFineTuneState(fine_tune);
+    setCurlCodeState(
+      /* prettier-ignore */
+      `curl http://localhost:3000/api/sterndeck/completion/${fine_tune.fine_tuned_model}
+       --request POST
+       --header 'accept: application/json'
+       --header 'authorization: Bearer YOUR_API_KEY'
+       --header 'content-type: application/json'
+       --data '{"prompt": "Bring more customers."}'`
+    );
     const fetchData = async () => {
       const unsub = await getEvent(user_uid, model.id, fine_tune.id, setEvent);
       return () => {
@@ -60,11 +80,7 @@ export default function FineTune({ user_uid, model, fine_tune }: Props) {
             <div className="">{!fineTuneState?.fine_tuned_model ? <Loading size={25} /> : ''}</div>
             {fineTuneState?.fine_tuned_model ? (
               <div className="flex items-center">
-                <div className=" ">
-                  <Link href={`/api/v1/model/${fineTuneState?.fine_tuned_model}`} className="text-sm hover:text-stern-blue">
-                    {truncate(fineTuneState?.fine_tuned_model)}
-                  </Link>
-                </div>
+                <div className="text-sm">{truncate(fineTuneState?.fine_tuned_model)}</div>
                 <div className="text-sm">
                   <span className="font-semibold ml-4">h.params </span>[{fineTuneState?.hyperparams?.n_epochs},{fineTuneState?.hyperparams?.batch_size} ,
                   {fineTuneState?.hyperparams?.learning_rate_multiplier} ,{fineTuneState?.hyperparams?.prompt_loss_weight}]
@@ -77,14 +93,36 @@ export default function FineTune({ user_uid, model, fine_tune }: Props) {
           <div className=" w-min justify-end">
             <div className="mx-4">
               {!!fineTuneState?.fine_tuned_model ? (
-                <button className="btn-link whitespace-nowrap" onClick={() => (showTest ? setShowTest(false) : setShowTest(true))}>
-                  {showTest ? 'Hide' : 'Show'} Promt
-                </button>
+                <div className="flex flex-row">
+                  <button className="btn-link whitespace-nowrap" onClick={() => (showCurl ? setShowCurl(false) : setShowCurl(true))}>
+                    {showCurl ? 'Hide' : 'Show'} Curl
+                  </button>
+                  <button className="btn-link whitespace-nowrap" onClick={() => (showTest ? setShowTest(false) : setShowTest(true))}>
+                    {showTest ? 'Hide' : 'Show'} Promt
+                  </button>
+                </div>
               ) : (
                 <button className="btn-link whitespace-nowrap" onClick={() => cancelTraining(fineTuneState)}>
                   Cancel Training
                 </button>
               )}
+            </div>
+          </div>
+        </li>
+        <li className="relative m-2">
+          <div className={showCurl ? 'visible flex flex-row w-full' : 'hidden'}>
+            <div className="w-full bg-gray-100">
+              <pre>
+                <code className="p-2 block whitespace-pre-line text-xs overflow-x-auto">{curlCodeState}</code>
+              </pre>
+            </div>
+            <div
+              className="p-2 cursor-pointer w-[100px] flex items-center justify-center"
+              onClick={() => {
+                navigator.clipboard.writeText(curlCodeState);
+              }}
+            >
+              <IconCopy size={35} stroke={1.5} />
             </div>
           </div>
         </li>
