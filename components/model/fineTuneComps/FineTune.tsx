@@ -2,12 +2,13 @@ import { useState, useEffect } from 'react';
 import { IFineTune } from '@interfaces/IFineTune';
 import { ICancelFineTuneConfirmation } from '@interfaces/ICancelFineTuneConfirmation';
 import { IModel } from '@interfaces/IModel';
-
+import { useSystemContext } from '@context/SystemProvider';
 import { IconCopy } from '@tabler/icons-react';
 
 import Loading from '@components/shared/Loading';
 import FineTunedPrompt from '@components/model/fineTuneComps/FineTunedPrompt';
 
+import { getUserApiKey } from '@firestore/users';
 import { getEvent } from '@firestore/events';
 import { cancelFineTune } from '@firestore/fineTunes';
 
@@ -29,6 +30,7 @@ export default function FineTune({ user_uid, model, fine_tune }: Props) {
   const [showTest, setShowTest] = useState<boolean>(false);
   const [showCurl, setShowCurl] = useState<boolean>(false);
   const [curlCodeState, setCurlCodeState] = useState<string>('');
+  const { authApiKey, setAuthApiKey } = useSystemContext();
 
   useEffect(() => {
     if (showCurl && showTest) setShowTest(false);
@@ -45,7 +47,7 @@ export default function FineTune({ user_uid, model, fine_tune }: Props) {
       `curl http://localhost:3000/api/sterndeck/completion/${fine_tune.fine_tuned_model}
        --request POST
        --header 'accept: application/json'
-       --header 'authorization: Bearer YOUR_API_KEY'
+       --header 'Authorization: Bearer ${authApiKey}'
        --header 'content-type: application/json'
        --data '{"prompt": "Bring more customers."}'`
     );

@@ -27,7 +27,8 @@
       "@context*": ["./context*"],
       "@interfaces*": ["./lib/interfaces*"],
       "@firestore*": ["./lib/firestore*"],
-      "@cloudstorage*": ["./lib/cloudstorage*"]
+      "@cloudstorage*": ["./lib/cloudstorage*"],
+      "@middleware*": ["./lib/middleware*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
