@@ -27,6 +27,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     stop: ' END',
   };
 
+  let token: string = req.headers['Authorization'] as string;
+
+  if (token) {
+    token = token.replace(/^Bearer\s+/, '');
+    const userToken: string = await jwt.verify(token, config.secret, (err, decoded) => {
+      if (err) {
+        return res.json({
+          success: false,
+          message: 'Token is not valid',
+        });
+      }
+      req.decoded = decoded;
+      next();
+    });
+  } else {
+    return res.json({
+      success: false,
+      message: 'Token not provided',
+    });
+  }
+
   if (!configuration.apiKey) {
     res.status(500).json({
       error: { message: 'OpenAI API key not configured' },

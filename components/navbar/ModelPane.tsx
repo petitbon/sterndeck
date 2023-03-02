@@ -29,14 +29,19 @@ export default function CustommodelPane() {
     <>
       <ul className="relative">
         <li className="relative">
-          <div className="m-3 p-1 flex">
-            <span className="text-[18px] ml-6 font-semibold">Models</span>
+          <div className="m-1 p-1 flex flex-row">
+            <div>
+              <span className="text-[18px] ml-4">Models</span>
+            </div>
+            <div onClick={() => router.push(`/models/${newDocId}`)}>
+              <span className="text-[11px] pl-4 hover:text-stern-blue cursor-pointer font-semibold">[+ Create New]</span>
+            </div>
           </div>
         </li>
 
         {models?.map((model: IModel, i) => (
           <li className="relative" key={i}>
-            <div className="m-3 p-1 flex duration-300 cursor-pointer hover:bg-stern-blue" key={i} onClick={() => router.push(`/models/${model.id}`)}>
+            <div className="ml-8 my-4 p-1 flex duration-500 cursor-pointer hover:bg-stern-blue" key={i} onClick={() => router.push(`/models/${model.id}`)}>
               <span className="text-[13px] ml-6" key={i}>
                 {model.title}
               </span>
@@ -44,11 +49,7 @@ export default function CustommodelPane() {
           </li>
         ))}
 
-        <li className="relative">
-          <div className="m-3 p-1 flex duration-300 cursor-pointer  hover:bg-stern-blue" onClick={() => router.push(`/models/${newDocId}`)}>
-            <span className="text-[13px] ml-6">+ Create New</span>
-          </div>
-        </li>
+        <li className="relative my-10"></li>
       </ul>
     </>
   );

@@ -24,7 +24,7 @@ const sendFileToOpenai = async (file: string): Promise<ITrainingFile> => {
 
 export default function FileDrop({ user_uid, model_id }: Props) {
   const [error, setError] = useState('');
-
+  console.log('HEere');
   const onDrop = useCallback(async (receivedFiles: any) => {
     setError('');
     if (receivedFiles.length !== 1) {

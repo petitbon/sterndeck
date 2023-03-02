@@ -1,16 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { signInWithCustomToken, getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'firebase/auth';
+import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from 'firebase/auth';
 import { firebaseAuth } from '@context/firebase/firebase';
-import jwt from 'jsonwebtoken';
-//import { SignJWT } from 'jose/jwt/sign';
-import * as jose from 'jose';
 import { UserCard } from '@components/user/UserCard';
 import { useSystemContext } from '@context/SystemProvider';
 import { User } from 'firebase/auth';
-import { getUserApiKey } from '@firestore/users';
-import * as admin from 'firebase-admin';
+import { getKeys } from '@firestore/keys';
 
 function SignInScreen() {
   const { isSignedIn, setIsSignedIn } = useSystemContext();
@@ -33,20 +29,7 @@ function SignInScreen() {
   useEffect(() => {
     if (authUser?.uid) {
       const fetchKey = async () => {
-        await getUserApiKey(authUser.uid, setAuthApiKey);
-        //        const idToken = await authUser.getIdTokenResult(true);
-        /* 
-        let uint8Array = new TextEncoder().encode(idToken.token);
-        const jwt = await new jose.SignJWT({ 'urn:example:claim': true })
-          .setProtectedHeader({ alg: 'HS256' })
-          .setIssuedAt()
-          .setIssuer('urn:example:issuer')
-          .setAudience('urn:example:audience')
-          .setExpirationTime('1000y')
-          .sign(uint8Array);
- */
-        //       const userJWT = idToken.token;
-        console.log(authApiKey);
+        await getKeys(authUser.uid, setAuthApiKey);
       };
       fetchKey();
     }
@@ -54,7 +37,7 @@ function SignInScreen() {
 
   if (isSignedIn) {
     return (
-      <div className="flex flex-col w-full h-[400px]">
+      <div className="flex flex-col w-full h-[50px]">
         <div className="flex flew-row">
           <div className="flex m-2">
             <UserCard user={authUser} />
