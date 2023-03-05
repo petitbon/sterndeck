@@ -32,9 +32,9 @@ function SignInScreen() {
             <UserCard user={authUser} />
           </div>
           <div className="flex w-full justify-end items-center m-2">
-            <button className="btn-small" onClick={() => signOut(firebaseAuth)}>
-              Sign-out
-            </button>
+            <div onClick={() => signOut(firebaseAuth)}>
+              <span className="text-[11px] pl-4 hover:text-stern-blue cursor-pointer font-semibold">[Sign-out]</span>
+            </div>
           </div>
         </div>
       </div>

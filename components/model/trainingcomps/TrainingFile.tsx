@@ -36,7 +36,7 @@ export default function TrainingFile({ training_file, model }: Props) {
           {truncate(trainingFileState?.id)}{' '}
         </div>
         <div className="mx-4">
-          <Link className="hover:text-stern-blue justify-end" href={signedURLState}>
+          <Link as="download" className="hover:text-stern-blue justify-end" href={signedURLState}>
             Download
           </Link>
         </div>

@@ -2,9 +2,8 @@ import '../styles/globals.css';
 
 import { SystemProvider } from '@context/SystemProvider';
 
-import UserAuth from '@components/user/UserAuth';
 import ModelPane from '@components/navbar/ModelPane';
-import KeysPane from '@components/navbar/KeysPane';
+import UserPane from '@components/navbar/UserPane';
 import UserCheck from '@components/user/UserCheck';
 
 export const metadata = {
@@ -33,10 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {/* ----------------------------------------------------------------------------------- */}
             <div className="flex-1 flex-col w-full bottom-14 absolute">
               <div className="h-px my-2 bg-gray-500 border-0" />
-              <UserAuth />
-              <UserCheck>
-                <KeysPane />
-              </UserCheck>
+              <UserPane />
             </div>
             {/* ----------------------------------------------------------------------------------- */}
             <div className="flex-1 bottom-0 absolute w-full h-[26px]">
