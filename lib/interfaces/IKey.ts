@@ -1,5 +1,6 @@
 export interface IKey {
-  apiKey: string;
+  id: string;
+  api_key: string;
   status: string;
   created_at: Date;
 }

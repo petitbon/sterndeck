@@ -1,32 +1,38 @@
 import { firebaseDB } from '@context/firebase/firebase';
 import { IKey } from '@interfaces/IKey';
 
-import { doc, setDoc, deleteDoc, getDocs, collection, addDoc } from 'firebase/firestore';
+import { doc, setDoc, deleteDoc, onSnapshot, where, collection, addDoc, query } from 'firebase/firestore';
+
+const truncate = (input: string) => `${input.substring(0, 9)}...${input.slice(-4)}`;
 
 export async function getKeys(user_uid: string, setKeys: any) {
-  const usersCollectionRef = collection(firebaseDB, `users/${user_uid}/keys`);
-  getDocs(usersCollectionRef).then((querySnapshot) => {
-    const keys: IKey[] = querySnapshot.docs.map((doc) => {
-      return doc.data() as IKey;
-    });
-    setKeys(keys);
+  const path = `users/${user_uid}/keys`;
+  const collectionQuery = query(collection(firebaseDB, path), where('status', '==', 'active'));
+  const unsubscribe = onSnapshot(collectionQuery, async (snapshot: any) => {
+    let allDatas = [];
+    for (const docSnap of snapshot.docs) {
+      const nKey: IKey = {
+        id: docSnap.id,
+        api_key: truncate(docSnap.data().api_key),
+        status: docSnap.data().status,
+        created_at: docSnap.data().created_at,
+      };
+      allDatas.push(nKey);
+    }
+    setKeys(allDatas);
   });
+  return unsubscribe;
 }
 
 export async function deleteKey(user_uid: string, key_id: string) {
   return await deleteDoc(doc(firebaseDB, `users/${user_uid}/keys/${key_id}`));
 }
 
-export async function addKey(user_uid: string, data: IKey) {
-  addDoc(collection(firebaseDB, `users/${user_uid}/keys/`), data);
-}
-
 export async function updateKey<T>(user_uid: string, key_id: string, data: T) {
-  const keyRef = doc(firebaseDB, `users/${user_uid}/keys/${key_id}`);
-  return await setDoc(keyRef, { ...(data as T[]) }, { merge: true });
-}
-
-export async function verifyApiKey(user_uid: string, api_key: string) {
-  const result: any = doc(firebaseDB, `users/${user_uid}/keys/${api_key}`);
-  return result;
+  if (key_id == '') {
+    return await addDoc(collection(firebaseDB, `users/${user_uid}/keys/`), { ...(data as T[]) });
+  } else {
+    const keyRef = doc(firebaseDB, `users/${user_uid}/keys/${key_id}`);
+    return await setDoc(keyRef, { ...(data as T[]) }, { merge: true });
+  }
 }

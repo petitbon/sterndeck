@@ -6,12 +6,10 @@ import { firebaseAuth } from '@context/firebase/firebase';
 import { UserCard } from '@components/user/UserCard';
 import { useSystemContext } from '@context/SystemProvider';
 import { User } from 'firebase/auth';
-import { getKeys } from '@firestore/keys';
 
 function SignInScreen() {
   const { isSignedIn, setIsSignedIn } = useSystemContext();
   const { authUser, setAuthUser } = useSystemContext();
-  const { authApiKey, setAuthApiKey } = useSystemContext();
   const provider = new GoogleAuthProvider();
 
   const signIn = async () => {
@@ -25,15 +23,6 @@ function SignInScreen() {
     });
     return () => unsubscribe();
   }, []);
-
-  useEffect(() => {
-    if (authUser?.uid) {
-      const fetchKey = async () => {
-        await getKeys(authUser.uid, setAuthApiKey);
-      };
-      fetchKey();
-    }
-  }, [authUser]);
 
   if (isSignedIn) {
     return (

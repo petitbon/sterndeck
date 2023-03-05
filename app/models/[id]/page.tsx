@@ -47,7 +47,6 @@ export default function ModelEdit({ params }: Props) {
   }, [authUser]);
 
   const methods = useForm();
-  //const onSubmit = (data: any) => console.log('DATA FROM EDIT PAGE: ', data);
   const onSubmit = (data: any) => null;
 
   return (

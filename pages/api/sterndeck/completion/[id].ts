@@ -28,7 +28,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   };
 
   let token: string = req.headers['Authorization'] as string;
-
   if (token) {
     token = token.replace(/^Bearer\s+/, '');
     const userToken: string = await jwt.verify(token, config.secret, (err, decoded) => {
@@ -59,7 +58,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(400).json({ error: { message: 'Please enter a valid data' } });
     return;
   }
-
   switch (method) {
     case 'POST':
       try {

@@ -2,11 +2,10 @@ import { useState, useEffect } from 'react';
 import { IFineTune } from '@interfaces/IFineTune';
 import { ICancelFineTuneConfirmation } from '@interfaces/ICancelFineTuneConfirmation';
 import { IModel } from '@interfaces/IModel';
-import { useSystemContext } from '@context/SystemProvider';
-import { IconCopy } from '@tabler/icons-react';
 
 import Loading from '@components/shared/Loading';
-import FineTunedPrompt from '@components/model/fineTuneComps/FineTunedPrompt';
+import Prompt from '@components/model/fineTuneComps/Prompt';
+import Curl from '@components/model/fineTuneComps/Curl';
 
 import { getEvent } from '@firestore/events';
 import { cancelFineTune } from '@firestore/fineTunes';
@@ -28,7 +27,6 @@ export default function FineTune({ user_uid, model, fine_tune }: Props) {
   const [modelState, setModelState] = useState<IModel>({} as IModel);
   const [showTest, setShowTest] = useState<boolean>(false);
   const [showCurl, setShowCurl] = useState<boolean>(false);
-  const [curlCodeState, setCurlCodeState] = useState<string>('');
 
   useEffect(() => {
     if (showCurl && showTest) setShowTest(false);
@@ -40,14 +38,6 @@ export default function FineTune({ user_uid, model, fine_tune }: Props) {
 
   useEffect(() => {
     setFineTuneState(fine_tune);
-    setCurlCodeState(
-      /* prettier-ignore */
-      `curl ${String(process.env.API_DOMAIN)}/api/v1/completion/${fine_tune.fine_tuned_model}
-       -x POST
-       -H 'Authorization: Bearer YOUR_API_KEY'
-       -H 'content-type: application/json'
-       -d '{"prompt": "Bring more customers.", "model": ${fine_tune.fine_tuned_model}}'`
-    );
     const fetchData = async () => {
       const unsub = await getEvent(user_uid, model.id, fine_tune.id, setEvent);
       return () => {
@@ -108,25 +98,11 @@ export default function FineTune({ user_uid, model, fine_tune }: Props) {
             </div>
           </div>
         </li>
-        <li className="relative m-2">
-          <div className={showCurl ? 'visible flex flex-row w-full' : 'hidden'}>
-            <div className="w-full bg-gray-100">
-              <pre>
-                <code className="p-2 block whitespace-pre-line text-xs overflow-x-auto">{curlCodeState}</code>
-              </pre>
-            </div>
-            <div
-              className="p-2 cursor-pointer w-[100px] flex items-center justify-center"
-              onClick={() => {
-                navigator.clipboard.writeText(curlCodeState);
-              }}
-            >
-              <IconCopy size={35} stroke={1.5} />
-            </div>
-          </div>
+        <li className={showCurl ? ' visible relative m-2' : 'hidden'}>
+          <Curl fine_tuned_model={fineTuneState.fine_tuned_model as string} />
         </li>
         <li className="relative m-2">
-          <div className={showTest ? 'visible' : 'hidden'}> {!!fineTuneState?.fine_tuned_model && <FineTunedPrompt fine_tuned_model={fineTuneState.fine_tuned_model} />}</div>
+          <div className={showTest ? 'visible' : 'hidden'}>{!!fineTuneState?.fine_tuned_model && <Prompt fine_tuned_model={fineTuneState.fine_tuned_model} />}</div>
         </li>
       </ul>
     </div>

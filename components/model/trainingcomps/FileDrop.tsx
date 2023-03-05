@@ -3,7 +3,6 @@
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { IconFileCode } from '@tabler/icons-react';
-
 import { ITrainingFile } from '@interfaces/ITrainingFile';
 
 import { uploadStorageFile, getDownloadURL } from '@cloudstorage/storage';
@@ -23,18 +22,18 @@ const sendFileToOpenai = async (file: string): Promise<ITrainingFile> => {
 };
 
 export default function FileDrop({ user_uid, model_id }: Props) {
-  const [error, setError] = useState('');
-  console.log('HEere');
+  const [error, setError] = useState<string>('');
+
   const onDrop = useCallback(async (receivedFiles: any) => {
+    console.log(receivedFiles);
     setError('');
     if (receivedFiles.length !== 1) {
       setError('please upload one file at a time');
       return null;
     }
     const reader = new FileReader();
-    reader.onabort = () => console.log('file reading was aborted');
-    reader.onerror = () => console.log('file reading has failed');
-
+    reader.onabort = () => setError('File reading was aborted.');
+    reader.onerror = () => setError('file reading has failed');
     reader.onload = async () => {
       const binaryStr = reader.result;
       var enc = new TextDecoder('utf-8');
@@ -46,7 +45,7 @@ export default function FileDrop({ user_uid, model_id }: Props) {
           JSON.parse(line);
         } catch (error) {
           console.log('bad line', JSON.stringify(line));
-          setError('file must be a valid JSONLine format');
+          setError('File must be a valid JSONLine format');
           return null;
         }
       });
