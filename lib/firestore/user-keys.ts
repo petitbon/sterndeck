@@ -6,14 +6,13 @@ import { doc, setDoc, deleteDoc, onSnapshot, where, collection, addDoc, query } 
 const truncate = (input: string) => `${input.substring(0, 9)}...${input.slice(-4)}`;
 
 export async function getKeys(user_uid: string, setKeys: any) {
-  const path = `keys`;
-  const collectionQuery = query(collection(firebaseDB, path), where('status', '==', 'active'), where('user_uid', '==', user_uid));
+  const path = `users/${user_uid}/keys`;
+  const collectionQuery = query(collection(firebaseDB, path), where('status', '==', 'active'));
   const unsubscribe = onSnapshot(collectionQuery, async (snapshot: any) => {
     let allDatas = [];
     for (const docSnap of snapshot.docs) {
       const nKey: IKey = {
         id: docSnap.id,
-        user_uid: docSnap.data().user_uid,
         api_key: truncate(docSnap.data().api_key),
         status: docSnap.data().status,
         created_at: docSnap.data().created_at,
@@ -25,11 +24,15 @@ export async function getKeys(user_uid: string, setKeys: any) {
   return unsubscribe;
 }
 
-export async function updateKey<T>(key_id: string, data: T) {
+export async function deleteKey(user_uid: string, key_id: string) {
+  return await deleteDoc(doc(firebaseDB, `users/${user_uid}/keys/${key_id}`));
+}
+
+export async function updateKey<T>(user_uid: string, key_id: string, data: T) {
   if (key_id == '') {
-    return await addDoc(collection(firebaseDB, `keys/`), { ...(data as T[]) });
+    return await addDoc(collection(firebaseDB, `users/${user_uid}/keys/`), { ...(data as T[]) });
   } else {
-    const keyRef = doc(firebaseDB, `keys/${key_id}`);
+    const keyRef = doc(firebaseDB, `users/${user_uid}/keys/${key_id}`);
     return await setDoc(keyRef, { ...(data as T[]) }, { merge: true });
   }
 }

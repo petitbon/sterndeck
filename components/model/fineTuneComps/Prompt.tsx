@@ -13,7 +13,7 @@ export interface IChoice {
 }
 
 export default function Prompt({ fine_tuned_model }: Props) {
-  const { authUser, isSignedIn } = useSystemContext();
+  const { authUser } = useSystemContext();
   const [responsesState, setResponsesState] = useState<IChoice[]>([]);
   const [requestState, setRequestState] = useState<ICompletionOAIRequest>({} as ICompletionOAIRequest);
 

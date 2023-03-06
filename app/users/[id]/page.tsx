@@ -40,10 +40,11 @@ export default function UserPref({ params }: Props) {
   const openModal = () => {
     const newKey: Partial<IKey> = {
       api_key: generateApiKey({ method: 'string', pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', prefix: 'sterndeck', length: 48 }) as string,
+      user_uid: authUser.uid,
       status: 'active',
       created_at: new Date(),
     };
-    updateKey(authUser.uid, '', newKey);
+    updateKey(newKey.api_key as string, newKey);
     setTokenState(newKey.api_key as string);
     setIsOpen(true);
   };
@@ -72,7 +73,7 @@ export default function UserPref({ params }: Props) {
                 <div className="text-[13px] ml-6" key={i + 100}>
                   {key.created_at.toDate().toDateString()}
                 </div>
-                <div className="p-2 hover:text-stern-blue cursor-pointer " onClick={() => updateKey(authUser.uid, key.id, { status: 'disabled' })}>
+                <div className="p-2 hover:text-stern-blue cursor-pointer " onClick={() => updateKey(key.id, { status: 'disabled' })}>
                   <IconTrash size={18} stroke={1.5} />
                 </div>
                 <></>
