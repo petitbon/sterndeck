@@ -12,7 +12,6 @@ import { IFineTuneOAIRequest } from '@interfaces/IFineTune';
 import TrainingFile from '@components/model/trainingcomps/TrainingFile';
 import HyperParameters from '@components/model/trainingcomps/HyperParameters';
 import FineTune from '@components/model/fineTuneComps/FineTune';
-
 export interface Props {
   user_uid: string;
   model: IModel;
@@ -105,20 +104,3 @@ export default function TrainStanza({ user_uid, model, training_file }: Props) {
     </>
   );
 }
-
-/*
-  <div className="flex m-2 font-semibold">
-    <button className="btn-small" onClick={() => deleteFile(trainingFileState)}>
-      Remove
-    </button>
-  </div>
-
-  const deleteFile = async (file: ITrainingFile): Promise<IDeletedFileConfirmation | null> => {
-    const response = await fetch(`/api/openai/training-files/${file.id}`, { method: 'DELETE' });
-    const confirmation: IDeletedFileConfirmation = await response.json();
-    deleteTrainingFile(user_uid, modelState.id, file.id);
-    deleteStorageFile(file.path);
-    setTrainingFileState({} as ITrainingFile) ;
-    return confirmation;
-  };
- */
