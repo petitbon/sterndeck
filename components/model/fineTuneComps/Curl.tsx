@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { IconCopy } from '@tabler/icons-react';
+import IconCopy from '@components/icons/IconCopy';
 
 export interface Props {
   fine_tuned_model: string;
@@ -32,7 +32,7 @@ export default function Curl({ fine_tuned_model }: Props) {
             navigator.clipboard.writeText(curlCodeState);
           }}
         >
-          <IconCopy size={35} stroke={1.5} />
+          <IconCopy />
         </div>
       </div>
     </>

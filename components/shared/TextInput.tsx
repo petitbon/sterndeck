@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
-import { IconPencil } from '@tabler/icons-react';
-import { IconDeviceFloppy } from '@tabler/icons-react';
+//import { IconPencil } from '@tabler/icons-react';
+//import { IconDeviceFloppy } from '@tabler/icons-react';
 
 export interface Props {
   text: string;
@@ -71,11 +71,41 @@ export default function TextInput({ text, inputType, onChange, placeHolder, size
           />
           {edit ? (
             <button className="btn-edit" onClick={() => saveText()}>
-              <IconDeviceFloppy className={'pointer-events-none w-8 h-8 transform ' + (edit ? 'text-stern-blue' : 'text-gray-300')} />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className={'icon icon-tabler icon-tabler-pencil pointer-events-none w-8 h-8 transform ' + (edit ? 'text-stern-blue' : 'text-gray-300')}
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+                stroke="currentColor"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4"></path>
+                <path d="M13.5 6.5l4 4"></path>
+              </svg>
             </button>
           ) : (
             <button className="btn-edit" onClick={() => editText()}>
-              <IconPencil />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="icon icon-tabler icon-tabler-pencil"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+                stroke="currentColor"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4"></path>
+                <path d="M13.5 6.5l4 4"></path>
+              </svg>
             </button>
           )}
         </div>

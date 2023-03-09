@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Configuration, OpenAIApi } from 'openai';
 
-import { ICompletionRequest } from '@interfaces/ICompletions';
+import { ICompletionOAIRequest } from '@interfaces/ICompletions';
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return;
   }
 
-  const completionRequest: ICompletionRequest = req.body;
+  const completionRequest: ICompletionOAIRequest = req.body;
 
   if (!completionRequest) {
     res.status(400).json({ error: { message: 'Please enter a valid data' } });

@@ -2,78 +2,51 @@
 
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { IconFileCode } from '@tabler/icons-react';
-import { ITrainingFile } from '@interfaces/ITrainingFile';
-
-import { uploadStorageFile, getDownloadURL } from '@cloudstorage/storage';
-import { addTrainingFile } from '@firestore/trainingFiles';
+import Spin from '@components/shared/Spin';
 
 export interface Props {
   user_uid: string;
   model_id: string;
 }
 
-const sendFileToOpenai = async (file: string): Promise<ITrainingFile> => {
-  const formData = new FormData();
-  formData.append('file', file);
-  const response = await fetch('/api/openai/training-files/upload', { method: 'POST', body: formData });
-  const trainingFile: ITrainingFile = await response.json();
-  return trainingFile;
-};
-
 export default function FileDrop({ user_uid, model_id }: Props) {
   const [error, setError] = useState<string>('');
+  const [spin, setSpin] = useState(false);
 
-  const onDrop = useCallback(async (receivedFiles: any) => {
-    console.log(receivedFiles);
+  const onDrop = useCallback((acceptedFiles: any) => {
     setError('');
-    if (receivedFiles.length !== 1) {
-      setError('please upload one file at a time');
-      return null;
-    }
-    const reader = new FileReader();
-    reader.onabort = () => setError('File reading was aborted.');
-    reader.onerror = () => setError('file reading has failed');
-    reader.onload = async () => {
-      const binaryStr = reader.result;
-      var enc = new TextDecoder('utf-8');
-      const data = enc.decode(binaryStr as BufferSource);
-      const clean = data.split('\n').filter(Boolean).join('\n');
-      const lines = clean.split('\n');
-      lines.forEach((line: string) => {
-        try {
-          JSON.parse(line);
-        } catch (error) {
-          console.log('bad line', JSON.stringify(line));
-          setError('File must be a valid JSONLine format');
-          return null;
-        }
-      });
-    };
-    reader.readAsArrayBuffer(receivedFiles[0]);
-    try {
-      const openaifile: ITrainingFile = await sendFileToOpenai(receivedFiles[0]);
-      const trainingFilePath: string = await uploadStorageFile(receivedFiles[0], user_uid, model_id, openaifile.id);
-      const trainingFileURL: string = await getDownloadURL(trainingFilePath);
-      const tf = { ...openaifile, path: trainingFilePath, url: trainingFileURL };
-      await addTrainingFile(user_uid, model_id, tf);
-    } catch (e) {
-      console.error(e);
+    const file = acceptedFiles[0];
+    if (file) {
+      console.log('acceptedfiles:', acceptedFiles);
+      setSpin(true);
+    } else {
+      console.log('file was not accepted');
+      setError('File was not accepted. upload one CSV file at a time.');
+      setSpin(false);
     }
   }, []);
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop, multiple: false });
-
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    maxFiles: 1,
+    accept: {
+      'text/csv': ['.csv'],
+    },
+  });
   return (
-    <div className="">
-      <label className="custom-label">Training File ( JSONLine format )</label>
+    <div className="text-sm">
+      <label className="custom-label">Training File CSV (promt,completion)</label>
       <div {...getRootProps()} className="flex flex-col h-[100px] bg-gray-100 border items-center justify-center">
         <input {...getInputProps()} />
-        <div className="flex flex-col items-center">
-          <div className={!!error ? 'text-error' : ''}>{!!error ? error : 'Drag and drop file.'} </div>
-          <IconFileCode size={35} stroke={1.5} />
-        </div>
+        {spin ? (
+          <div className="flex justify-center">
+            <Spin size="text-4xl" />
+          </div>
+        ) : (
+          <div>{isDragActive ? <p>Drop the file here.</p> : <p>Drag 'n' drop CSV file here, or click to select a file.</p>}</div>
+        )}
       </div>
+      <div className="flex flex-col items-center text-orange-600 pt-4"> {error}</div>{' '}
     </div>
   );
 }

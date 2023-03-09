@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useSystemContext } from '@context/SystemProvider';
-import { IconCopy } from '@tabler/icons-react';
 import generateApiKey from 'generate-api-key';
 
 import { updateKey } from '@firestore/keys';
@@ -10,7 +9,8 @@ import { IKey } from '@interfaces/IKey';
 
 import { getKeys } from '@firestore/keys';
 import { Dialog } from '@headlessui/react';
-import { IconTrash } from '@tabler/icons-react';
+import IconCopy from '@components/icons/IconCopy';
+import IconTrash from '@components/icons/IconTrash';
 
 interface Props {
   params: {
@@ -74,7 +74,7 @@ export default function UserPref({ params }: Props) {
                   {key.created_at.toDate().toDateString()}
                 </div>
                 <div className="p-2 hover:text-stern-blue cursor-pointer " onClick={() => updateKey(key.id, { status: 'disabled' })}>
-                  <IconTrash size={18} stroke={1.5} />
+                  <IconTrash />
                 </div>
                 <></>
               </div>
