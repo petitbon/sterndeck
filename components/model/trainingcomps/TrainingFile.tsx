@@ -4,6 +4,7 @@ import { ITrainingFile } from '@interfaces/ITrainingFile';
 import { IModel } from '@interfaces/IModel';
 
 import { getStorage, ref, getDownloadURL } from 'firebase/storage';
+import { getFileURL } from '@cloudstorage/storage';
 
 export interface Props {
   training_file: ITrainingFile;
@@ -18,7 +19,8 @@ export default function TrainingFile({ training_file, model }: Props) {
     setTrainingFileState(training_file || {});
     const fetchURL = async () => {
       const storage = getStorage();
-      const starsRef = ref(storage, training_file.url);
+      const trainingFileURL: string = await getFileURL(training_file.path);
+      const starsRef = ref(storage, trainingFileURL);
       const url = await getDownloadURL(starsRef);
       setSignedURLState(url);
     };
@@ -52,7 +54,7 @@ export default function TrainingFile({ training_file, model }: Props) {
           {truncate(trainingFileState?.id)}{' '}
         </div>
         <div className="mx-4">
-          <Link as="download" className="hover:text-stern-blue justify-end" href={signedURLState}>
+          <Link className="hover:text-stern-blue justify-end" href={signedURLState}>
             Download
           </Link>
         </div>

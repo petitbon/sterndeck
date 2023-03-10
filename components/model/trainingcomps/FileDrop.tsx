@@ -3,24 +3,38 @@
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Spin from '@components/shared/Spin';
+import { ITrainingFile } from '@interfaces/ITrainingFile';
+import { User } from 'firebase/auth';
 
 export interface Props {
-  user_uid: string;
+  user: User;
   model_id: string;
 }
 
-export default function FileDrop({ user_uid, model_id }: Props) {
+export default function FileDrop({ user, model_id }: Props) {
   const [error, setError] = useState<string>('');
   const [spin, setSpin] = useState(false);
 
-  const onDrop = useCallback((acceptedFiles: any) => {
+  const onDrop = useCallback(async (acceptedFiles: any) => {
     setError('');
     const file = acceptedFiles[0];
     if (file) {
-      console.log('acceptedfiles:', acceptedFiles);
+      console.log(JSON.stringify(file));
       setSpin(true);
+      const formData = new FormData();
+      formData.append('upload', file);
+      formData.append('model_id', model_id);
+      formData.append('user_uid', user.uid);
+      formData.append('file_id', 'og.csv');
+
+      const token = await user.getIdToken(true);
+      const response = await fetch('https://api-dev.sterndeck.com/api/v1/upload', {
+        method: 'POST',
+        body: formData,
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setSpin(false);
     } else {
-      console.log('file was not accepted');
       setError('File was not accepted. upload one CSV file at a time.');
       setSpin(false);
     }

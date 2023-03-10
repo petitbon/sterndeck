@@ -8,5 +8,4 @@ export interface ITrainingFile {
   status: string;
   status_details: string;
   path: string;
-  url: string;
 }

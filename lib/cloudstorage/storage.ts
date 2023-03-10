@@ -23,7 +23,7 @@ export function deleteStorageFile(path: any) {
 }
 
 // Gets the download URL from the reference URL
-export async function getDownloadURL(path: any) {
+export async function getFileURL(path: any) {
   return await getStorageDownloadURL(ref(firebaseStorage, path));
 }
 

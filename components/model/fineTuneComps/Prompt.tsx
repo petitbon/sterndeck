@@ -45,7 +45,8 @@ export default function Prompt({ fine_tuned_model }: Props) {
 
   const submittest = async () => {
     const token = await authUser.getIdToken(true);
-    const r = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/v1/completion-firebase`, {
+    //console.log(token);
+    const r = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/v1/completion`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify(requestState),

@@ -60,7 +60,7 @@ export default function ModelEdit({ params }: Props) {
               </div>
               <div>
                 <ul>
-                  <li className="relative m-2">{model?.title && <UploadStanza user_uid={authUser?.uid} model={model} />}</li>
+                  <li className="relative m-2">{model?.title && <UploadStanza user={authUser} model={model} />}</li>
                   {trainingFiles.map((training_file: ITrainingFile, i: number) => (
                     <li className="relative m-2" key={i}>
                       <TrainStanza user_uid={authUser?.uid} model={model} training_file={training_file} />
