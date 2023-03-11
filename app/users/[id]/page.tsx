@@ -106,7 +106,7 @@ export default function UserPref({ params }: Props) {
                       navigator.clipboard.writeText(tokenState);
                     }}
                   >
-                    <IconCopy size={35} stroke={1.5} />
+                    <IconCopy />
                   </div>
                 </div>
 

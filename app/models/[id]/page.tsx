@@ -6,11 +6,9 @@ import { useForm, FormProvider } from 'react-hook-form';
 
 import { IModel } from '@interfaces/IModel';
 import { ITrainingFile } from '@interfaces/ITrainingFile';
-import { IFineTune } from '@interfaces/IFineTune';
 
 import { getModel } from '@firestore/models';
 import { getTrainingFiles } from '@firestore/trainingFiles';
-import { getFineTunes } from '@firestore/fineTunes';
 
 import UploadStanza from './upload';
 import TrainStanza from './train';
@@ -28,22 +26,21 @@ export default function ModelEdit({ params }: Props) {
   const { authUser, isSignedIn } = useSystemContext();
   const [model, setModel] = useState<IModel>({} as IModel);
   const [trainingFiles, setTrainingFiles] = useState<ITrainingFile[]>([]);
-  const [fineTunes, setFineTunes] = useState<IFineTune[]>([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (isSignedIn) {
-        const disregard = await getModel(authUser.uid, params.id, setModel);
-        const unsubscribe = await getTrainingFiles(authUser.uid, params.id, setTrainingFiles);
-        const forgetit = await getFineTunes(authUser.uid, params.id, setFineTunes);
-        return () => {
-          unsubscribe();
-          disregard();
-          forgetit();
-        };
-      }
-    };
-    fetchData();
+    if (authUser.uid) {
+      const fetchData = async () => {
+        if (isSignedIn) {
+          const disregard = await getModel(authUser.uid, params.id, setModel);
+          const unsubscribe = await getTrainingFiles(authUser.uid, params.id, setTrainingFiles);
+          return () => {
+            unsubscribe();
+            disregard();
+          };
+        }
+      };
+      fetchData();
+    }
   }, [authUser]);
 
   const methods = useForm();

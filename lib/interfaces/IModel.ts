@@ -5,6 +5,7 @@ export interface IModel {
   model: string;
   suffix: string;
   hyperparams?: IHyperparams;
+  created_at: Date;
 }
 
 export interface IHyperparams {

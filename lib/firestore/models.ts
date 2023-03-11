@@ -1,11 +1,11 @@
 import { firebaseDB } from '@context/firebase/firebase';
 import { IModel } from '@interfaces/IModel';
 
-import { doc, setDoc, deleteDoc, onSnapshot, collection, query, where, documentId, addDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, deleteDoc, Timestamp, onSnapshot, collection, query, where, documentId, addDoc, orderBy } from 'firebase/firestore';
 
 export async function getModels(user_uid: string, setModels: any) {
   const path = `models/${user_uid}/list`;
-  const collectionQuery = query(collection(firebaseDB, path));
+  const collectionQuery = query(collection(firebaseDB, path), orderBy('created_at', 'desc'));
   const unsubscribe = onSnapshot(collectionQuery, async (snapshot) => {
     let allDatas = [];
     for (const documentSnapshot of snapshot.docs) {
@@ -37,15 +37,21 @@ export async function getModel(user_uid: string, model_id: string, setModel: any
   return unsubscribe;
 }
 
-export async function deleteModel(user_uid: string, model_id: string) {
-  return await deleteDoc(doc(firebaseDB, `models/${user_uid}/list/${model_id}`));
-}
+//export async function deleteModel(user_uid: string, model_id: string) {
+//  return await deleteDoc(doc(firebaseDB, `models/${user_uid}/list/${model_id}`));
+//}
 
-export async function addModel(user_uid: string, data: IModel) {
-  addDoc(collection(firebaseDB, `models/${user_uid}/list/`), data);
-}
+//export async function addModel(user_uid: string, data: IModel) {
+//  addDoc(collection(firebaseDB, `models/${user_uid}/list/`), data);
+//}
 
 export async function updateModel<T>(user_uid: string, model_id: string, data: T) {
-  const modelRef = doc(firebaseDB, `models/${user_uid}/list/${model_id}`);
-  return await setDoc(modelRef, { ...(data as T[]) }, { merge: true });
+  const docRef = doc(firebaseDB, `models/${user_uid}/list/${model_id}`);
+  const docSnap = await getDoc(docRef);
+  if (!docSnap.exists()) {
+    data = { ...data, created_at: Timestamp.now() };
+    console.log('No such document!');
+  }
+
+  return await setDoc(docRef, { ...(data as T[]) }, { merge: true });
 }

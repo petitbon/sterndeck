@@ -3,14 +3,14 @@ import { useState, useEffect } from 'react';
 import { addFineTune } from '@firestore/fineTunes';
 import { getFineTunes } from '@firestore/fineTunes';
 
+import { useSystemContext } from '@context/SystemProvider';
+
 import { ITrainingFile } from '@interfaces/ITrainingFile';
 import { IModel } from '@interfaces/IModel';
 import { IFineTune } from '@interfaces/IFineTune';
-import { IHyperparams } from '@interfaces/IModel';
 import { IFineTuneOAIRequest } from '@interfaces/IFineTune';
 
 import TrainingFile from '@components/model/trainingcomps/TrainingFile';
-import HyperParameters from '@components/model/trainingcomps/HyperParameters';
 import FineTune from '@components/model/fineTuneComps/FineTune';
 export interface Props {
   user_uid: string;
@@ -24,6 +24,7 @@ export interface ITrainData {
 }
 
 export default function TrainStanza({ user_uid, model, training_file }: Props) {
+  const { authUser, isSignedIn } = useSystemContext();
   const [modelState, setModelState] = useState<IModel>({} as IModel);
   const [trainingFileState, setTrainingFileState] = useState<ITrainingFile>({} as ITrainingFile);
   const [fineTunesState, setFineTunesState] = useState<IFineTune[]>([]);
@@ -38,7 +39,7 @@ export default function TrainStanza({ user_uid, model, training_file }: Props) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const forgetit = await getFineTunes(user_uid, model.id, setFineTunesState);
+      const forgetit = await getFineTunes(user_uid, model.id, training_file.id, setFineTunesState);
       return () => forgetit();
     };
     fetchData();
@@ -67,7 +68,7 @@ export default function TrainStanza({ user_uid, model, training_file }: Props) {
       });
       const data: any = await response.json();
       fineTune = data.result;
-      await addFineTune(user_uid, model.id, fineTune);
+      await addFineTune(user_uid, model.id, training_file.id, fineTune);
       return fineTune;
     } catch (error) {
       console.error(error);
@@ -83,7 +84,6 @@ export default function TrainStanza({ user_uid, model, training_file }: Props) {
             <TrainingFile model={model} training_file={training_file} />
           </div>
         </div>
-        <HyperParameters model={modelState} user_uid={user_uid} />
         <div className="pb-2 flex w-full">
           <div className="w-full flex flex-row p-3 mx-4 justify-center">
             <div className="flex m-2 font-bold">
@@ -96,7 +96,7 @@ export default function TrainStanza({ user_uid, model, training_file }: Props) {
         <ul>
           {fineTunesState.map((fineTune: IFineTune, i: number) => (
             <li className="relative m-2" key={i}>
-              <FineTune user_uid={user_uid} model={modelState} fine_tune={fineTune} />
+              <FineTune user={authUser} model={modelState} training_file_id={trainingFileState.id} fine_tune={fineTune} />
             </li>
           ))}
         </ul>

@@ -4,8 +4,8 @@ export interface IEvents {
 }
 
 export interface IEvent {
-  object: string;
   created_at: Date;
+  object: string;
   level: string;
   message: string;
 }

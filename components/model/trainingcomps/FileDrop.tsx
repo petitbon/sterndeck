@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
-import Spin from '@components/shared/Spin';
+import Loading from '@components/shared/Loading';
 import { ITrainingFile } from '@interfaces/ITrainingFile';
 import { User } from 'firebase/auth';
 
@@ -19,7 +19,6 @@ export default function FileDrop({ user, model_id }: Props) {
     setError('');
     const file = acceptedFiles[0];
     if (file) {
-      console.log(JSON.stringify(file));
       setSpin(true);
       const formData = new FormData();
       formData.append('upload', file);
@@ -54,7 +53,7 @@ export default function FileDrop({ user, model_id }: Props) {
         <input {...getInputProps()} />
         {spin ? (
           <div className="flex justify-center">
-            <Spin size="text-4xl" />
+            <Loading size="text-4xl" />
           </div>
         ) : (
           <div>{isDragActive ? <p>Drop the file here.</p> : <p>Drag 'n' drop CSV file here, or click to select a file.</p>}</div>
