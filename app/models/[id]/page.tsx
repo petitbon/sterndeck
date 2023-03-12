@@ -28,7 +28,7 @@ export default function ModelEdit({ params }: Props) {
   const [trainingFiles, setTrainingFiles] = useState<ITrainingFile[]>([]);
 
   useEffect(() => {
-    if (authUser.uid) {
+    if (authUser?.uid) {
       const fetchData = async () => {
         if (isSignedIn) {
           const disregard = await getModel(authUser.uid, params.id, setModel);
