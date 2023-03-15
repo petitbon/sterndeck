@@ -14,15 +14,15 @@ export async function getFineTunes(user_uid: string, model_id: string, training_
         id: documentSnapshot.id,
       });
     }
-    if (allDatas.length > 0) setFineTunesState(allDatas);
+    setFineTunesState(allDatas);
   });
   return unsubscribe;
 }
 
-export async function addFineTune(user_uid: string, model_id: string, training_file_id: string, data: any) {
-  const path = `models/${user_uid}/list/${model_id}/training_files/${training_file_id}/fine_tunes`;
-  await setDoc(doc(firebaseDB, path, data.id), data);
-}
+//export async function addFineTune(user_uid: string, model_id: string, training_file_id: string, data: any) {
+//  const path = `models/${user_uid}/list/${model_id}/training_files/${training_file_id}/fine_tunes`;
+//  await setDoc(doc(firebaseDB, path, data.id), data);
+//}
 
 export async function deleteFineTune(user_uid: string, model_id: string, training_file_id: string, data_id: string) {
   await deleteDoc(doc(firebaseDB, `models/${user_uid}/list/${model_id}/training_files/${training_file_id}/fine_tunes/${data_id}`));

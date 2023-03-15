@@ -10,4 +10,5 @@ export interface ITrainingFile {
   status: string;
   status_details: string;
   path: string;
+  visible: boolean;
 }

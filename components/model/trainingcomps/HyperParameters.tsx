@@ -42,13 +42,3 @@ export default function HyperParameters({ user_uid, model }: Props) {
     </>
   );
 }
-
-/*
- *
- *
-import ComputeClassification from '@components/model/trainingcomps/ComputeClassification';
-
-<div className="w-1/3 p-3 mx-4">
-  <ComputeClassification user_uid={user_uid} model_id={modelState.id} compute_classification_metrics={modelState.hyperparams?.compute_classification_metrics} />
-</div>
-*/

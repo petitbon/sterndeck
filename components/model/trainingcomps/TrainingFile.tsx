@@ -10,11 +10,12 @@ import { getStorage, ref, getDownloadURL } from 'firebase/storage';
 import { getFileURL } from '@cloudstorage/storage';
 
 export interface Props {
+  user_uid: string;
   training_file: ITrainingFile;
   model: IModel;
 }
 
-export default function TrainingFile({ training_file, model }: Props) {
+export default function TrainingFile({ user_uid, training_file, model }: Props) {
   const [trainingFileState, setTrainingFileState] = useState<ITrainingFile>({} as ITrainingFile);
   const [signedURLState, setSignedURLState] = useState<string>('');
   const [ago, setAgo] = useState<string>('');

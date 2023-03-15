@@ -24,6 +24,7 @@ export default function Prompt({ fine_tuned_model }: Props) {
       setRequestState((existingValues) => ({
         ...existingValues,
         model: fine_tuned_model,
+        stop: 'END',
       }));
     }
   }, [fine_tuned_model]);
@@ -36,7 +37,6 @@ export default function Prompt({ fine_tuned_model }: Props) {
   };
 
   const temperatureChange = (e: number) => {
-    requestState.temperature = e;
     setRequestState((existingValues) => ({
       ...existingValues,
       temperature: e,
@@ -45,8 +45,8 @@ export default function Prompt({ fine_tuned_model }: Props) {
 
   const submittest = async () => {
     const token = await authUser.getIdToken(true);
-    //console.log(token);
     const r = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/v1/completion`, {
+      //    const r = await fetch(`${process.env.NEXT_PUBLIC_API_LOCAL}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify(requestState),
@@ -60,7 +60,7 @@ export default function Prompt({ fine_tuned_model }: Props) {
       <div className="w-full">
         <textarea className="custom-textarea" rows={4} onChange={(evt: React.ChangeEvent<HTMLTextAreaElement>) => handleInputChange(evt)}></textarea>
         {responsesState.map((choice: IChoice, i: number) => (
-          <div className="p-2 my-2 bg-gray-100" key={i}>
+          <div className="p-2 my-2 bg-gray-100 text-sm text-stern-red" key={i}>
             {clean(choice.text)}
           </div>
         ))}

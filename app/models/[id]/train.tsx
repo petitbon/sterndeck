@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 
-import { addFineTune } from '@firestore/fineTunes';
 import { getFineTunes } from '@firestore/fineTunes';
 
 import { useSystemContext } from '@context/SystemProvider';
@@ -8,97 +7,76 @@ import { useSystemContext } from '@context/SystemProvider';
 import { ITrainingFile } from '@interfaces/ITrainingFile';
 import { IModel } from '@interfaces/IModel';
 import { IFineTune } from '@interfaces/IFineTune';
-import { IFineTuneOAIRequest } from '@interfaces/IFineTune';
 
 import TrainingFile from '@components/model/trainingcomps/TrainingFile';
 import FineTune from '@components/model/fineTuneComps/FineTune';
+
+import { removeTrainingFile } from '@firestore/trainingFiles';
+
 export interface Props {
-  user_uid: string;
   model: IModel;
   training_file: ITrainingFile;
 }
 
-export interface ITrainData {
-  training_file: string;
-  model: string;
-}
-
-export default function TrainStanza({ user_uid, model, training_file }: Props) {
-  const { authUser, isSignedIn } = useSystemContext();
-  const [modelState, setModelState] = useState<IModel>({} as IModel);
-  const [trainingFileState, setTrainingFileState] = useState<ITrainingFile>({} as ITrainingFile);
+export default function TrainStanza({ model, training_file }: Props) {
+  const { authUser } = useSystemContext();
   const [fineTunesState, setFineTunesState] = useState<IFineTune[]>([]);
 
   useEffect(() => {
-    setModelState(model || {});
-  }, [model]);
-
-  useEffect(() => {
-    setTrainingFileState(training_file || {});
-  }, [training_file]);
-
-  useEffect(() => {
     const fetchData = async () => {
-      const forgetit = await getFineTunes(user_uid, model.id, training_file.id, setFineTunesState);
+      const forgetit = await getFineTunes(authUser.uid, model.id, training_file.id, setFineTunesState);
       return () => forgetit();
     };
     fetchData();
-  }, [model]);
+  }, [training_file]);
 
-  const train = async (file: ITrainingFile): Promise<Partial<IFineTune> | null> => {
-    const trainRequest: IFineTuneOAIRequest = {
-      training_file: file.id,
-      model: model.model,
-      suffix: 'sterndeck',
-      n_epochs: model.hyperparams?.n_epochs,
-      batch_size: model.hyperparams?.batch_size,
-      learning_rate_multiplier: model.hyperparams?.learning_rate_multiplier,
-      prompt_loss_weight: model.hyperparams?.prompt_loss_weight,
-    };
+  const train = async (training_file: ITrainingFile): Promise<Partial<IFineTune> | null> => {
+    const path = `models/${authUser.uid}/list/${model.id}/training_files/${training_file.id}/fine_tunes`;
+    const token = await authUser.getIdToken(true);
+    const payload = { training_file_id: training_file.id, path: path, use_case_id: model.use_case };
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/v1/fine-tunes-create`, {
+      //const response = await fetch(`${process.env.NEXT_PUBLIC_API_LOCAL}`, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    });
+    const confirmation: Partial<IFineTune> = await response.json();
+    return confirmation;
+  };
 
-    let fineTune: IFineTune;
-    try {
-      const response = await fetch(`/api/openai/fine-tunes/create`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(trainRequest),
-      });
-      const data: any = await response.json();
-      fineTune = data.result;
-      await addFineTune(user_uid, model.id, training_file.id, fineTune);
-      return fineTune;
-    } catch (error) {
-      console.error(error);
-      return null;
-    }
+  const remove = async (training_file_id: string) => {
+    await removeTrainingFile(authUser.uid, model.id, training_file_id);
   };
 
   return (
     <>
       <div className="border">
         <div className="pb-2 flex w-full">
-          <div className="w-full p-3 mx-4">
-            <TrainingFile model={model} training_file={training_file} />
-          </div>
-        </div>
-        <div className="pb-2 flex w-full">
-          <div className="w-full flex flex-row p-3 mx-4 justify-center">
-            <div className="flex m-2 font-bold">
-              <button className="btn-small w-[200px]" onClick={() => train(trainingFileState)}>
-                Train
-              </button>
+          <div className="flex flex-row w-full p-2 items-center">
+            <div className="w-full p-2">
+              <TrainingFile user_uid={authUser.uid} model={model} training_file={training_file} />
             </div>
           </div>
         </div>
         <ul>
+          {fineTunesState.length > 0}
           {fineTunesState.map((fineTune: IFineTune, i: number) => (
             <li className="relative m-2" key={i}>
-              <FineTune user={authUser} model={modelState} training_file_id={trainingFileState.id} fine_tune={fineTune} />
+              <FineTune user={authUser} model={model} training_file_id={training_file.id} fine_tune={fineTune} />
             </li>
           ))}
+          {fineTunesState.length == 0 && (
+            <li className="relative m-2">
+              <div className="flex flex-row w-full p-2 items-center justify-center ">
+                <button className="btn-small mx-4 w-[120px]" onClick={() => train(training_file)}>
+                  Train
+                </button>
+                <button className="btn-small mx-4 w-[120px]" onClick={() => remove(training_file.id)}>
+                  Remove
+                </button>
+              </div>
+            </li>
+          )}
         </ul>
       </div>
     </>

@@ -41,7 +41,11 @@ export default function CustommodelPane() {
 
         {models?.map((model: IModel, i) => (
           <li className="relative" key={i}>
-            <div className="ml-8 my-4 p-1 flex duration-200 cursor-pointer hover:bg-stern-blue" key={i} onClick={() => router.push(`/models/${model.id}`)}>
+            <div
+              className="ml-8 my-4 p-1 rounded-none flex duration-200 cursor-pointer hover:bg-stern-blue hover:text-white"
+              key={i}
+              onClick={() => router.push(`/models/${model.id}`)}
+            >
               <span className="text-[13px] ml-6" key={i}>
                 {model.title}
               </span>

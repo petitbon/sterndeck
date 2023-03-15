@@ -14,6 +14,8 @@ import UploadStanza from './upload';
 import TrainStanza from './train';
 
 import Title from '@components/model/comps/Title';
+import SubTitle from '@components/model/comps/SubTitle';
+import NewModel from '@components/model/comps/NewModel';
 import UserCheck from '@components/user/UserCheck';
 
 interface Props {
@@ -49,18 +51,25 @@ export default function ModelEdit({ params }: Props) {
   return (
     <>
       <UserCheck>
-        <div className="flex h-screen">
+        <div className="flex-1 p-4">
           <FormProvider {...methods}>
-            <form className="custom-form" onSubmit={methods.handleSubmit(onSubmit)}>
-              <div className="pb-4">
-                <Title user_uid={authUser?.uid} model_id={params.id} title={model?.title} />
-              </div>
+            <form className="" onSubmit={methods.handleSubmit(onSubmit)}>
+              {!model?.title ? (
+                <div className="pb-4">
+                  <NewModel user_uid={authUser?.uid} model_id={params.id} />
+                </div>
+              ) : (
+                <div className="pb-4">
+                  <Title user_uid={authUser?.uid} model_id={model?.id} title={model?.title} />
+                  <SubTitle model={model} />
+                </div>
+              )}
               <div>
                 <ul>
-                  <li className="relative m-2">{model?.title && <UploadStanza user={authUser} model={model} />}</li>
+                  <li className="relative m-2">{model?.use_case && <UploadStanza user={authUser} model={model} />}</li>
                   {trainingFiles.map((training_file: ITrainingFile, i: number) => (
                     <li className="relative m-2" key={i}>
-                      <TrainStanza user_uid={authUser?.uid} model={model} training_file={training_file} />
+                      <TrainStanza model={model} training_file={training_file} />
                     </li>
                   ))}
                 </ul>

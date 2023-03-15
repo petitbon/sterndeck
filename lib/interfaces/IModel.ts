@@ -4,16 +4,6 @@ export interface IModel {
   user_uid: string;
   model: string;
   suffix: string;
-  hyperparams?: IHyperparams;
   created_at: Date;
-}
-
-export interface IHyperparams {
-  n_epochs?: number;
-  batch_size?: number;
-  learning_rate_multiplier?: number;
-  prompt_loss_weight?: number;
-  compute_classification_metrics?: boolean;
-  classification_n_classes?: number;
-  classification_positive_class?: string;
+  use_case: string;
 }

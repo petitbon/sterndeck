@@ -19,12 +19,6 @@
   .og-blend {
     @apply mix-blend-overlay w-[42px] h-[80px];
   }
-  .sidenavbar {
-    @apply w-[379px] h-full top-0 absolute;
-  }
-  .content {
-    @apply ml-[380px];
-  }
   .toggle {
     @apply w-11 h-6 bg-gray-400 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-stern-blue rounded-full peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-stern-blue;
   }
@@ -44,9 +38,6 @@
 
   .btn-edit {
     @apply text-xs;
-  }
-  .custom-form {
-    @apply p-8 w-full;
   }
   .input-range {
     @apply w-full h-[1px] mb-6 bg-gray-500 rounded-lg appearance-none cursor-pointer;

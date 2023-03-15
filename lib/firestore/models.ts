@@ -37,20 +37,11 @@ export async function getModel(user_uid: string, model_id: string, setModel: any
   return unsubscribe;
 }
 
-//export async function deleteModel(user_uid: string, model_id: string) {
-//  return await deleteDoc(doc(firebaseDB, `models/${user_uid}/list/${model_id}`));
-//}
-
-//export async function addModel(user_uid: string, data: IModel) {
-//  addDoc(collection(firebaseDB, `models/${user_uid}/list/`), data);
-//}
-
 export async function updateModel<T>(user_uid: string, model_id: string, data: T) {
   const docRef = doc(firebaseDB, `models/${user_uid}/list/${model_id}`);
   const docSnap = await getDoc(docRef);
   if (!docSnap.exists()) {
     data = { ...data, created_at: Timestamp.now() };
-    console.log('No such document!');
   }
 
   return await setDoc(docRef, { ...(data as T[]) }, { merge: true });
