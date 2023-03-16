@@ -35,7 +35,6 @@
   .btn-link {
     @apply hover:text-stern-blue p-1 font-semibold text-xs;
   }
-
   .btn-edit {
     @apply text-xs;
   }
@@ -44,7 +43,7 @@
   }
 
   .custom-text-input {
-    @apply appearance-none border rounded w-full py-2 px-3 text-gray-700;
+    @apply appearance-none border rounded w-full py-2 px-3 text-gray-700 border-white;
   }
   .edit-text-input {
     @apply appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-gray-100;

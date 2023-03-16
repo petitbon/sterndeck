@@ -8,11 +8,11 @@ export interface Props {
 }
 
 export default function Temperature({ onTemperatureChange, temperature }: Props) {
-  const [temperatureState, setTemperatureState] = useState<number>(1);
+  const [temperatureState, setTemperatureState] = useState<number>(0.2);
 
   useEffect(() => {
     if (temperature) {
-      setTemperatureState(temperature || 1);
+      setTemperatureState(temperature || 0.2);
     }
   }, [temperature]);
 

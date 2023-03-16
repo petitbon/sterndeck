@@ -4,6 +4,8 @@ export interface IUseCase {
   long_name: string;
   description: string;
   hyper_parameters: IHyperParameters;
+  completion_separator: string;
+  prompt_separator: string;
 }
 
 export interface IHyperParameters {
@@ -14,4 +16,7 @@ export interface IHyperParameters {
   compute_classification_metrics?: boolean;
   classification_n_classes?: number;
   classification_positive_class?: string;
+  frequency_penalty: number;
+  presense_penalty: number;
+  temperature: number;
 }

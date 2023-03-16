@@ -14,7 +14,7 @@ export default function UploadStanza({ model, user }: Props) {
       <div className="border">
         <div className="pb-2 flex w-full">
           <div className="w-full p-3 mx-4">
-            <FileDrop user={user} model_id={model.id} />
+            <FileDrop user={user} model_id={model.id} use_case_id={model.use_case} />
           </div>
         </div>
       </div>

@@ -51,14 +51,12 @@ export default function TrainStanza({ model, training_file }: Props) {
   return (
     <>
       <div className="border">
-        <div className="pb-2 flex w-full">
-          <div className="flex flex-row w-full p-2 items-center">
-            <div className="w-full p-2">
+        <ul>
+          <li className="relative m-2">
+            <div className="flex flex-row w-full p-2 items-center">
               <TrainingFile user_uid={authUser.uid} model={model} training_file={training_file} />
             </div>
-          </div>
-        </div>
-        <ul>
+          </li>
           {fineTunesState.length > 0}
           {fineTunesState.map((fineTune: IFineTune, i: number) => (
             <li className="relative m-2" key={i}>

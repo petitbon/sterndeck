@@ -9,9 +9,10 @@ import { User } from 'firebase/auth';
 export interface Props {
   user: User;
   model_id: string;
+  use_case_id: string;
 }
 
-export default function FileDrop({ user, model_id }: Props) {
+export default function FileDrop({ user, model_id, use_case_id }: Props) {
   const [error, setError] = useState<string>('');
   const [spin, setSpin] = useState(false);
 
@@ -24,10 +25,12 @@ export default function FileDrop({ user, model_id }: Props) {
       formData.append('upload', file);
       formData.append('model_id', model_id);
       formData.append('user_uid', user.uid);
+      formData.append('use_case_id', use_case_id);
       formData.append('file_id', 'og.csv');
 
       const token = await user.getIdToken(true);
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/v1/upload`, {
+        //const response = await fetch(`${process.env.NEXT_PUBLIC_API_LOCAL}`, {
         method: 'POST',
         body: formData,
         headers: { Authorization: `Bearer ${token}` },
