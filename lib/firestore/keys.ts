@@ -26,6 +26,7 @@ export async function getKeys(user_uid: string, setKeys: any) {
 }
 
 export async function updateKey<T>(key_id: string, data: T) {
+  console.log(data);
   if (key_id == '') {
     return await addDoc(collection(firebaseDB, `keys/`), { ...(data as T[]) });
   } else {

@@ -2,14 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useSystemContext } from '@context/SystemProvider';
-import generateApiKey from 'generate-api-key';
 
 import { updateKey } from '@firestore/keys';
 import { IKey } from '@interfaces/IKey';
 
 import { getKeys } from '@firestore/keys';
 import { Dialog } from '@headlessui/react';
-import IconCopy from '@components/icons/IconCopy';
 import IconTrash from '@components/icons/IconTrash';
 
 interface Props {
@@ -22,6 +20,7 @@ export default function UserPref({ params }: Props) {
   const { authUser, isSignedIn } = useSystemContext();
   const [keysState, setKeysState] = useState<IKey[]>([]);
   const [tokenState, setTokenState] = useState<string>('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
   let [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -34,19 +33,31 @@ export default function UserPref({ params }: Props) {
   }, [authUser]);
 
   const closeModal = () => {
-    setIsOpen(false);
+    if (tokenState.length != 51) {
+      setErrorMessage('API key is not valid.');
+    } else {
+      setErrorMessage('');
+      const newKey: Partial<IKey> = {
+        api_key: tokenState,
+        user_uid: authUser.uid,
+        status: 'active',
+        created_at: new Date(),
+      };
+      updateKey(newKey.api_key as string, newKey);
+      setTokenState(newKey.api_key as string);
+      setIsOpen(false);
+    }
   };
 
   const openModal = () => {
-    const newKey: Partial<IKey> = {
-      api_key: generateApiKey({ method: 'string', pool: 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', prefix: 'sterndeck', length: 48 }) as string,
-      user_uid: authUser.uid,
-      status: 'active',
-      created_at: new Date(),
-    };
-    updateKey(newKey.api_key as string, newKey);
-    setTokenState(newKey.api_key as string);
+    setErrorMessage('');
+    setTokenState('');
+
     setIsOpen(true);
+  };
+
+  const saveToken = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTokenState(event.target.value);
   };
 
   return (
@@ -98,21 +109,14 @@ export default function UserPref({ params }: Props) {
 
                 <div className="flex flex-row w-full py-4">
                   <div className="w-full">
-                    <input className="p-2 text-[11px] w-full" value={tokenState} type="text" disabled />
+                    <input className="edit-text-input" type="text" onChange={saveToken} placeholder="paste api key from openai" />
                   </div>
-                  <div
-                    className="pl-2 cursor-pointer w-[40px] flex items-center justify-center"
-                    onClick={() => {
-                      navigator.clipboard.writeText(tokenState);
-                    }}
-                  >
-                    <IconCopy />
-                  </div>
+                  <div className="text-red-500"> {errorMessage} </div>
                 </div>
 
                 <div className="mt-4">
                   <button type="button" className="btn-primary " onClick={closeModal}>
-                    Got it, thanks!
+                    Save!
                   </button>
                 </div>
               </Dialog.Panel>
