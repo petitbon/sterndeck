@@ -27,34 +27,36 @@ export default function CustommodelPane() {
 
   return (
     <>
-      <ul className="relative">
-        <li className="relative">
-          <div className="m-1 p-1 flex flex-row">
-            <div>
-              <span className="text-[18px] ml-4">Models</span>
-            </div>
-            <div onClick={() => router.push(`/models/${newDocId}`)}>
-              <span className="text-[11px] pl-4 hover:text-stern-blue cursor-pointer font-semibold">[+ Create New]</span>
-            </div>
-          </div>
-        </li>
-
-        {models?.map((model: IModel, i) => (
-          <li className="relative" key={i}>
-            <div
-              className="ml-8 my-4 p-1 rounded-none flex duration-200 cursor-pointer hover:bg-stern-blue hover:text-white"
-              key={i}
-              onClick={() => router.push(`/models/${model.id}`)}
-            >
-              <span className="text-[13px] ml-6" key={i}>
-                {model.title}
-              </span>
+      <div className="flex flex-col flex-wrap h-fit">
+        <ul className="relative">
+          <li className="relative">
+            <div className="m-1 p-1 flex flex-row">
+              <div>
+                <span className="text-[18px] ml-4">Models</span>
+              </div>
+              <div onClick={() => router.push(`/models/${newDocId}`)}>
+                <span className="text-[11px] pl-4 hover:text-stern-blue cursor-pointer font-semibold">[+ Create New]</span>
+              </div>
             </div>
           </li>
-        ))}
-
-        <li className="relative my-10"></li>
-      </ul>
+        </ul>
+        <ul className="h-full overflow-y-scroll">
+          {models?.map((model: IModel, i) => (
+            <li className="relative " key={i}>
+              <div
+                className="ml-8 my-4 p-1 rounded-none flex duration-200 cursor-pointer hover:bg-stern-blue hover:text-white"
+                key={i}
+                onClick={() => router.push(`/models/${model.id}`)}
+              >
+                <span className="text-[13px] ml-6" key={i}>
+                  {model.title}
+                </span>
+              </div>
+            </li>
+          ))}
+          <li className="relative my-10"></li>
+        </ul>
+      </div>
     </>
   );
 }

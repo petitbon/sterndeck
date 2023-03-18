@@ -26,7 +26,7 @@ export default function KeysPane() {
   }, []);
 
   return (
-    <>
+    <div className="bg-white">
       <ul className="relative">
         {!isSignedIn ? (
           <li className="relative">
@@ -50,7 +50,7 @@ export default function KeysPane() {
             <li className="relative">
               <div className="flex flex-row w-full justify-end p-2">
                 <div className="flex px-2" onClick={() => router.push(`/users/${authUser.uid}`)}>
-                  <span className="text-[11px] hover:text-stern-blue cursor-pointer font-semibold">[API keys]</span>
+                  <span className="text-[11px] hover:text-stern-blue cursor-pointer font-semibold">[OpenAI API key]</span>
                 </div>
                 <div className="flex px-2" onClick={() => signOut(firebaseAuth)}>
                   <span className="text-[11px] hover:text-stern-blue cursor-pointer font-semibold">[Sign-out]</span>
@@ -60,6 +60,6 @@ export default function KeysPane() {
           </>
         )}
       </ul>
-    </>
+    </div>
   );
 }

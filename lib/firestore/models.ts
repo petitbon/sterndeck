@@ -37,6 +37,22 @@ export async function getModel(user_uid: string, model_id: string, setModel: any
   return unsubscribe;
 }
 
+export async function getLiveModels(user_uid: string, model_id: string, setLiveModels: any) {
+  const path = `models/${user_uid}/list/${model_id}/live_models`;
+  const collectionQuery = query(collection(firebaseDB, path), orderBy('createdAt', 'desc'));
+  const unsubscribe = onSnapshot(collectionQuery, async (snapshot) => {
+    let allDatas = [];
+    for (const documentSnapshot of snapshot.docs) {
+      const live_model = documentSnapshot.data();
+      allDatas.push({
+        ...live_model,
+      });
+    }
+    setLiveModels(allDatas);
+  });
+  return unsubscribe;
+}
+
 export async function updateModel<T>(user_uid: string, model_id: string, data: T) {
   const docRef = doc(firebaseDB, `models/${user_uid}/list/${model_id}`);
   const docSnap = await getDoc(docRef);

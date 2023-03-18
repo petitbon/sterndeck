@@ -7,6 +7,7 @@ import { useSystemContext } from '@context/SystemProvider';
 import { ITrainingFile } from '@interfaces/ITrainingFile';
 import { IModel } from '@interfaces/IModel';
 import { IFineTune } from '@interfaces/IFineTune';
+import { ILiveModel } from '@interfaces/IModel';
 
 import TrainingFile from '@components/model/trainingcomps/TrainingFile';
 import FineTune from '@components/model/fineTuneComps/FineTune';
@@ -16,24 +17,27 @@ import { removeTrainingFile } from '@firestore/trainingFiles';
 export interface Props {
   model: IModel;
   training_file: ITrainingFile;
+  live_models: ILiveModel[];
 }
 
-export default function TrainStanza({ model, training_file }: Props) {
+export default function TrainStanza({ model, training_file, live_models }: Props) {
   const { authUser } = useSystemContext();
   const [fineTunesState, setFineTunesState] = useState<IFineTune[]>([]);
+  const [selectedLiveModel, setSelectedLiveModel] = useState<string>('');
 
   useEffect(() => {
     const fetchData = async () => {
       const forgetit = await getFineTunes(authUser.uid, model.id, training_file.id, setFineTunesState);
-      return () => forgetit();
+      return () => {
+        forgetit();
+      };
     };
     fetchData();
   }, [training_file]);
 
   const train = async (training_file: ITrainingFile): Promise<Partial<IFineTune> | null> => {
-    const path = `models/${authUser.uid}/list/${model.id}/training_files/${training_file.id}/fine_tunes`;
     const token = await authUser.getIdToken(true);
-    const payload = { training_file_id: training_file.id, path: path, use_case_id: model.use_case };
+    const payload = { user_uid: authUser.uid, training_file_id: training_file.id, model_id: model.id, use_case_id: model.use_case, base_model: selectedLiveModel };
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/v1/fine-tunes-create`, {
       //const response = await fetch(`${process.env.NEXT_PUBLIC_API_LOCAL}`, {
       method: 'POST',
@@ -47,6 +51,12 @@ export default function TrainStanza({ model, training_file }: Props) {
   const remove = async (training_file_id: string) => {
     await removeTrainingFile(authUser.uid, model.id, training_file_id);
   };
+
+  const saveLiveModel = async (e: any) => {
+    setSelectedLiveModel(e.target.value);
+  };
+
+  const truncate = (input: string) => (input?.length > 40 ? `${input.substring(0, 0)}...${input.slice(-19)}` : input);
 
   return (
     <>
@@ -65,13 +75,26 @@ export default function TrainStanza({ model, training_file }: Props) {
           ))}
           {fineTunesState.length == 0 && (
             <li className="relative m-2">
-              <div className="flex flex-row w-full p-2 items-center justify-center ">
-                <button className="btn-small mx-4 w-[120px]" onClick={() => train(training_file)}>
-                  Train
-                </button>
-                <button className="btn-small mx-4 w-[120px]" onClick={() => remove(training_file.id)}>
-                  Remove
-                </button>
+              <div className="flex flex-row w-full p-2">
+                <div className="w-1/2">
+                  <button className="btn-small mx-4 w-[120px]" onClick={() => train(training_file)}>
+                    Train
+                  </button>
+                  on
+                  <select className="custom-select ml-2 " onChange={(e) => saveLiveModel(e)} value={selectedLiveModel}>
+                    <option value="davinci">base model (davinci) </option>
+                    {live_models.map((ft, i) => (
+                      <option value={String(ft.id)} key={i}>
+                        {truncate(ft.id)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex w-1/2 justify-end ">
+                  <button className="btn-small mx-4 w-[120px]" onClick={() => remove(training_file.id)}>
+                    Remove
+                  </button>
+                </div>
               </div>
             </li>
           )}
@@ -80,3 +103,7 @@ export default function TrainStanza({ model, training_file }: Props) {
     </>
   );
 }
+
+/*
+ *
+ * */

@@ -19,9 +19,11 @@ export default function SubTitle({ model }: Props) {
   }, [model]);
 
   return (
-    <div className="text-xs pt-2 font-semibold">
+    <div className="text-xs pt-2 px-2 font-semibold">
       <span className="text-white">.</span>
-      {fu && `Model Use Case: ${fu?.long_name}`}{' '}
+      <span className="">
+        {fu && `Use Case: ${fu?.long_name}`} | {`Suffix: sterndeck-${fu?.short_name}-${model.id.slice(0, 5)}`}
+      </span>
     </div>
   );
 }

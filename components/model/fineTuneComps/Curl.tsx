@@ -7,14 +7,27 @@ export interface Props {
 
 export default function Curl({ fine_tuned_model }: Props) {
   const [curlCodeState, setCurlCodeState] = useState<string>('');
+  const [curlCodeCopy, setCurlCodeCopy] = useState<string>('');
 
   useEffect(() => {
     setCurlCodeState(
       /* prettier-ignore */
-      `curl ${process.env.NEXT_PUBLIC_API_DOMAIN}/api/v1/completion
-       -H 'Authorization: Bearer YOUR_API_KEY'
+      `curl https://api.openai.com/v1/completions  
+       -H 'Authorization: Bearer YOUR_API_KEY'  
        -H 'content-type: application/json'
-       -d '{"prompt": "Grow acquisitions.", "model": ${fine_tuned_model}}'`
+       -d '{
+         "prompt": "NEW PROMPT ##>>", 
+         "model": "${fine_tuned_model}" }' 
+         "max_tokens": 60, 
+         "temperature": 1, 
+         "frequency_penalty": 1.4, 
+         "presence_penalty": 1.4
+         "stop": "<<##"
+       }'`
+    );
+    setCurlCodeCopy(
+      /* prettier-ignore */
+      `curl https://api.openai.com/v1/completions -H 'Authorization: Bearer YOUR_API_KEY' -H 'content-type: application/json' -d '{"prompt": "NEW PROMPT", "model": "${fine_tuned_model}", "max_tokens": 60, "temperature": 1, "frequency_penalty": 1.4, "presence_penalty": 1.4, "stop": "<<##"}'`
     );
   }, [fine_tuned_model]);
 
@@ -29,7 +42,7 @@ export default function Curl({ fine_tuned_model }: Props) {
         <div
           className="p-2 cursor-pointer w-[100px] flex items-center justify-center"
           onClick={() => {
-            navigator.clipboard.writeText(curlCodeState);
+            navigator.clipboard.writeText(curlCodeCopy);
           }}
         >
           <IconCopy />

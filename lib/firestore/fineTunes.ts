@@ -8,9 +8,9 @@ export async function getFineTunes(user_uid: string, model_id: string, training_
   const unsubscribe = onSnapshot(collectionQuery, async (snapshot) => {
     let allDatas = [];
     for (const documentSnapshot of snapshot.docs) {
-      const model = documentSnapshot.data();
+      const ft = documentSnapshot.data();
       allDatas.push({
-        ...model,
+        ...ft,
         id: documentSnapshot.id,
       });
     }
