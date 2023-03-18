@@ -31,10 +31,12 @@ export default function FineTune({ user, model, training_file_id, fine_tune }: P
 
   useEffect(() => {
     const last: number = fine_tune.events.length - 1;
-    if (fine_tune.status != 'succeeded') {
-      setLastEvent(fine_tune.events[last]);
-    } else {
-      setLastEvent({} as IEvent);
+    if (training_file_id == fine_tune.training_files[0].id) {
+      if (fine_tune.status != 'succeeded') {
+        setLastEvent(fine_tune.events[last]);
+      } else {
+        setLastEvent({} as IEvent);
+      }
     }
   }, [fine_tune]);
 
@@ -53,7 +55,7 @@ export default function FineTune({ user, model, training_file_id, fine_tune }: P
   const truncate = (input: string) => (input?.length > 40 ? `${input.substring(0, 7)}...${input.slice(-26)}` : input);
 
   return (
-    <div className="flex-1 p-2 mx-2 border ">
+    <div className="flex-1 p-2 mx-2 border">
       <ul>
         <li className="relative m-2 flex flex-row w-full">
           <div className="flex w-full">
@@ -71,8 +73,6 @@ export default function FineTune({ user, model, training_file_id, fine_tune }: P
               <div className="flex items-center">
                 <div className="text-sm">Status: {lastEvent.message} </div>
                 <div className="flex mx-2">
-                  <Loading size="text-sml" />
-                  <Loading size="text-sml" />
                   <Loading size="text-sml" />
                 </div>
               </div>

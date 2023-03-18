@@ -11,7 +11,7 @@ import { ILiveModel } from '@interfaces/IModel';
 
 import TrainingFile from '@components/model/trainingcomps/TrainingFile';
 import FineTune from '@components/model/fineTuneComps/FineTune';
-
+import Loading from '@components/shared/Loading';
 import { removeTrainingFile } from '@firestore/trainingFiles';
 
 export interface Props {
@@ -23,7 +23,8 @@ export interface Props {
 export default function TrainStanza({ model, training_file, live_models }: Props) {
   const { authUser } = useSystemContext();
   const [fineTunesState, setFineTunesState] = useState<IFineTune[]>([]);
-  const [selectedLiveModel, setSelectedLiveModel] = useState<string>('');
+  const [selectedLiveModel, setSelectedLiveModel] = useState<string>('davinci');
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +37,7 @@ export default function TrainStanza({ model, training_file, live_models }: Props
   }, [training_file]);
 
   const train = async (training_file: ITrainingFile): Promise<Partial<IFineTune> | null> => {
+    setLoading(true);
     const token = await authUser.getIdToken(true);
     const payload = { user_uid: authUser.uid, training_file_id: training_file.id, model_id: model.id, use_case_id: model.use_case, base_model: selectedLiveModel };
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/v1/fine-tunes-create`, {
@@ -45,6 +47,7 @@ export default function TrainStanza({ model, training_file, live_models }: Props
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
     });
     const confirmation: Partial<IFineTune> = await response.json();
+    setLoading(false);
     return confirmation;
   };
 
@@ -67,14 +70,15 @@ export default function TrainStanza({ model, training_file, live_models }: Props
               <TrainingFile user_uid={authUser.uid} model={model} training_file={training_file} />
             </div>
           </li>
+
           {fineTunesState.length > 0}
           {fineTunesState.map((fineTune: IFineTune, i: number) => (
             <li className="relative m-2" key={i}>
               <FineTune user={authUser} model={model} training_file_id={training_file.id} fine_tune={fineTune} />
             </li>
           ))}
-          {fineTunesState.length == 0 && (
-            <li className="relative m-2">
+          {fineTunesState.length == 0 && !loading && (
+            <li className="relative m-2 h-14">
               <div className="flex flex-row w-full p-2">
                 <div className="w-1/2">
                   <button className="btn-small mx-4 w-[120px]" onClick={() => train(training_file)}>
