@@ -11,7 +11,7 @@ import { ILiveModel } from '@interfaces/IModel';
 
 import TrainingFile from '@components/model/trainingcomps/TrainingFile';
 import FineTune from '@components/model/fineTuneComps/FineTune';
-import Loading from '@components/shared/Loading';
+//import Loading from '@components/shared/Loading';
 import { removeTrainingFile } from '@firestore/trainingFiles';
 
 export interface Props {
@@ -28,13 +28,16 @@ export default function TrainStanza({ model, training_file, live_models }: Props
 
   useEffect(() => {
     const fetchData = async () => {
-      const forgetit = await getFineTunes(authUser.uid, model.id, training_file.id, setFineTunesState);
-      return () => {
-        forgetit();
-      };
+      setLoading(true);
+      try {
+        await getFineTunes(authUser.uid, model.id, training_file.id, setFineTunesState);
+      } catch (error) {
+        console.error('Error fetching fine-tunes:', error);
+      }
+      setLoading(false);
     };
     fetchData();
-  }, [training_file]);
+  }, [authUser.uid, model.id, training_file]);
 
   const train = async (training_file: ITrainingFile): Promise<Partial<IFineTune> | null> => {
     setLoading(true);
@@ -59,7 +62,7 @@ export default function TrainStanza({ model, training_file, live_models }: Props
     setSelectedLiveModel(e.target.value);
   };
 
-  const truncate = (input: string) => (input?.length > 40 ? `${input.substring(0, 0)}...${input.slice(-19)}` : input);
+  const truncate = (input: string) => (input?.length > 40 ? `${input.substring(0, 0)}...${input.slice(-26)}` : input);
 
   return (
     <>
@@ -70,44 +73,39 @@ export default function TrainStanza({ model, training_file, live_models }: Props
               <TrainingFile user_uid={authUser.uid} model={model} training_file={training_file} />
             </div>
           </li>
-
-          {fineTunesState.length > 0}
-          {fineTunesState.map((fineTune: IFineTune, i: number) => (
-            <li className="relative m-2" key={i}>
-              <FineTune user={authUser} model={model} training_file_id={training_file.id} fine_tune={fineTune} />
-            </li>
-          ))}
-          {fineTunesState.length == 0 && !loading && (
-            <li className="relative m-2 h-14">
-              <div className="flex flex-row w-full p-2">
-                <div className="w-1/2">
-                  <button className="btn-small mx-4 w-[120px]" onClick={() => train(training_file)}>
-                    Train
-                  </button>
-                  on
-                  <select className="custom-select ml-2 " onChange={(e) => saveLiveModel(e)} value={selectedLiveModel}>
-                    <option value="davinci">base model (davinci) </option>
-                    {live_models.map((ft, i) => (
-                      <option value={String(ft.id)} key={i}>
-                        {truncate(ft.id)}
-                      </option>
-                    ))}
-                  </select>
+          <li className="relative m-2">
+            <div className="flex-1 m-2 border-0 ">
+              {fineTunesState.map((fineTune: IFineTune) => (
+                <FineTune user={authUser} model={model} training_file_id={training_file.id} fine_tune={fineTune} key={fineTune.id} />
+              ))}
+              {loading && <div className="flex"> ... loading </div>}
+              {fineTunesState.length == 0 && !loading && (
+                <div className="flex flex-row">
+                  <div className="w-full">
+                    <button className="btn-small w-[120px] mr-4" onClick={() => train(training_file)}>
+                      Train
+                    </button>
+                    <span className="mr-4"> ON </span>
+                    <select className="custom-select" onChange={(e) => saveLiveModel(e)} value={selectedLiveModel}>
+                      <option value="davinci">base model (davinci) </option>
+                      {live_models.map((ft, i) => (
+                        <option value={String(ft.id)} key={i}>
+                          {truncate(ft.id)}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex w-[120px] justify-end ">
+                    <button className="btn-small w-[120px]" onClick={() => remove(training_file.id)}>
+                      Remove
+                    </button>
+                  </div>
                 </div>
-                <div className="flex w-1/2 justify-end ">
-                  <button className="btn-small mx-4 w-[120px]" onClick={() => remove(training_file.id)}>
-                    Remove
-                  </button>
-                </div>
-              </div>
-            </li>
-          )}
+              )}
+            </div>
+          </li>
         </ul>
       </div>
     </>
   );
 }
-
-/*
- *
- * */

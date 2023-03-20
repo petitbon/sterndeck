@@ -17,11 +17,11 @@ export default function Curl({ fine_tuned_model }: Props) {
        -H 'content-type: application/json'
        -d '{
          "prompt": "NEW PROMPT ##>>", 
-         "model": "${fine_tuned_model}" }' 
+         "model": "${fine_tuned_model}", 
          "max_tokens": 60, 
          "temperature": 1, 
          "frequency_penalty": 1.4, 
-         "presence_penalty": 1.4
+         "presence_penalty": 1.4,
          "stop": "<<##"
        }'`
     );

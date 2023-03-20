@@ -36,14 +36,18 @@ export default function ModelEdit({ params }: Props) {
     if (authUser?.uid) {
       const fetchData = async () => {
         if (isSignedIn) {
-          const disregard = await getModel(authUser.uid, params.id, setModel);
-          const unsubscribe = await getTrainingFiles(authUser.uid, params.id, setTrainingFiles);
-          const useless = await getLiveModels(authUser.uid, params.id, setLiveModels);
-          return () => {
-            unsubscribe();
-            disregard();
-            useless();
-          };
+          try {
+            const disregard = await getModel(authUser.uid, params.id, setModel);
+            const unsubscribe = await getTrainingFiles(authUser.uid, params.id, setTrainingFiles);
+            const useless = await getLiveModels(authUser.uid, params.id, setLiveModels);
+            return () => {
+              unsubscribe();
+              disregard();
+              useless();
+            };
+          } catch (error) {
+            console.error('Error fetching model data:', error);
+          }
         }
       };
       fetchData();

@@ -29,15 +29,23 @@ export default function FileDrop({ user, model_id, use_case_id }: Props) {
       formData.append('file_id', 'og.csv');
 
       const token = await user.getIdToken(true);
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/v1/upload`, {
-        //const response = await fetch(`${process.env.NEXT_PUBLIC_API_LOCAL}`, {
-        method: 'POST',
-        body: formData,
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setSpin(false);
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/v1/upload`, {
+          method: 'POST',
+          body: formData,
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!response.ok) {
+          setError('An error occurred while uploading the file. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error during file upload:', error);
+        setError('An error occurred while uploading the file. Please try again.');
+      } finally {
+        setSpin(false);
+      }
     } else {
-      setError('File was not accepted. upload one CSV file at a time.');
+      setError('File was not accepted. Upload one CSV file at a time.');
       setSpin(false);
     }
   }, []);
