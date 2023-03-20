@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -14,6 +10,7 @@
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "node",
+    "useUnknownInCatchVariables": false,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
@@ -22,15 +19,18 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "paths": {
+      "@components*": ["./components*"],
+      "@api*": ["./pages/api*"],
+      "@lib*": ["./lib*"],
+      "@context*": ["./context*"],
+      "@interfaces*": ["./lib/interfaces*"],
+      "@firestore*": ["./lib/firestore*"],
+      "@cloudstorage*": ["./lib/cloudstorage*"],
+      "@middleware*": ["./lib/middleware*"]
+    }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
 }

@@ -1,12 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    './app/**/*.{js,ts,jsx,tsx}',
-    './pages/**/*.{js,ts,jsx,tsx}',
-    './components/**/*.{js,ts,jsx,tsx}',
-  ],
+  content: ['./app/**/*.{js,ts,jsx,tsx}', './pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'stern-royal-blue': '#041242',
+        'stern-blue': '#d83a00',
+        'stern-acqua': '#12E8F0',
+        'stern-red': '#1279F0',
+        error: '#FF0000',
+      },
+    },
   },
+
   plugins: [],
 };

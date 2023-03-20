@@ -2,18 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  height: 100vh;
-  background-image: linear-gradient(
-    25deg,
-    hsl(240deg 15% 13%) 0%,
-    hsl(233deg 22% 15%) 11%,
-    hsl(226deg 30% 17%) 23%,
-    hsl(221deg 40% 18%) 36%,
-    hsl(215deg 52% 19%) 48%,
-    hsl(221deg 62% 26%) 61%,
-    hsl(238deg 46% 36%) 74%,
-    hsl(264deg 54% 40%) 87%,
-    hsl(287deg 84% 36%) 100%
-  );
+.firebaseui-idp-button {
+  border-radius: 18px;
+}
+
+@layer base {
+  div {
+    @apply border-gray-400 rounded;
+  }
+  button {
+    @apply border-gray-400 rounded;
+  }
+}
+
+@layer components {
+  .og-blend {
+    @apply mix-blend-overlay w-[42px] h-[80px];
+  }
+  .toggle {
+    @apply w-11 h-6 bg-gray-400 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-stern-blue rounded-full peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-stern-blue;
+  }
+  .radio-primary {
+    @apply appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 bg-no-repeat bg-center bg-contain mr-4 cursor-pointer;
+  }
+
+  .btn-small {
+    @apply border hover:border-stern-blue p-1 font-semibold text-xs;
+  }
+  .btn-primary {
+    @apply border hover:border-stern-blue p-2 font-semibold;
+  }
+  .btn-link {
+    @apply hover:text-stern-blue p-1 font-semibold text-xs;
+  }
+  .btn-edit {
+    @apply text-xs;
+  }
+  .input-range {
+    @apply w-full h-[1px] mb-6 bg-gray-500 rounded-lg appearance-none cursor-pointer;
+  }
+
+  .custom-text-input {
+    @apply appearance-none border rounded w-full py-2 px-3 text-gray-700 border-white;
+  }
+  .edit-text-input {
+    @apply appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-gray-100;
+  }
+  .custom-select {
+    @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 p-1 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+  }
+
+  .custom-base-model-select {
+    @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+  }
+  .custom-label {
+    @apply block text-[11px] font-semibold mb-2;
+  }
+  .custom-textarea {
+    @apply block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
+  }
 }
