@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useSystemContext } from '@context/SystemProvider';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -48,6 +48,7 @@ export default function CustommodelPane() {
                 key={i}
                 onClick={() => router.push(`/models/${model.id}`)}
               >
+                {usePathname().split('/')[2] == model.id && <span className="w-[6px] bg-stern-blue mr-2 "></span>}
                 <span className="text-[13px] ml-6" key={i}>
                   {model.title}
                 </span>

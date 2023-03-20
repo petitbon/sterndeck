@@ -2,6 +2,7 @@ import '../styles/globals.css';
 
 import { SystemProvider } from '@context/SystemProvider';
 
+import HomePane from '@components/navbar/HomePane';
 import ModelPane from '@components/navbar/ModelPane';
 import UserPane from '@components/navbar/UserPane';
 import UserCheck from '@components/user/UserCheck';
@@ -28,6 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               {/* ----------------------------------------------------------------------------------- */}
               <div className="flex-1">
                 <UserCheck>
+                  <HomePane />
                   <ModelPane />
                 </UserCheck>
               </div>

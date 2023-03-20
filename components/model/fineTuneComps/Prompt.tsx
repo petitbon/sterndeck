@@ -78,7 +78,7 @@ export default function Prompt({ fine_tuned_model }: Props) {
           <textarea className="custom-textarea" rows={3} value={loading ? '... loading' : clean(responsesState[0]?.text)}></textarea>
         </div>
         <div className="flex cursor-pointer w-[100px] justify-center items-center">
-          <button className="btn-primary border-0 hover:text-stern-blue" onClick={() => sendFeedback(clean(responsesState[0]?.text))}>
+          <button className="btn-primary border-0 hover:text-stern-blue" onClick={() => sendFeedback(clean(responsesState[0]?.text))} hidden>
             <IconMessageHeart />
           </button>
         </div>
