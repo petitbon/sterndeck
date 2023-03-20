@@ -12,7 +12,17 @@ export default function HomePage() {
       <p>6. Wait for the training to be finished (this may take minutes to hours depending on how busy OpenAI are) </p>
       <p>7. You can now test the fine tuning completion by clicking on [ Show Test Prompt ], entering a prompt and submitting</p>
       <p>8. If you want to use your model in your application use curl to get the request signature ( please make sure you use the entire payload as described)</p>
-      <p className="mt-8">( * ) OpenAI will charge you directly for fine tuning your data. SternDeck does not charges for fine tuning</p>
+      <p className="my-8">( * ) OpenAI will charge you directly for fine tuning your data. SternDeck does not charges for fine tuning</p>
+
+      <div className="my-4  text-stern-red">
+        <a href="https://storage.cloud.google.com/sterndeck-public/marketingOKRs.csv">Download a sample file with marketing Objective KeyResults.</a>
+      </div>
+      <ul>
+        <li className="font-semibold">Sample prompts to for testing: </li>
+        <li>Increase marketing campaign agility</li>
+        <li>Expand marketing team size</li>
+        <li>Optimize marketing performance measurement</li>
+      </ul>
     </div>
   );
 }

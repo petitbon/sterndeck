@@ -9,9 +9,9 @@ import { useSystemContext } from '@context/SystemProvider';
 import { UserCard } from '@components/user/UserCard';
 
 export default function KeysPane() {
-  const router = useRouter();
   const { authUser, isSignedIn, setIsSignedIn, setAuthUser } = useSystemContext();
   const provider = new GoogleAuthProvider();
+  const router = useRouter();
 
   const signIn = async () => {
     await signInWithPopup(firebaseAuth, provider);

@@ -11,9 +11,10 @@ import { getModels } from '@firestore/models';
 
 export default function CustommodelPane() {
   const { authUser, isSignedIn } = useSystemContext();
-  const router = useRouter();
   const [models, setModels] = useState<IModel[]>([]);
   const newDocId: string = uuidv4().replace(/-/g, '').slice(0, 20);
+  const router = useRouter();
+  const path = usePathname();
 
   useEffect(() => {
     if (isSignedIn) {
@@ -48,7 +49,7 @@ export default function CustommodelPane() {
                 key={i}
                 onClick={() => router.push(`/models/${model.id}`)}
               >
-                {usePathname().split('/')[2] == model.id && <span className="w-[6px] bg-stern-blue mr-2 "></span>}
+                {path.split('/')[2] == model.id && <span className="w-[6px] bg-stern-blue mr-2 "></span>}
                 <span className="text-[13px] ml-6" key={i}>
                   {model.title}
                 </span>
