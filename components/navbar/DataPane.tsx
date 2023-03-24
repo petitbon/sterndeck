@@ -5,13 +5,13 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useSystemContext } from '@context/SystemProvider';
 import { v4 as uuidv4 } from 'uuid';
 
-import { IModel } from '@interfaces/IModel';
+import { IData } from '@interfaces/IData';
 
-import { getModels } from '@firestore/models';
+import { getDatas } from '@firestore/datas';
 
-export default function ModelPane() {
+export default function DataPane() {
   const { authUser, isSignedIn } = useSystemContext();
-  const [models, setModels] = useState<IModel[]>([]);
+  const [dataSets, setDataSets] = useState<IData[]>([]);
   const newDocId: string = uuidv4().replace(/-/g, '').slice(0, 20);
   const router = useRouter();
   const path = usePathname();
@@ -19,7 +19,7 @@ export default function ModelPane() {
   useEffect(() => {
     if (isSignedIn) {
       const fetchData = async () => {
-        const unsubscribe = await getModels(authUser.uid, setModels);
+        const unsubscribe = await getDatas(authUser.uid, setDataSets);
         return () => unsubscribe();
       };
       fetchData();
@@ -33,25 +33,25 @@ export default function ModelPane() {
           <li className="relative">
             <div className="m-1 p-1 flex flex-row">
               <div>
-                <span className="text-[18px] ml-4">Models</span>
+                <span className="text-[18px] ml-4">Data Sets</span>
               </div>
-              <div onClick={() => router.push(`/models/${newDocId}`)}>
+              <div onClick={() => router.push(`/data-sets/${newDocId}`)}>
                 <span className="text-[11px] pl-4 hover:text-stern-blue cursor-pointer font-semibold">[+ Create New]</span>
               </div>
             </div>
           </li>
         </ul>
         <ul className="h-full overflow-y-scroll">
-          {models?.map((model: IModel, i) => (
+          {dataSets?.map((data: IData, i) => (
             <li className="relative " key={i}>
               <div
                 className="ml-8 my-4 p-1 rounded-none flex duration-200 cursor-pointer hover:bg-stern-blue hover:text-white"
                 key={i}
-                onClick={() => router.push(`/models/${model.id}`)}
+                onClick={() => router.push(`/data-sets/${data.id}`)}
               >
-                {path.split('/')[2] == model.id && <span className="w-[6px] bg-stern-blue mr-2 "></span>}
+                {path.split('/')[2] == data.id && <span className="w-[6px] bg-stern-blue mr-2 "></span>}
                 <span className="text-[13px] ml-6" key={i}>
-                  {model.title}
+                  {data.title}
                 </span>
               </div>
             </li>

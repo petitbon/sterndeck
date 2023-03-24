@@ -4,6 +4,7 @@ import { SystemProvider } from '@context/SystemProvider';
 
 import HomePane from '@components/navbar/HomePane';
 import ModelPane from '@components/navbar/ModelPane';
+import DataPane from '@components/navbar/DataPane';
 import UserPane from '@components/navbar/UserPane';
 import UserCheck from '@components/user/UserCheck';
 
@@ -31,6 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <UserCheck>
                   <HomePane />
                   <ModelPane />
+                  <DataPane />
                 </UserCheck>
               </div>
               {/* ----------------------------------------------------------------------------------- */}

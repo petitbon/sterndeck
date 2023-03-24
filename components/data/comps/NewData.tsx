@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
-import { updateModel } from '@firestore/models';
+import { updateData } from '@firestore/datas';
 import { getUseCases } from '@firestore/useCases';
 import { IUseCase } from '@interfaces/IUseCase';
 
 export interface Props {
   user_uid: string;
-  model_id: string;
+  data_id: string;
 }
 
-export default function NewModel({ user_uid, model_id }: Props) {
+export default function NewData({ user_uid, data_id }: Props) {
   const [useCaseState, setUseCaseState] = useState<string>('');
   const [useCases, setUseCases] = useState<IUseCase[]>([]);
   const [titleState, setTitleState] = useState<string>('');
@@ -18,10 +18,10 @@ export default function NewModel({ user_uid, model_id }: Props) {
       await getUseCases(setUseCases, setUseCaseState);
     };
     fetchData();
-  }, [model_id]);
+  }, [data_id]);
 
-  const createModel = async () => {
-    await updateModel(user_uid, model_id, { title: titleState, use_case: useCaseState });
+  const createData = async () => {
+    await updateData(user_uid, data_id, { title: titleState, use_case: useCaseState });
   };
 
   const checkNext = () => {
@@ -39,7 +39,7 @@ export default function NewModel({ user_uid, model_id }: Props) {
     <div className="flex-1 ">
       {' '}
       <div className="w-full px-4">
-        <input className="appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-gray-100 text-4xl" type="text" onChange={saveTitle} placeholder="Name this model" />
+        <input className="appearance-none border rounded w-full py-2 px-3 text-gray-700 bg-gray-100 text-4xl" type="text" onChange={saveTitle} placeholder="Name this data" />
       </div>
       <div className="flex flex-col">
         {useCases?.map((use_case: IUseCase, i) => (
@@ -60,7 +60,7 @@ export default function NewModel({ user_uid, model_id }: Props) {
               <div className="w-1/2">
                 <ul className="text-sm" key={i}>
                   <li className="font-semibold">Fine Tuning Paramters</li>
-                  <li>base model: {use_case.model}</li>
+                  <li>base data: {use_case.model}</li>
                   <li>prompt loss weight: {use_case.hyper_parameters.prompt_loss_weight}</li>
                   <li>learning rate multiplyer: {use_case.hyper_parameters.learning_rate_multiplier}</li>
                 </ul>
@@ -79,7 +79,7 @@ export default function NewModel({ user_uid, model_id }: Props) {
       </div>
       <div className="flex flex-row justify-end pt-4 items-center">
         <span className="text-sm px-4"></span>
-        <button className={`btn-small w-[100px] ${!checkNext() ? 'cursor-not-allowed text-gray-300' : ''}`} disabled={!checkNext()} onClick={() => createModel()}>
+        <button className={`btn-small w-[100px] ${!checkNext() ? 'cursor-not-allowed text-gray-300' : ''}`} disabled={!checkNext()} onClick={() => createData()}>
           Next
         </button>
       </div>
