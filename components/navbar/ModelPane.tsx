@@ -19,8 +19,8 @@ export default function ModelPane() {
   useEffect(() => {
     if (isSignedIn) {
       const fetchData = async () => {
-        const unsubscribe = await getModels(authUser.uid, setModels);
-        return () => unsubscribe();
+        const unsub = await getModels(authUser.uid, setModels);
+        return () => unsub();
       };
       fetchData();
     }

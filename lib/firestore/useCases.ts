@@ -4,9 +4,7 @@ import { getDocs, getDoc, collection, doc, where, query } from 'firebase/firesto
 
 export async function getUseCases(setUseCases: any, setUseCaseState: any) {
   const querySnapshot = await getDocs(query(collection(firebaseDB, 'use_cases'), where('live_flag', '==', 'production')));
-
   let allDatas: any = [];
-
   querySnapshot.forEach((doc) => {
     const model = doc.data();
     allDatas.push({

@@ -2,7 +2,7 @@ import { firebaseDB } from '@context/firebase/firebase';
 
 import { ITrainingFile } from '@interfaces/ITrainingFile';
 
-import { doc, setDoc, getDoc, deleteDoc, onSnapshot, collection, query, addDoc, orderBy, Query, where } from 'firebase/firestore';
+import { doc, setDoc, deleteDoc, onSnapshot, collection, query, orderBy, where } from 'firebase/firestore';
 
 export async function getTrainingFiles(user_uid: string, model_id: string, setTrainingFiles: any) {
   const path = `models/${user_uid}/list/${model_id}/training_files`;

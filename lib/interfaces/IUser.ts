@@ -4,4 +4,6 @@ export interface IUser {
   displayName: string;
   email: string;
   photoURL: string;
+  stripeId: string;
+  stripeLink: string;
 }

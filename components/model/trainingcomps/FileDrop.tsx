@@ -3,7 +3,6 @@
 import { useState, useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import Loading from '@components/shared/Loading';
-import { ITrainingFile } from '@interfaces/ITrainingFile';
 import { User } from 'firebase/auth';
 
 export interface Props {

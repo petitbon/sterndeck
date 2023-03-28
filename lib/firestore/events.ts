@@ -1,6 +1,4 @@
 import { firebaseDB } from '@context/firebase/firebase';
-// todo make the latest event a full event type
-//import { IEvent } from '@interfaces/IEvents';
 import { documentId, onSnapshot, collection, query, where } from 'firebase/firestore';
 
 export async function getEvent(user_uid: string, model_id: string, training_file_id: string, finetune_id: string, setEvent: any) {

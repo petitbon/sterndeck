@@ -11,7 +11,6 @@ import { ILiveModel } from '@interfaces/IModel';
 
 import TrainingFile from '@components/model/trainingcomps/TrainingFile';
 import FineTune from '@components/model/fineTuneComps/FineTune';
-//import Loading from '@components/shared/Loading';
 import { removeTrainingFile } from '@firestore/trainingFiles';
 
 export interface Props {
@@ -28,13 +27,8 @@ export default function TrainStanza({ model, training_file, live_models }: Props
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
-      try {
-        await getFineTunes(authUser.uid, model.id, training_file.id, setFineTunesState);
-      } catch (error) {
-        console.error('Error fetching fine-tunes:', error);
-      }
-      setLoading(false);
+      const unsub = await getFineTunes(authUser.uid, model.id, training_file.id, setFineTunesState);
+      return () => unsub();
     };
     fetchData();
   }, [authUser.uid, model.id, training_file]);
@@ -70,7 +64,7 @@ export default function TrainStanza({ model, training_file, live_models }: Props
         <ul>
           <li className="relative m-2">
             <div className="flex flex-row w-full p-2 items-center">
-              <TrainingFile user_uid={authUser.uid} model={model} training_file={training_file} />
+              <TrainingFile training_file={training_file} />
             </div>
           </li>
           <li className="relative m-2">

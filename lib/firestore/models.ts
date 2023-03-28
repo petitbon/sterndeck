@@ -1,7 +1,7 @@
 import { firebaseDB } from '@context/firebase/firebase';
 import { IModel } from '@interfaces/IModel';
 
-import { doc, getDoc, setDoc, deleteDoc, Timestamp, onSnapshot, collection, query, where, documentId, addDoc, orderBy } from 'firebase/firestore';
+import { doc, getDoc, setDoc, Timestamp, onSnapshot, collection, query, where, documentId, orderBy } from 'firebase/firestore';
 
 export async function getModels(user_uid: string, setModels: any) {
   const path = `models/${user_uid}/list`;

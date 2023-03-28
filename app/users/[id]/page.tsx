@@ -31,7 +31,8 @@ export default function UserPref({ params }: Props) {
   useEffect(() => {
     if (isSignedIn) {
       const fetchData = async () => {
-        await getKey(authUser.uid, setKeyState);
+        const unsub = await getKey(authUser.uid, setKeyState);
+        return () => unsub();
       };
       fetchData();
     }
