@@ -10,6 +10,7 @@ import { ITrainingFile } from '@interfaces/ITrainingFile';
 
 import { getModel } from '@firestore/models';
 import { getLiveModels } from '@firestore/models';
+import { getLatestModel } from '@firestore/models';
 import { getTrainingFiles } from '@firestore/trainingFiles';
 
 import UploadStanza from './upload';
@@ -31,6 +32,7 @@ export default function ModelEdit({ params }: Props) {
   const [model, setModel] = useState<IModel>({} as IModel);
   const [trainingFiles, setTrainingFiles] = useState<ITrainingFile[]>([]);
   const [liveModels, setLiveModels] = useState<ILiveModel[]>([]);
+  const [latestModel, setLatestModel] = useState<ILiveModel>({} as ILiveModel);
 
   useEffect(() => {
     if (authUser?.uid) {
@@ -40,10 +42,12 @@ export default function ModelEdit({ params }: Props) {
             const disregard = await getModel(authUser.uid, params.id, setModel);
             const unsubscribe = await getTrainingFiles(authUser.uid, params.id, setTrainingFiles);
             const useless = await getLiveModels(authUser.uid, params.id, setLiveModels);
+            const usenot = await getLatestModel(authUser.uid, params.id, setLatestModel);
             return () => {
               unsubscribe();
               disregard();
               useless();
+              usenot();
             };
           } catch (error) {
             console.error('Error fetching model data:', error);
@@ -78,7 +82,7 @@ export default function ModelEdit({ params }: Props) {
                   <li className="relative m-2">{model?.use_case && <UploadStanza user={authUser} model={model} />}</li>
                   {trainingFiles.map((training_file: ITrainingFile, i: number) => (
                     <li className="relative m-2" key={i}>
-                      <TrainStanza model={model} training_file={training_file} live_models={liveModels} />
+                      <TrainStanza model={model} training_file={training_file} latest_model={latestModel} />
                     </li>
                   ))}
                 </ul>

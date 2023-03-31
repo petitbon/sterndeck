@@ -1,7 +1,7 @@
 import { firebaseDB } from '@context/firebase/firebase';
 import { IModel } from '@interfaces/IModel';
 
-import { doc, getDoc, setDoc, Timestamp, onSnapshot, collection, query, where, documentId, orderBy } from 'firebase/firestore';
+import { limit, doc, getDoc, setDoc, Timestamp, onSnapshot, collection, query, where, documentId, orderBy } from 'firebase/firestore';
 
 export async function getModels(user_uid: string, setModels: any) {
   const path = `models/${user_uid}/list`;
@@ -49,6 +49,22 @@ export async function getLiveModels(user_uid: string, model_id: string, setLiveM
       });
     }
     setLiveModels(allDatas);
+  });
+  return unsubscribe;
+}
+
+export async function getLatestModel(user_uid: string, model_id: string, setLatestModel: any) {
+  const path = `models/${user_uid}/list/${model_id}/live_models`;
+  const collectionQuery = query(collection(firebaseDB, path), orderBy('createdAt', 'desc'), limit(1));
+  const unsubscribe = onSnapshot(collectionQuery, async (snapshot) => {
+    let allDatas = [];
+    for (const documentSnapshot of snapshot.docs) {
+      const live_model = documentSnapshot.data();
+      allDatas.push({
+        ...live_model,
+      });
+    }
+    setLatestModel(allDatas[0]);
   });
   return unsubscribe;
 }

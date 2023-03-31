@@ -16,13 +16,12 @@ import { removeTrainingFile } from '@firestore/trainingFiles';
 export interface Props {
   model: IModel;
   training_file: ITrainingFile;
-  live_models: ILiveModel[];
+  latest_model: ILiveModel;
 }
 
-export default function TrainStanza({ model, training_file, live_models }: Props) {
+export default function TrainStanza({ model, training_file, latest_model }: Props) {
   const { authUser } = useSystemContext();
   const [fineTunesState, setFineTunesState] = useState<IFineTune[]>([]);
-  const [selectedLiveModel, setSelectedLiveModel] = useState<string>('davinci');
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
@@ -36,7 +35,7 @@ export default function TrainStanza({ model, training_file, live_models }: Props
   const train = async (training_file: ITrainingFile): Promise<Partial<IFineTune> | null> => {
     setLoading(true);
     const token = await authUser.getIdToken(true);
-    const payload = { user_uid: authUser.uid, training_file_id: training_file.id, model_id: model.id, use_case_id: model.use_case, base_model: selectedLiveModel };
+    const payload = { user_uid: authUser.uid, training_file_id: training_file.id, model_id: model.id, use_case_id: model.use_case, base_model: latest_model.id };
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/v1/fine-tunes-create`, {
       //const response = await fetch(`${process.env.NEXT_PUBLIC_API_LOCAL}`, {
       method: 'POST',
@@ -52,33 +51,46 @@ export default function TrainStanza({ model, training_file, live_models }: Props
     await removeTrainingFile(authUser.uid, model.id, training_file_id);
   };
 
-  const saveLiveModel = async (e: any) => {
-    setSelectedLiveModel(e.target.value);
-  };
-
   const truncate = (input: string) => (input?.length > 40 ? `${input.substring(0, 0)}...${input.slice(-26)}` : input);
 
   return (
     <>
-      <div className="border">
-        <ul>
-          <li className="relative m-2">
-            <div className="flex flex-row w-full p-2 items-center">
-              <TrainingFile training_file={training_file} />
+      <div className="flex flex-row border items-top">
+        <div className="w-[40px] m-2">
+          <div className="flex flex-row w-full">
+            <TrainingFile training_file={training_file} />
+          </div>
+        </div>
+        <div className="w-full mt-6">
+          {fineTunesState.map((fineTune: IFineTune) => (
+            <FineTune user={authUser} model={model} training_file_id={training_file.id} fine_tune={fineTune} key={fineTune.id} />
+          ))}
+          {loading && <div className="flex"> ... loading </div>}
+          {fineTunesState.length == 0 && !loading && (
+            <div className="flex flex-row">
+              <div className="w-full">
+                <button className="btn-small w-[120px] mr-4" onClick={() => train(training_file)}>
+                  Train
+                </button>
+              </div>
+              <div className="flex w-[120px] justify-end ">
+                <button className="btn-small w-[120px]" onClick={() => remove(training_file.id)}>
+                  Remove
+                </button>
+              </div>
             </div>
-          </li>
-          <li className="relative m-2">
-            <div className="flex-1 m-2 border-0 ">
-              {fineTunesState.map((fineTune: IFineTune) => (
-                <FineTune user={authUser} model={model} training_file_id={training_file.id} fine_tune={fineTune} key={fineTune.id} />
-              ))}
-              {loading && <div className="flex"> ... loading </div>}
-              {fineTunesState.length == 0 && !loading && (
-                <div className="flex flex-row">
-                  <div className="w-full">
-                    <button className="btn-small w-[120px] mr-4" onClick={() => train(training_file)}>
-                      Train
-                    </button>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+/*
+  *
+  *
+  
+
                     <span className="mr-4"> ON </span>
                     <select className="custom-select" onChange={(e) => saveLiveModel(e)} value={selectedLiveModel}>
                       <option value="davinci">base model (davinci) </option>
@@ -88,18 +100,10 @@ export default function TrainStanza({ model, training_file, live_models }: Props
                         </option>
                       ))}
                     </select>
-                  </div>
-                  <div className="flex w-[120px] justify-end ">
-                    <button className="btn-small w-[120px]" onClick={() => remove(training_file.id)}>
-                      Remove
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </li>
-        </ul>
-      </div>
-    </>
-  );
-}
+
+  *
+  *
+  *
+  *
+  *
+  * */
