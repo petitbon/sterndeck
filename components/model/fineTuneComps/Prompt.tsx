@@ -41,7 +41,7 @@ export default function Prompt({ fine_tuned_model }: Props) {
     setLoading(true);
     const token = await authUser.getIdToken(true);
     const r = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/v1/completion`, {
-      // const r = await fetch(`${process.env.NEXT_PUBLIC_API_LOCAL}`, {
+      //const r = await fetch(`${process.env.NEXT_PUBLIC_API_LOCAL}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify(requestState),
@@ -54,7 +54,7 @@ export default function Prompt({ fine_tuned_model }: Props) {
   const sendFeedback = async (feedback: string) => {
     const token = await authUser.getIdToken(true);
     const r = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/v1/models-feedback`, {
-      //const r = await fetch(`${process.env.NEXT_PUBLIC_API_LOCAL}`, {
+      // const r = await fetch(`${process.env.NEXT_PUBLIC_API_LOCAL}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ ...requestState, completion: feedback }),
@@ -78,7 +78,7 @@ export default function Prompt({ fine_tuned_model }: Props) {
           <textarea className="custom-textarea" rows={3} value={loading ? '... loading' : clean(responsesState[0]?.text)}></textarea>
         </div>
         <div className="flex cursor-pointer w-[100px] justify-center items-center">
-          <button className="btn-primary border-0 hover:text-stern-blue" onClick={() => sendFeedback(clean(responsesState[0]?.text))} hidden>
+          <button className="btn-primary border-0 hover:text-stern-blue" onClick={() => sendFeedback(clean(responsesState[0]?.text))}>
             <IconMessageHeart />
           </button>
         </div>
