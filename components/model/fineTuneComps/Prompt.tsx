@@ -54,7 +54,7 @@ export default function Prompt({ fine_tuned_model }: Props) {
   const sendFeedback = async (feedback: string) => {
     const token = await authUser.getIdToken(true);
     const r = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/api/v1/models-feedback`, {
-      // const r = await fetch(`${process.env.NEXT_PUBLIC_API_LOCAL}`, {
+      //const r = await fetch(`${process.env.NEXT_PUBLIC_API_LOCAL}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
       body: JSON.stringify({ ...requestState, completion: feedback }),

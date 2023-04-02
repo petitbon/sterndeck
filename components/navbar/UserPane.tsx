@@ -42,8 +42,8 @@ export default function KeysPane() {
       <ul className="relative">
         {!isSignedIn ? (
           <li className="relative">
-            <div className="flex flew-row w-full h-[300px]">
-              <div className="flex w-full justify-center items-start m-2">
+            <div className="flex flew-row ">
+              <div className="flex justify-center items-center m-2">
                 <button className="btn-primary" onClick={signIn}>
                   Sign In
                 </button>
@@ -59,7 +59,7 @@ export default function KeysPane() {
                 </div>
               </div>
             </li>
-            <li className="relative">
+            <li className="relative hidden">
               <div className="flex flex-row w-full justify-end p-2">
                 <div className="flex px-2" onClick={() => createCheckoutSession(authUser.uid)}>
                   <span className="text-[11px] hover:text-stern-blue cursor-pointer font-semibold">[ Free Trial ]</span>

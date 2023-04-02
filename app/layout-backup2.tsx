@@ -19,8 +19,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="text-stern-royal-blue accent-stern-blue">
         <SystemProvider>
-          <div className="flex flex-col h-screen">
-            <nav className="flex h-16 items-center border-b border-gray-300">
+          <div className="min-h-screen">
+            <div className="fixed top-0 left-0 w-full h-[80px] bg-white z-10 flex flex-row border-b border-gray-300">
               {/* ----------------------------------------------------------------------------------- */}
               <div className="flex w-full items-center">
                 <div className="flex text-4xl p-4 pl-6">
@@ -32,27 +32,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <UserPane />
               </div>
               {/* ----------------------------------------------------------------------------------- */}
-            </nav>
-            <div className="flex flex-1 overflow-hidden">
-              <aside className="hidden sm:block  w-64 overflow-y-auto border-r border-gray-300 ">
+            </div>
+            <div className="flex mt-16">
+              <aside className="flex-none w-full md:max-w-xs h-screen sticky top-0 border-r border-gray-300 ">
                 {/* ----------------------------------------------------------------------------------- */}
-                <div className="">
+                <div className="flex h-[80px] text-4xl p-4 pl-6">
                   <UserCheck>
                     <HomePane />
                   </UserCheck>
                 </div>
                 {/* ----------------------------------------------------------------------------------- */}
-                <div className="">
+                <div className="flex-1">
                   <UserCheck>
                     <ModelPane />
                   </UserCheck>
                 </div>
                 {/* ----------------------------------------------------------------------------------- */}
-                <div className="bottom-0 w-64 absolute h-[26px] border-t border-r border-gray-300 justify-end bg-white">
-                  <p className="m-1 text-xs text-right text-gray-400"> &#169; STERNDECK 2023</p>
-                </div>
               </aside>
-              <main className="flex flex-1 overflow-y-auto paragraph px-4"> {children}</main>
+              <main className="w-full overflow-y-scroll">{children}</main>
             </div>
           </div>
         </SystemProvider>

@@ -79,7 +79,7 @@ export default function ModelEdit({ params }: Props) {
               )}
               <div>
                 <ul>
-                  <li className="relative m-2">{model?.use_case && <UploadStanza user={authUser} model={model} />}</li>
+                  <li className="relative m-2">{liveModels.length == 0 && model?.use_case && <UploadStanza user={authUser} model={model} />}</li>
                   {trainingFiles.map((training_file: ITrainingFile, i: number) => (
                     <li className="relative m-2" key={i}>
                       <TrainStanza model={model} training_file={training_file} latest_model={latestModel} />

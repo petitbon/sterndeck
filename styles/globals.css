@@ -8,7 +8,7 @@
 
 @layer base {
   div {
-    @apply border-gray-400 rounded;
+    @apply border-gray-400;
   }
   button {
     @apply border-gray-400 rounded;
@@ -30,7 +30,7 @@
     @apply border hover:border-stern-blue p-1 font-semibold text-xs;
   }
   .btn-primary {
-    @apply border hover:border-stern-blue p-2 font-semibold;
+    @apply border-0 hover:text-stern-blue p-2 font-semibold;
   }
   .btn-link {
     @apply hover:text-stern-blue p-1 font-semibold text-xs;

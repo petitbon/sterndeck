@@ -59,7 +59,7 @@ export default function FileDrop({ user, model_id, use_case_id }: Props) {
   return (
     <div className="text-sm">
       <label className="custom-label">Training File CSV (promt,completion)</label>
-      <div {...getRootProps()} className="flex flex-col h-[100px] bg-gray-100 border items-center justify-center">
+      <div {...getRootProps()} className="flex flex-col h-[200px] bg-gray-100 border items-center justify-center">
         <input {...getInputProps()} />
         {spin ? (
           <div className="flex justify-center">
