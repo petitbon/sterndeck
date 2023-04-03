@@ -14,8 +14,8 @@ export function UserCard({ user }: { user: User }) {
     <>
       <div className="flex">
         <Image className="rounded-full" src={imageSource} alt="fynext" width="35" height="35" />
-        <div className="text-sm pl-4">
-          <p className="leading-none">{user?.displayName}</p>
+        <div className="text-sm pl-2">
+          <p className="">{user?.displayName}</p>
           <p className="">{user?.email}</p>
         </div>
       </div>

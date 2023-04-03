@@ -94,7 +94,7 @@ export default function UserPref({ params }: Props) {
           <li className="relative">
             <div className="flex p-8">
               <div>
-                <span className="text-4xl">Api Keys</span>
+                <span className="text-4xl">OpenAI Api Keys</span>
               </div>
             </div>
           </li>
@@ -116,9 +116,9 @@ export default function UserPref({ params }: Props) {
 
           {keyState?.api_key && (
             <li className="relative w-full">
-              <div className="p-1 flex flex-row items-center">
-                <div className="text-[13px] ml-6 ">{keyState.api_key}</div>
-                <div className="text-[13px] ml-6">{keyDate.toLocaleString()}</div>
+              <div className="p-4 flex flex-row items-center">
+                <div className="text-[13px] ml-6 font-semibold">{keyState.api_key}</div>
+                <div className="text-[13px] ml-6">Updated On {keyDate.toLocaleString()}</div>
                 <div className="p-2 hover:text-stern-blue cursor-pointer " onClick={() => updateKey(keyState.id, { status: 'disabled' })}>
                   <IconTrash />
                 </div>

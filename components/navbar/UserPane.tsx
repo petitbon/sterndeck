@@ -39,42 +39,34 @@ export default function KeysPane() {
 
   return (
     <div className="bg-white">
-      <ul className="relative">
-        {!isSignedIn ? (
-          <li className="relative">
-            <div className="flex flew-row ">
-              <div className="flex justify-center items-center m-2">
-                <button className="btn-primary" onClick={signIn}>
-                  Sign In
-                </button>
-              </div>
+      {!isSignedIn ? (
+        <div className="flex flew-row ">
+          <div className="flex justify-center items-center m-2">
+            <button className="btn-primary" onClick={signIn}>
+              Sign In
+            </button>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="flex flex-col w-full h-[50px]">
+            <div className="flex m-2">
+              <UserCard user={authUser} />
             </div>
-          </li>
-        ) : (
-          <>
-            <li className="relative">
-              <div className="flex flex-col w-full h-[50px]">
-                <div className="flex m-2">
-                  <UserCard user={authUser} />
-                </div>
-              </div>
-            </li>
-            <li className="relative hidden">
-              <div className="flex flex-row w-full justify-end p-2">
-                <div className="flex px-2" onClick={() => createCheckoutSession(authUser.uid)}>
-                  <span className="text-[11px] hover:text-stern-blue cursor-pointer font-semibold">[ Free Trial ]</span>
-                </div>
-                <div className="flex px-2" onClick={() => router.push(`/users/${authUser.uid}`)}>
-                  <span className="text-[11px] hover:text-stern-blue cursor-pointer font-semibold">[OpenAI API key]</span>
-                </div>
-                <div className="flex px-2" onClick={() => signOut(firebaseAuth)}>
-                  <span className="text-[11px] hover:text-stern-blue cursor-pointer font-semibold">[Sign-out]</span>
-                </div>
-              </div>
-            </li>
-          </>
-        )}
-      </ul>
+          </div>
+          <div className="flex flex-row w-full justify-end p-2">
+            <div className="flex px-2" onClick={() => createCheckoutSession(authUser.uid)}>
+              <span className="text-[11px] hover:text-stern-blue cursor-pointer font-semibold">[ Free Trial ]</span>
+            </div>
+            <div className="flex px-2" onClick={() => router.push(`/users/${authUser.uid}`)}>
+              <span className="text-[11px] hover:text-stern-blue cursor-pointer font-semibold">[OpenAI API key]</span>
+            </div>
+            <div className="flex px-2" onClick={() => signOut(firebaseAuth)}>
+              <span className="text-[11px] hover:text-stern-blue cursor-pointer font-semibold">[Sign-out]</span>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
